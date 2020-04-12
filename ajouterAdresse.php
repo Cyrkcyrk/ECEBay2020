@@ -1,8 +1,5 @@
 <?php
 	$erreur = ""; 
-	$logged = false;
-	$user = null;
-	
 	$ligne1 =  isset($_POST["ligne1"])? $_POST["ligne1"] :"";
 	$ligne2 =  isset($_POST["ligne2"])? $_POST["ligne2"] :"";
 	$ville =  isset($_POST["ville"])? $_POST["ville"] :"";
@@ -10,10 +7,6 @@
 	$pays =  isset($_POST["pays"])? $_POST["pays"] :"";
 	$telephone =  isset($_POST["telephone"])? $_POST["telephone"] :"";
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
-	
-	
-	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
-	list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
 	
 	if($logged)
 	{
@@ -39,10 +32,7 @@
 			{
 				$sql = "INSERT INTO `adresse`(`OwnerID`, `Ligne1`, `Ligne2`, `Ville`, `CodePostal`, `Pays`, `Telephone`) VALUES ('" . $user["ID"] . "', '" . $ligne1 . "', '" . $ligne2 . "', '" . $ville . "', '" . $codePostal . "', '" . $pays . "', '" . $telephone . "')";
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-				if($_)
-				{
 					redirect('./?page=account');
-				}
 			}
 		}
 	}

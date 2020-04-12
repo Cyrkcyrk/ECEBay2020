@@ -1,5 +1,5 @@
 <?php
-	// require("functions.php");
+	$erreur = ""; 
 	
 	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
 	$password =  isset($_POST["password"])? $_POST["password"] :"";
@@ -7,56 +7,63 @@
 	$prenom =  isset($_POST["prenom"])? $_POST["prenom"] :"";
 	$type =  isset($_POST["type"])? $_POST["type"] :"";
 	$inscription =  isset($_POST["inscription"])? $_POST["inscription"] :"";
-	$erreur = "";
 	
-	if($inscription != "")
+	
+	if(!$logged)
 	{
-		if($mail == "") {
-			$erreur .= "mail incomplet <br>";
-		} 
-		if($password == "") {
-			$erreur .= "password incomplet <br>";
-		} 
-		if($nom == "") {
-			$erreur .= "nom incomplet <br>";
-		} 
-		if($prenom == "") {
-			$erreur .= "prenom incomplet <br>";
-		} 
-		if($type == "") {
-			$erreur .= "type incomplet <br>";
-		} 
-		
-		if($erreur == "")
+		if($inscription != "")
 		{
-			if ($type = "vendeur") {
-				$type = 1;
-			}
-			else {
-				$type = 0;
-			}
+			if($mail == "") {
+				$erreur .= "mail incomplet <br>";
+			} 
+			if($password == "") {
+				$erreur .= "password incomplet <br>";
+			} 
+			if($nom == "") {
+				$erreur .= "nom incomplet <br>";
+			} 
+			if($prenom == "") {
+				$erreur .= "prenom incomplet <br>";
+			} 
+			if($type == "") {
+				$erreur .= "type incomplet <br>";
+			} 
 			
-			// $password = password_hash ($password , PASSWORD_BCRYPT);
-			$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
-			
-			
-			$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
-			list ($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
-			if($_) 
+			if($erreur == "")
 			{
-				$erreur .= "Cet email est deja enregistré.";
-			}
-			else
-			{
-				$sql = "INSERT INTO `Utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
-				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-				if($_)
+				if ($type = "vendeur") {
+					$type = 1;
+				}
+				else {
+					$type = 0;
+				}
+				
+				// $password = password_hash ($password , PASSWORD_BCRYPT);
+				$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
+				
+				
+				$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
+				list ($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
+				if($_) 
 				{
-					redirect('./?page=accueil');
+					$erreur .= "Cet email est deja enregistré.";
+				}
+				else
+				{
+					$sql = "INSERT INTO `Utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
+					list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+					if($_)
+					{
+						redirect('./?page=accueil');
+					}
 				}
 			}
+			
 		}
-		
+	}
+	else
+	{
+		redirect('./?page=accueil');
 	}
 ?>
 

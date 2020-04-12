@@ -1,12 +1,11 @@
 <?php
+	$erreur = ""; 
 	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
-	
-	
+
 	if($token != "")
 	{
 		$sql = "DELETE FROM `logintoken` WHERE `Token` = '" . $token . "'";
 		
-		$erreur = "";
 		list($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 		if ($_)
 		{

@@ -1,6 +1,5 @@
 <?php
 	require("functions.php");
-	$erreur = ""; 
 	
 	$logged = false;
 	$user = null;
@@ -9,6 +8,11 @@
 	
 	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
 	list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
+	
+	//https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +49,7 @@
 					}
 					else
 					{
-						echo "<a href='./?page=login'>Connexion</a> ou <a href='register'>Creer un compte</a> <br>";
+						echo "<a href='./?page=login'>Connexion</a> ou <a href='./?page=register'>Creer un compte</a> <br>";
 						echo "<a href='./?page=Panier.html'>Votre panier</a>";
 					}
 				?>
