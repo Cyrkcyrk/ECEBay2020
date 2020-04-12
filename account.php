@@ -1,5 +1,4 @@
 <?php
-	require("functions.php");
 	$erreur = ""; 
 	$logged = false;
 	$user = null;
@@ -60,7 +59,7 @@
 		
 		
 		echo "Bienvenue, " . $user['Prenom'] . " " . $user['Nom'] . " :D <br>";
-		echo "<a href='./logout.php?_=" . $token ."'>Se deconnecter</a><br>";
+		echo "<a href='./?page=logout&_=" . $token ."'>Se deconnecter</a><br>";
 		
 		echo "<h2> Vos adresse(s)</h2><hr>";
 		if(!$adresses)
@@ -85,7 +84,7 @@
 				echo $string_adresse;
 			}
 		}
-		echo "<a href='./ajouterAdresse.php'>Ajouter une adresse</a><br>";
+		echo "<a href='./?page=ajouterAdresse'>Ajouter une adresse</a><br>";
 	}
 	else
 	{

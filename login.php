@@ -1,5 +1,5 @@
 <?php
-	require("functions.php");
+	// require("functions.php");
 
 	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
 	$password =  isset($_POST["password"])? $_POST["password"] :"";
@@ -50,7 +50,7 @@
 							if($_)
 							{
 								setcookie("token", $token, time()+3600);
-								redirect('./index');
+								redirect('./?page=accueil');
 							}
 							else
 							{
@@ -91,7 +91,7 @@
 	}
 </style>
 
-<form action="login.php" method="post">
+<form action="./?page=login" method="post">
 	<div id="identification">
 		<div id="formulaire">
 			<table>

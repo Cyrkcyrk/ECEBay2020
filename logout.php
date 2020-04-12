@@ -1,6 +1,4 @@
 <?php
-	require("functions.php");
-	
 	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
 	
 	
@@ -14,7 +12,7 @@
 		{
 			//https://www.geeksforgeeks.org/remove-a-cookie-using-php/
 			setcookie("token", "", time() - 3600); 
-			redirect('./index');
+			redirect('./?page=accueil');
 		}
 		else
 		{
@@ -26,6 +24,6 @@
 	}
 	else
 	{
-		redirect('./index');
+		redirect('./?page=accueil');
 	}
 ?>

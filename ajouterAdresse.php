@@ -1,5 +1,4 @@
 <?php
-	require("functions.php");
 	$erreur = ""; 
 	$logged = false;
 	$user = null;
@@ -42,14 +41,14 @@
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 				if($_)
 				{
-					redirect('./account');
+					redirect('./?page=account');
 				}
 			}
 		}
 	}
 	else
 	{
-		redirect('./login');
+		redirect('./?page=login');
 	}
 ?>
 
@@ -62,7 +61,7 @@
 	}
 </style>
 
-<form action="ajouterAdresse.php" method="post">
+<form action="./?page=ajouterAdresse" method="post">
 	<div id="identification">
 		<div id="formulaire">
 			<table>

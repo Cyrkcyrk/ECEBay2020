@@ -1,4 +1,5 @@
 <?php 
+	$imported = true;
 	$_DATABASE = Array(
 		"host" => "localhost",
 		"user" => "root",

@@ -1,5 +1,5 @@
 <?php
-	require("functions.php");
+	// require("functions.php");
 	
 	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
 	$password =  isset($_POST["password"])? $_POST["password"] :"";
@@ -52,7 +52,7 @@
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 				if($_)
 				{
-					redirect('./index');
+					redirect('./?page=accueil');
 				}
 			}
 		}
@@ -69,7 +69,7 @@
 	}
 </style>
 
-<form action="register.php" method="post">
+<form action="./?page=register" method="post">
 	<div id="identification">
 		<div id="formulaire">
 			<table>
