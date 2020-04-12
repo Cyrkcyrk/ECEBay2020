@@ -5,21 +5,18 @@
 		"password" => "",
 		"BDD" => "ecebay"
 	);
+	
 	$_INFO = Array (
 		"secret" => "MonCodeSecret"
 	);
 	
 	
-	
 	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
 	$password =  isset($_POST["password"])? $_POST["password"] :"";
-	$nom =  isset($_POST["nom"])? $_POST["nom"] :"";
-	$prenom =  isset($_POST["prenom"])? $_POST["prenom"] :"";
-	$type =  isset($_POST["type"])? $_POST["type"] :"";
-	$inscription =  isset($_POST["inscription"])? $_POST["inscription"] :"";
+	$connection =  isset($_POST["connection"])? $_POST["connection"] :"";
 	$erreur = "";
 	
-	if($inscription != "")
+	if($connection != "")
 	{
 		if($mail == "") {
 			$erreur .= "mail incomplet <br>";
@@ -27,46 +24,69 @@
 		if($password == "") {
 			$erreur .= "password incomplet <br>";
 		} 
-		if($nom == "") {
-			$erreur .= "nom incomplet <br>";
-		} 
-		if($prenom == "") {
-			$erreur .= "prenom incomplet <br>";
-		} 
-		if($type == "") {
-			$erreur .= "type incomplet <br>";
-		} 
 		
 		if($erreur == "")
 		{
-			if ($type = "vendeur") {
-				$type = 1;
-			}
-			else {
-				$type = 0;
-			}
-			
-			// $password = password_hash ($password , PASSWORD_BCRYPT);
-			$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
-			
-			
 			$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
-			if(SQLCheck($_DATABASE, $sql, $erreur)) 
+			if(!SQLCheck($_DATABASE, $sql, $erreur)) 
 			{
-				$erreur .= "Cet email est deja enregistré.";
+				$erreur .= "Ce compte n'existe pas. <br>" . $sql . "<hr>";
 			}
 			else
 			{
-				$sql = "INSERT INTO `Utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
-				if(SQLquery($_DATABASE, $sql, $erreur))
+				$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "' LIMIT 1;";
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+				
+				if ($mysqli -> connect_errno) {
+					$error .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						
+						$row = mysqli_fetch_assoc($result);
+						
+						// echo $row["ID"]. " - " . $row["Mail"]. " - " . $row["MotDePasse"]. " - " . $row["Nom"]. " - " . $row["Prenom"]. " - " . $row["TypeCompte"]. " - " . $row["FondFavoris"] . "<hr>";
+						
+						$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
+						if($row["MotDePasse"] == $passwordHash)
+						{
+							$token = hash_hmac('md5', $passwordHash , time() . $_INFO["secret"]);
+							
+							$sql = "INSERT INTO `logintoken`(`Token`, `UserID`) VALUES ('" . $token . "', '" . $row["ID"] . "')";
+							if(SQLquery($_DATABASE, $sql, $error))
+							{
+								setcookie("token", $token, time()+3600);
+								header("Location: ./index.php", true, 301);
+								exit();
+							}
+							else
+							{
+								$erreur .= "Une erreur est survenue dans la création du token de connexion.";
+							}
+							
+						}
+						else
+						{
+							$erreur .= "Mot de passe incorrect";
+						}
+						$result -> free_result();
+						$mysqli -> close();
+					} 
+					else
+					{
+						$result -> free_result();
+						$mysqli -> close();
+						$erreur .= "Cet email n'existe pas.";
+					}
+				}
+				else
 				{
-					//https://www.rapidtables.com/web/dev/php-redirect.html
-					header("Location: ./index.php", true, 301);
-					exit();
+					$erreur .= "Une erreur est survenue";
 				}
 			}
 		}
-		
 	}
 	
 	
@@ -124,7 +144,7 @@
 	}
 </style>
 
-<form action="register.php" method="post">
+<form action="login.php" method="post">
 	<div id="identification">
 		<div id="formulaire">
 			<table>
@@ -138,26 +158,7 @@
 					<td><?php echo "<input type='password' name='password'>";?></td>
 				</tr>
 				<tr>
-					<td>Nom:</td>
-					<td><?php echo "<input type='text' name='nom' value ='" . $nom ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Prenom:</td>
-					<td><?php echo "<input type='text' name='prenom' value ='" . $prenom ."'>";?></td>
-				</tr>
-				
-				<tr>
-					<td> Type de compte: </td>
-					<td>
-						<input type="radio" name="type" value="vendeur"> 
-						<label for="vendeur">Vendeur</label><br>
-						
-						<input type="radio" name="type" value="acheteur"> 
-						<label for="acheteur">Acheteur</label><br>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" style="text-align:center;"><input type="submit" value="S'inscrire" name="inscription"></td>
+					<td colspan="2" style="text-align:center;"><input type="submit" value="Se connecter" name="connection"></td>
 				<tr>
 			</table>
 		</div>
