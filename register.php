@@ -41,18 +41,18 @@
 			
 			
 			$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
-			if(SQLCheck($_DATABASE, $sql, $erreur)) 
+			list ($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
+			if($_) 
 			{
 				$erreur .= "Cet email est deja enregistré.";
 			}
 			else
 			{
 				$sql = "INSERT INTO `Utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
-				if(SQLquery($_DATABASE, $sql, $erreur))
+				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+				if($_)
 				{
-					//https://www.rapidtables.com/web/dev/php-redirect.html
-					header("Location: ./index.php", true, 301);
-					exit();
+					redirect('./index');
 				}
 			}
 		}

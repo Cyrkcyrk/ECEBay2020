@@ -9,13 +9,12 @@
 		$sql = "DELETE FROM `logintoken` WHERE `Token` = '" . $token . "'";
 		
 		$erreur = "";
-		if (SQLquery($_DATABASE, $sql, $erreur))
+		list($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+		if ($_)
 		{
 			//https://www.geeksforgeeks.org/remove-a-cookie-using-php/
 			setcookie("token", "", time() - 3600); 
-			header("Location: ./index", true, 301);
-			exit();
-			echo "logout success";
+			redirect('./index');
 		}
 		else
 		{
@@ -27,7 +26,6 @@
 	}
 	else
 	{
-		header("Location: ./index", true, 301);
-		exit();
+		redirect('./index');
 	}
 ?>

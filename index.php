@@ -1,10 +1,5 @@
 <?php
-	$_DATABASE = Array(
-		"host" => "localhost",
-		"user" => "root",
-		"password" => "",
-		"BDD" => "ecebay"
-	);
+	require("functions.php");
 	$erreur = ""; 
 	
 	$logged = false;
@@ -13,7 +8,7 @@
 	
 	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
 	
-	if($token != "")
+	/*if($token != "")
 	{
 		$sql = "SELECT * FROM `utilisateur` INNER JOIN `logintoken` ON `utilisateur`.`ID`= `logintoken`.`UserID` WHERE `logintoken`.`Token` = '" . $token . "';";
 				
@@ -33,22 +28,17 @@
 					"Nom" => $row["Nom"],
 					"Prenom" => $row["Prenom"]
 				);
-				
-				$result -> free_result();
-				$mysqli -> close();
 			} 
-			else
-			{
-				$result -> free_result();
-				$mysqli -> close();
-				$erreur .= "Cet email n'existe pas.";
-			}
+			$result -> free_result();
+			$mysqli -> close();
 		}
 		else
 		{
 			$erreur .= "Une erreur est survenue";
 		}
 	}
+	*/
+	list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
 ?>
 
 

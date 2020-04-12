@@ -18,7 +18,8 @@
 		if($erreur == "")
 		{
 			$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
-			if(!SQLCheck($_DATABASE, $sql, $erreur)) 
+			list($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
+			if(!$_) 
 			{
 				$erreur .= "Ce compte n'existe pas. <br>" . $sql . "<hr>";
 			}
@@ -45,11 +46,11 @@
 							$token = hash_hmac('md5', $passwordHash , time() . $_INFO["secret"]);
 							
 							$sql = "INSERT INTO `logintoken`(`Token`, `UserID`) VALUES ('" . $token . "', '" . $row["ID"] . "')";
-							if(SQLquery($_DATABASE, $sql, $error))
+							list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+							if($_)
 							{
 								setcookie("token", $token, time()+3600);
-								header("Location: ./index.php", true, 301);
-								exit();
+								redirect('./index');
 							}
 							else
 							{
