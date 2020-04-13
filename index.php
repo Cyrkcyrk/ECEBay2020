@@ -26,10 +26,34 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
 	<link href="css/style1.css" rel="stylesheet" type="text/css" />
+
+	<script>
+		function dynamicHeigh() {
+			
+			//https://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+			var body = document.body;
+			var html = document.documentElement;
+
+			var height = Math.max( document.body.scrollHeight, 
+								   document.body.offsetHeight, 
+								   document.documentElement.clientHeight, 
+								   document.documentElement.scrollHeight, 
+								   document.documentElement.offsetHeight 
+								 );
+			
+			var heightContent = height - ( document.getElementById("header").offsetHeight + document.getElementById("menu").offsetHeight + (document.getElementById("footer").offsetHeight*2));
+			
+			
+		document.getElementById("content").style = "height : " + heightContent + "px;";
+		}
+		
+		window.onresize = dynamicHeigh();
+		
+	</script>
 </head>
 
-<body>
-	<div class="header">
+<body onload="dynamicHeigh();">
+	<div id="header" class="header">
 		<div class="logo">
 			<a href="./?page=accueil">
 				<img src="void-02.jpg" width="100" height="60">
@@ -58,7 +82,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="menu">
+	<div id="menu" class="menu">
 		<nav>
 			<ul>
 				<li class="deroul"><p>Catégories &ensp;</p>
@@ -81,14 +105,10 @@
 			</ul>
 		</nav>
 	</div>
-	
-	
-	<div class="content">
+	<div id="content" class="content">
 		<?php include("./" . $page . ".php"); ?>
 	</div>
-	
-	
-	<div class="footer">
+	<div id="footer" class="footer">
 		ECEbay © all right reserved 2020-2020
 	</div>
 </body>

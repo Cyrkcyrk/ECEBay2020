@@ -62,8 +62,47 @@
 		{
 			foreach($items as $item)
 			{
+				$image = "";
+				$sql = "SELECT * FROM `medias` WHERE `ItemID` = ". $item["ID"] . " AND `type` = 1 ORDER BY `Ordre` ASC LIMIT 1;";
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+				
+				if ($mysqli -> connect_errno) {
+					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						
+						$image = mysqli_fetch_assoc($result)["Lien"];
+
+						$result -> free_result();
+						$mysqli -> close();
+					}
+					else
+					{
+						$items = false;
+						$result -> free_result();
+						$mysqli -> close();
+					}
+				}
+				else
+				{
+					$erreur .= "Une erreur est survenue";
+				}
+				
+				
+				
+				
 				$string_items = '';
 				$string_items .= "<div class='item'>";
+				if($image != "")
+				{
+					$string_items .= "\n<div class='image'>";
+					$string_items .= "<img src='". $image . "'>";
+					$string_items .= "</div>";
+				}
+				$string_items .= "\n<div class='description'>";
 				$string_items .= "Nom : " . $item["Nom"] . "<br>";
 				$string_items .= "Points positifs : " . $item["DescriptionQ"] . "<br>";
 				$string_items .= "Points négatifs : " . $item["DescriptionD"] . "<br>";
@@ -76,8 +115,7 @@
 				else if($item["ModeVente"] == 2)
 					$string_items .= "Offre commencant à " . $item["PrixDepart"] . "€.<br>";
 				
-				
-				$string_items .= "<a href='?page=supprimerItem&ID=" . $item["ID"] . "'>Supprimer cet item </a></div>\n";
+				$string_items .= "</div>\n<a href='?page=supprimerItem&ID=" . $item["ID"] . "'>Supprimer cet item </a>\n</div>";
 				
 				echo $string_items;
 			}
@@ -88,7 +126,7 @@
 	}
 	else
 	{
-		redirect('./?page=accueil');
+		redirect('./?page=login');
 	}
 ?>
 

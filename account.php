@@ -156,7 +156,7 @@
 	}
 	else
 	{
-		redirect('./?page=accueil');
+		redirect('./?page=login');
 	}
 ?>
 

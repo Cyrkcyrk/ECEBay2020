@@ -1,4 +1,5 @@
 <?php 
+define ("SECRET", "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6UX7vZUeC5mhQ3CRnBrQfKm2rXh66QkwJCNb2SEzG88NiuV5h4Tf9C58T8w7z8rvvj4E3");
 	$imported = true;
 	$_DATABASE = Array(
 		"host" => "localhost",
@@ -8,7 +9,7 @@
 	);
 	
 	$_INFO = Array (
-		"secret" => "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6UX7vZUeC5mhQ3CRnBrQfKm2rXh66QkwJCNb2SEzG88NiuV5h4Tf9C58T8w7z8rvvj4E3"
+		"secret" => SECRET
 	);
 		
 	function SQLquery($_DATABASE, $sql, $error)
@@ -105,5 +106,18 @@
 	{
 		header("Location: ". $URL, true, 301);
 		exit();
+	}
+	
+	function tokenGenerator () {
+		function RandomString()
+		{
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			$randstring = '';
+			for ($i = 0; $i < 10; $i++) {
+				$randstring = $characters[rand(0, strlen($characters)-1)];
+			}
+			return $randstring;
+		}
+		return hash_hmac('md5', RandomString() , time() . SECRET);
 	}
 ?>

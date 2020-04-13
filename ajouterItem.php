@@ -9,6 +9,8 @@
 	$checkboxVenteDirecte =  isset($_POST["checkboxVenteDirecte"])? $_POST["checkboxVenteDirecte"] :"";
 	$prixDepart =  isset($_POST["prixDepart"])? $_POST["prixDepart"] :"";
 	$prixDirect =  isset($_POST["prixDirect"])? $_POST["prixDirect"] :"";
+	
+	$images =  isset($_POST["images"])? $_POST["images"] :"";
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)
@@ -63,11 +65,62 @@
 				else if($modeVente == "encheres") $_modeDeVente = 1;
 				else if($modeVente == "offre") $_modeDeVente = 2;
 				
-				echo $modeVente;
+				$dateMiseEnLigne = time();
 				
-				$sql = "INSERT INTO `item`(`OwnerID`, `Nom`, `DescriptionQualites`, `DescriptionDefauts`, `Categorie`, `EtatVente`, `ModeVente`, `PrixDepart`, `VenteDirect`, `PrixVenteDirect`, `dateMiseEnLigne`) VALUES ('". $user["ID"] ."', '". $Nom ."', '". $DescriptionQ ."', '". $DescriptionD ."', '". $categorie ."', ". 1 .", ". $_modeDeVente .", '". $_tmpPrixDepart ."', '". $_venteDirecte ."', '". $_tmpPrixDirect ."', '". time() ."')";
+				$sql = "INSERT INTO `item`(`OwnerID`, `Nom`, `DescriptionQualites`, `DescriptionDefauts`, `Categorie`, `EtatVente`, `ModeVente`, `PrixDepart`, `VenteDirect`, `PrixVenteDirect`, `dateMiseEnLigne`) VALUES ('". $user["ID"] ."', '". $Nom ."', '". $DescriptionQ ."', '". $DescriptionD ."', '". $categorie ."', ". 1 .", ". $_modeDeVente .", '". $_tmpPrixDepart ."', '". $_venteDirecte ."', '". $_tmpPrixDirect ."', '". $dateMiseEnLigne ."')";
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-				redirect('./?page=vente');
+				if($_)
+					
+					$sql = "SELECT * FROM `item` WHERE `OwnerID` = '" . $user["ID"] . "' AND `Nom` = '" . $Nom . "' AND `dateMiseEnLigne` = '" . $dateMiseEnLigne . "';";
+					$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+					mysqli_set_charset($mysqli, "utf8");
+					
+					if ($mysqli -> connect_errno) {
+						$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+					}
+					if ($result = $mysqli -> query($sql)) {
+						if (mysqli_num_rows($result) > 0) {
+							
+							$itemID = mysqli_fetch_assoc($result)["ID"];
+							$cheminAcces = "./uploads/". $user["ID"] . "/";
+							$sql = "INSERT INTO `medias`(`ItemID`, `Lien`, `type`, `Ordre`) VALUES ";
+							
+							$compteur = 0;
+							forEach($images as $img)
+							{
+								if($compteur != 0)
+									$sql .= ", ";
+								
+								$sql .= "('". $itemID . "', '". $cheminAcces . $img . "', 1, ". $compteur . ")" ;
+								$compteur = $compteur+1;
+							}
+							$sql .= ";";
+							
+							$result -> free_result();
+							$mysqli -> close();
+							
+							list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+							redirect('./?page=vente&SQL=' . $sql);
+						}
+						else
+						{
+							$items = false;
+							$result -> free_result();
+							$mysqli -> close();
+						}
+					}
+					else
+					{
+						$erreur .= "Une erreur est survenue";
+					}
+					
+					
+					
+					/*forEach($images as $img)
+					{
+						echo $img . "<br>\n";
+					}*/
+					//redirect('./?page=vente&SQL=' . $sql);
 			}
 		}
 	}
@@ -76,6 +129,13 @@
 		redirect('./?page=login');
 	}
 ?>
+
+<!--
+http://www.expertphp.in/article/php-upload-multiple-file-using-dropzone-js-with-drag-and-drop-features
+https://www.dropzonejs.com
+-->
+<link href="http://demo.expertphp.in/css/dropzone.css" rel="stylesheet">
+<script src="http://demo.expertphp.in/js/dropzone.js"></script>
 
 <style>
 	#formulaire{
@@ -121,12 +181,58 @@
 		}
 	}
 	
+	
+	Dropzone.options.myDropzone = {
+		init: function() {
+			this.on("addedfile", function(file) {
+				// alert(file.name)
+			});
+		},
+		//https://stackoverflow.com/questions/23332464/how-to-return-new-filename-to-dropzone-after-upload-is-complete-as-hidden-form-i/27143904
+		accept: function(file, done) 
+		{
+			var re = /(?:\.([^.]+))?$/;
+			var ext = re.exec(file.name)[1];
+			ext = ext.toUpperCase();
+			if ( ext == "JPG" || ext == "JPEG" || ext == "PNG" ||  ext == "GIF" ||  ext == "BMP") 
+			{
+				done();
+			}else { 
+				done("Please select only supported picture files."); 
+			}
+		},
+		success: function( file, response ){
+			 obj = JSON.parse(response);
+			 // alert(obj.filename);
+			 
+			 /*var _img = document.createElement("img");
+			 _img.src = "./uploads/" + <?php echo "'" . $user["ID"] . "'";?> + "/" + obj.filename;
+			 
+			 document.getElementById("images").appendChild(_img);
+			 document.getElementById("images").appendChild(document.createElement("br"));
+			 dynamicHeigh()
+			 setTimeout(dynamicHeigh(), 1000);
+			 */
+			 
+			 var _input = document.createElement("input");
+			 _input.type = "hidden";
+			 _input.value = obj.filename;
+			 _input.name = "images[]";
+			  document.getElementById("form").appendChild(_input);
+			 
+			 
+		}
+	};
+	
 </script>
+<form action="upload.php" class="dropzone" id="my-dropzone"></form>
+
+<div id="images"></div>
 
 
-<form action="./?page=ajouterItem" method="post">
-	<div id="identification">
-		<div id="formulaire">
+<div id="identification">
+	<div id="formulaire">
+		<form action="./?page=ajouterItem" id="form" method="post">
 			<table>
 				<tr>
 					<td>Nom:</td>
@@ -186,14 +292,15 @@
 					<td colspan="2" style="text-align:center;"><input type="submit" value="Valider" name="valider"></td>
 				<tr>
 			</table>
-		</div>
-		<div id="erreur">
-			<?php if($erreur != "")
-				{
-					echo $erreur;
-				}
-			?>
-		</div>
+		</form>
 	</div>
-</form>
+	<div id="erreur">
+		<?php if($erreur != "")
+			{
+				echo $erreur;
+			}
+		?>
+	</div>
+</div>
+
 
