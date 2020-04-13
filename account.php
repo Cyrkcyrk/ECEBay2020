@@ -116,7 +116,7 @@
 				$string_adresse .= $ad["CodePostal"] . "<br>";
 				$string_adresse .= $ad["Pays"] . "<br>";
 				$string_adresse .= $ad["Telephone"] . "<br>";
-				$string_adresse .= "<a href='?page=supprimerAdresse&ID=" . $ad["ID"] . "'>Supprimer cette adresse </a></div>";
+				$string_adresse .= "<a href='?page=supprimerAdresse&ID=" . $ad["ID"] . "'>Supprimer cette adresse </a></div>\n";
 				
 				echo $string_adresse;
 			}
@@ -145,7 +145,7 @@
 				$string_cb .= $cb["NomAffiche"] . "<br>";
 				$string_cb .= $cb["DatePeremption"] . "<br>";
 				// $string_cb .= "***" . "<br>";
-				$string_cb .= "<a href='?page=supprimerCarteBancaire&ID=" . $cb["ID"] . "'>Supprimer cette carte bancaire </a></div>";
+				$string_cb .= "<a href='?page=supprimerCarteBancaire&ID=" . $cb["ID"] . "'>Supprimer cette carte bancaire </a></div>\n";
 				
 				echo $string_cb;
 			}

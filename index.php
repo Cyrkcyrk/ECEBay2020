@@ -22,7 +22,7 @@
 	<meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
 	<link href="css/style1.css" rel="stylesheet" type="text/css" />
@@ -63,19 +63,19 @@
 			<ul>
 				<li class="deroul"><p>Catégories &ensp;</p>
 					<ul class="sous">
-						<li>Ferraille ou trésor</li>
-						<li>Bon pour le musée</li>
-						<li>Accessoire VIP</li>
+						<li><a href="#">Ferraille ou trésor</a></li>
+						<li><a href="#">Bon pour le musée</a></li>
+						<li><a href="#">Accessoire VIP</a></li>
 					</ul>
 				</li>
 				<li class="deroul"><p>Achat &ensp;</p>
 					<ul class="sous">
-						<li>Enchères</li>
-						<li>Achetez-le Maintenant</li>
-						<li>Meilleure Offre</li>
+						<li><a href="#">Enchères</a></li>
+						<li><a href="#">Achetez-le Maintenant</a></li>
+						<li><a href="#">Meilleure Offre</a></li>
 					</ul>
 				</li>
-				<li>Vendre</li>
+				<li><a href='./?page=vente'>Vendre</a></li>
 				<li><a href='./?page=account'>Mon compte</a></li>
 				<li>Admin</li>
 			</ul>
