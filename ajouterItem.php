@@ -61,7 +61,13 @@
 					$_tmpPrixDirect = 0;
 				}
 				
-				if($modeVente == "directe") $_modeDeVente = 0;
+				if($modeVente == "directe")
+				
+				if($modeVente == "directe") 
+				{
+					$_modeDeVente = 0;
+					$_tmpPrixDepart = 0;
+				}
 				else if($modeVente == "encheres") $_modeDeVente = 1;
 				else if($modeVente == "offre") $_modeDeVente = 2;
 				

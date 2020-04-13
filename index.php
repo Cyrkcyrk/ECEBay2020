@@ -87,16 +87,16 @@
 			<ul>
 				<li class="deroul"><p>Catégories &ensp;</p>
 					<ul class="sous">
-						<li><a href="#">Ferraille ou trésor</a></li>
-						<li><a href="#">Bon pour le musée</a></li>
-						<li><a href="#">Accessoire VIP</a></li>
+						<li><a href="./?page=categories&cat=ferraille">Ferraille ou trésor</a></li>
+						<li><a href="./?page=categories&cat=musee">Bon pour le musée</a></li>
+						<li><a href="./?page=categories&cat=VIP">Accessoire VIP</a></li>
 					</ul>
 				</li>
 				<li class="deroul"><p>Achat &ensp;</p>
 					<ul class="sous">
-						<li><a href="#">Enchères</a></li>
-						<li><a href="#">Achetez-le Maintenant</a></li>
-						<li><a href="#">Meilleure Offre</a></li>
+						<li><a href="./?page=categories&type=encheres">Enchères</a></li>
+						<li><a href="./?page=categories&type=directe">Achetez-le Maintenant</a></li>
+						<li><a href="./?page=categories&type=offre">Meilleure Offre</a></li>
 					</ul>
 				</li>
 				<li><a href='./?page=vente'>Vendre</a></li>
