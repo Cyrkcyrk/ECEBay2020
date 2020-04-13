@@ -61,8 +61,6 @@
 					$_tmpPrixDirect = 0;
 				}
 				
-				if($modeVente == "directe")
-				
 				if($modeVente == "directe") 
 				{
 					$_modeDeVente = 0;

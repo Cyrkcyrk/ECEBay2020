@@ -156,5 +156,28 @@ nav > ul li:hover .sous
 	padding : 5px;
 	border : solid;
 	border-width : 2px;
-	/* float:left; */
+	float:left;
+	width : 25%;
 }
+
+
+
+
+
+div.item div.image {
+	max-width: 80%;
+	height: auto;
+	overflow: auto;
+}
+
+div.item div.image img{
+	width: 100%;
+	height: auto;
+}
+
+
+
+
+
+
+

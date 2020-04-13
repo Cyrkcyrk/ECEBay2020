@@ -20,6 +20,7 @@
 					$nomPage = "Accessoire VIP";
 					break;
 			}
+			$sql = "SELECT * FROM `item` WHERE `Categorie` = '". $categorie ."' AND `EtatVente` = 1 ORDER BY `dateMiseEnLigne` DESC;";
 		}
 		else {
 			switch ($type)
@@ -150,12 +151,11 @@
 				else if($item["ModeVente"] == 2)
 					$string_items .= "Offre commencant à " . $item["PrixDepart"] . "€.<br>";
 				
-				$string_items .= "</div>\n<a href='?page=supprimerItem&ID=" . $item["ID"] . "'>Supprimer cet item </a>\n</div>";
+				$string_items .= "</div>\n</div>";
 				
 				echo $string_items;
 			}
 		}
-		echo "<a href='./?page=ajouterItem'>Vendre un item</a><hr>";
 		echo "</div>";
 		
 	}

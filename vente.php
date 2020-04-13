@@ -19,6 +19,38 @@
 				$_compteur = 0;
 				while ($row = mysqli_fetch_assoc($result))
 				{
+					
+					$image = "";
+					$sql = "SELECT * FROM `medias` WHERE `ItemID` = ".  $row["ID"] . " AND `type` = 1 ORDER BY `Ordre` ASC LIMIT 1;";
+					
+					$mysqli_img = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+					mysqli_set_charset($mysqli_img, "utf8");
+					
+					if ($mysqli_img -> connect_errno) {
+						$erreur .= "Failed to connect to MySQL: " . $mysqli_img -> connect_error;
+					}
+					if ($result_img = $mysqli_img -> query($sql)) {
+						if (mysqli_num_rows($result_img) > 0) {
+							
+							$image = mysqli_fetch_assoc($result_img)["Lien"];
+
+							$result_img -> free_result();
+							$mysqli_img -> close();
+						}
+						else
+						{
+							$items = false;
+							$result_img -> free_result();
+							$mysqli_img -> close();
+						}
+					}
+					else
+					{
+						$erreur .= "Une erreur est survenue";
+					}
+					
+					
+					
 					if($row["Categorie"] == "ferraille") $_categorie = "Ferraille ou trésor";
 					else if($row["Categorie"] == "musee") $_categorie = "Bon pour le musée";
 					else if($row["Categorie"] == "VIP") $_categorie = "Accessoire VIP";
@@ -34,7 +66,8 @@
 						"PrixDepart" => $row["PrixDepart"],
 						"VenteDirect" => $row["VenteDirect"],
 						"PrixVenteDirect" => $row["PrixVenteDirect"],
-						"dateMiseEnLigne" => $row["dateMiseEnLigne"]
+						"dateMiseEnLigne" => $row["dateMiseEnLigne"],
+						"image" => $image
 					));
 				}
 				$result -> free_result();
@@ -52,7 +85,7 @@
 			$erreur .= "Une erreur est survenue";
 		}
 		
-		echo "<div id='items'>";
+		echo "<div class='items'>";
 		echo "<h2> Vos item(s)</h2>";
 		if(!$items)
 		{
@@ -62,46 +95,16 @@
 		{
 			foreach($items as $item)
 			{
-				$image = "";
-				$sql = "SELECT * FROM `medias` WHERE `ItemID` = ". $item["ID"] . " AND `type` = 1 ORDER BY `Ordre` ASC LIMIT 1;";
-				
-				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-				mysqli_set_charset($mysqli, "utf8");
-				
-				if ($mysqli -> connect_errno) {
-					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-				}
-				if ($result = $mysqli -> query($sql)) {
-					if (mysqli_num_rows($result) > 0) {
-						
-						$image = mysqli_fetch_assoc($result)["Lien"];
-
-						$result -> free_result();
-						$mysqli -> close();
-					}
-					else
-					{
-						$items = false;
-						$result -> free_result();
-						$mysqli -> close();
-					}
-				}
-				else
-				{
-					$erreur .= "Une erreur est survenue";
-				}
-				
-				
-				
-				
 				$string_items = '';
 				$string_items .= "<div class='item'>";
-				if($image != "")
+				
+				if($item["image"] != "")
 				{
 					$string_items .= "\n<div class='image'>";
-					$string_items .= "<img src='". $image . "'>";
+					$string_items .= "<img src='". $item["image"] . "'>";
 					$string_items .= "</div>";
 				}
+				
 				$string_items .= "\n<div class='description'>";
 				$string_items .= "Nom : " . $item["Nom"] . "<br>";
 				$string_items .= "Points positifs : " . $item["DescriptionQ"] . "<br>";
@@ -120,8 +123,8 @@
 				echo $string_items;
 			}
 		}
-		echo "<a href='./?page=ajouterItem'>Vendre un item</a><hr>";
 		echo "</div>";
+		echo "\n<div><a href='./?page=ajouterItem'>Vendre un item</a></div><hr>";
 		
 	}
 	else

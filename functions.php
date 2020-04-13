@@ -60,7 +60,9 @@ define ("SECRET", "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6U
 		$error = "";
 		if($token != "")
 		{
-			$sql = "SELECT * FROM `utilisateur` INNER JOIN `logintoken` ON `utilisateur`.`ID`= `logintoken`.`UserID` WHERE `logintoken`.`Token` = '" . $token . "';";
+			$tokenExpiration = time()-3600;
+			
+			$sql = "SELECT * FROM `utilisateur` INNER JOIN `logintoken` ON `utilisateur`.`ID`= `logintoken`.`UserID` WHERE `logintoken`.`Token` = '" . $token . "' AND `logintoken`.`CreationDate` > '" . $tokenExpiration . "';";
 					
 			$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 			mysqli_set_charset($mysqli, "utf8");

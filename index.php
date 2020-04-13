@@ -109,7 +109,7 @@
 		<?php include("./" . $page . ".php"); ?>
 	</div>
 	<div id="footer" class="footer">
-		ECEbay © all right reserved 2020-2020
+		ECEbay © all right reserved 2020
 	</div>
 </body>
 </html>

@@ -27,7 +27,6 @@
 				'filename' => $fileName,
 			);
 			echo json_encode($success_message);
-
 		}
 	}
 ?>
