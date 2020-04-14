@@ -39,7 +39,6 @@
 						}
 						else
 						{
-							$items = false;
 							$result_img -> free_result();
 							$mysqli_img -> close();
 						}
