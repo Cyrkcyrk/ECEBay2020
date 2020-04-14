@@ -98,34 +98,97 @@
 
 
 
+
+
+
+
+
+
+
 <div class="row">
-	<div class="col-lg-4 col-md-6 mb-4">
+	<div class="col-lg-4 col-md-5 mb-4">
 		<div class="card h-100">
-			<?php
-				if($images)
-				{
-					forEach($images as $i)
+			<div class="preview-pic tab-content">
+				<?php
+					if($images)
 					{
-						echo "			<img class='card-img-top' src='". $i["Lien"] ."'>\n";
+						forEach($images as $i)
+						{
+							if($i["ordre"] == 0)
+								echo "				<div class='tab-pane active' id='pic-". $i["ordre"] ."'><img src='".$i["Lien"]."' /></div>";
+							else
+								echo "				<div class='tab-pane' id='pic-". $i["ordre"] ."'><img src='".$i["Lien"]."' /></div>";
+							
+						}
 					}
+				?>
+			</div>
+						<ul class="preview-thumbnail nav nav-tabs">
+				<?php
+					if($images)
+					{
+						forEach($images as $i)
+						{
+							if($i["ordre"] == 0)
+								echo "				<li class='active'><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img src='". $i["Lien"] ."' /></a></li>\n";
+							else
+								echo "				<li><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img src='". $i["Lien"] ."' /></a></li>\n";
+						}
+					}
+				?>
+			</ul>
+
+		</div>
+	</div>
+	<div class="col-lg-5 col-md-5 mb-5">
+		<div class="card-body">
+			
+			<?php
+				if($item)
+				{
+					echo "			<h4 class='card-title'>". $item["Nom"] ."</h4>\n";
+					echo "			<p>Vendu par <a href=./?page=user&user='". $item["OwnerID"] ."'>". $item["OwnerPrenom"] ." ". $item["OwnerNom"] ."</a></p>\n";
+					echo "			<p class='card-text'>". $item["DescriptionQ"] ."</p>\n";
+					echo "			<p class='card-text'>". $item["DescriptionD"] ."</p>\n";
 				}
 			?>
 		</div>
 	</div>
-	<div class="col-lg-5 col-md-6 mb-5">
-		<div class="card-body">
-			
-			<?php
-				echo "			<h4 class='card-title'>". $item["Nom"] ."</h4>\n";
-				echo "			<p>Vendu par <a href=./?page=user&user='". $item["OwnerID"] ."'>". $item["OwnerPrenom"] ." ". $item["OwnerNom"] ."</a></p>\n";
-				echo "			<p class='card-text'>". $item["DescriptionQ"] ."</p>\n";
-				echo "			<p class='card-text'>". $item["DescriptionD"] ."</p>\n";
-			?>
-		</div>
-	</div>
-	<div class="col-lg-3 col-md-6 mb-3">
+	<div class="col-lg-3 col-md-2 mb-3">
 		<div class="card-body float-right">
-			Acheter maintenant.
+			<?php
+				if($item["EtatVente"] != 1)
+				{
+					echo "			<p>Cet objet n'est plus disponible à la vente</p>\n";
+				}
+				else
+				{
+					if($item["ModeVente"] == 0)
+					{
+						echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+					}
+					else if($item["ModeVente"] == 1)
+					{
+						echo "			<p>Encherissez pour " . $item["PrixDepart"] . "€ </p>\n";
+						
+						if($item["VenteDirect"])
+						{
+							echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+						}
+					}
+					else if($item["ModeVente"] == 2)
+					{
+						echo "			<p>Faite une offre dans les " . $item["PrixDepartPrixDepart
+						PrixDepart
+						"] . "€ </p>\n";
+						if($item["VenteDirect"])
+						{
+							echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+						}
+					}
+					
+				}
+			?>
 		</div>
 	</div>
 </div>

@@ -44,7 +44,7 @@
 			var heightContent = height - ( document.getElementById("header").offsetHeight + document.getElementById("menu").offsetHeight + (document.getElementById("footer").offsetHeight*2));
 			
 			
-		document.getElementById("content").style = "height : " + heightContent + "px;";
+			document.getElementById("content").style = "height : " + heightContent + "px;";
 		}
 		
 		window.onresize = dynamicHeigh();
