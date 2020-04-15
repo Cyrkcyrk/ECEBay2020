@@ -93,6 +93,11 @@
 {
 	float: right;
 }
+.tropetit
+{
+	width: 400px;
+	text-align: left;
+}
 input
 {
 	display: inline-block;

@@ -132,32 +132,33 @@ header("Pragma: no-cache");
 		</nav>
 	</div>
 	<nav class="navbar navbar-expand-sm navbar-light bg-light d-sm-none">
-		<a class="navbar-brand" href="#">Navbar</a>
+		<a class="navbar-brand" href="#">Menu</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-			<ul class="navbar-nav mr-auto mt-2 mt-sm-0">
-				<li>
-					<p>Catégories</p>
-					<ul>
-						<li><a href="./?page=categories&cat=ferraille">Ferraille ou trésor</a></li>
-						<li><a href="./?page=categories&cat=musee">Bon pour le musée</a></li>
-						<li><a href="./?page=categories&cat=VIP">Accessoire VIP</a></li>
-					</ul>
+			<ul class="navbar-nav ">
+				<li class="tropetit">
+					Catégories
+					<ul class="tropetit"><a href="./?page=categories&cat=ferraille">Ferraille ou trésor</a></ul>
+					<ul class="tropetit"><a href="./?page=categories&cat=musee">Bon pour le musée</a></ul>
+					<ul class="tropetit"><a href="./?page=categories&cat=VIP">Accessoire VIP</a></ul>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Vendre</a>
+				<li class="tropetit">
+					Achat
+					<ul class="tropetit"><a href="./?page=categories&type=encheres">Enchères</a></ul>
+					<ul class="tropetit"><a href="./?page=categories&type=directe">Achetez-le Maintenant</a></ul>
+					<ul class="tropetit"><a href="./?page=categories&type=offre">Meilleure Offre</a></ul>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Vendre</a>
+				<li class="tropetit">
+					<a  href="#">Vendre</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Mon compte</a>
+				<li class="tropetit">
+					<a  href="#">Mon compte</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Admin</a>
+				<li class="tropetit">
+					<a  href="#">Admin</a>
 				</li>
 			</ul>
 
