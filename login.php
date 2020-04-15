@@ -86,6 +86,8 @@
 	}
 ?>
 
+<?php include("./template/_top.php"); ?>
+
 <style>
 	#formulaire{
 		float:left;
@@ -122,3 +124,4 @@
 		</div>
 	</div>
 </form>
+<?php include("./template/_bot.php"); ?>

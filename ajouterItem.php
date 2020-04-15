@@ -134,6 +134,8 @@
 	}
 ?>
 
+<?php include("./template/_top.php"); ?>
+
 <!--
 http://www.expertphp.in/article/php-upload-multiple-file-using-dropzone-js-with-drag-and-drop-features
 https://www.dropzonejs.com
@@ -307,4 +309,4 @@ https://www.dropzonejs.com
 	</div>
 </div>
 
-
+<?php include("./template/_bot.php"); ?>
