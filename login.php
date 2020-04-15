@@ -17,7 +17,7 @@
 			
 			if($erreur == "")
 			{
-				$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
+				$sql = "SELECT * FROM `utilisateur` WHERE `Mail` = '" . $mail . "';";
 				list($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
 				if(!$_) 
 				{
@@ -25,7 +25,7 @@
 				}
 				else
 				{
-					$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "' LIMIT 1;";
+					$sql = "SELECT * FROM `utilisateur` WHERE `Mail` = '" . $mail . "' LIMIT 1;";
 					
 					$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 					mysqli_set_charset($mysqli, "utf8");

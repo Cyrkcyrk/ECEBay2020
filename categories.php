@@ -20,26 +20,27 @@
 					$nomPage = "Accessoire VIP";
 					break;
 			}
-			$sql = "SELECT * FROM `item` WHERE `Categorie` = '". $categorie ."' AND `EtatVente` = 1 ORDER BY `dateMiseEnLigne` DESC;";
+			$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`Categorie` = '". $categorie ."' AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
 		}
 		else {
 			switch ($type)
 			{
 				case "offre":
 					$nomPage = "Meilleur offre";
-					$sql = "SELECT * FROM `item` WHERE `ModeVente` = 2 AND `EtatVente` = 1 ORDER BY `dateMiseEnLigne` DESC;";
+					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 2 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;
 				case "encheres":
 					$nomPage = "Vente aux enchères";
-					$sql = "SELECT * FROM `item` WHERE `ModeVente` = 1 AND `EtatVente` = 1 ORDER BY `dateMiseEnLigne` DESC;";
+					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;
 				case "directe":
 					$nomPage = "Achetez le maintenant";
-					$sql = "SELECT * FROM `item` WHERE `VenteDirect` = 1 AND `EtatVente` = 1 ORDER BY `dateMiseEnLigne` DESC;";
+					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`VenteDirect` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;
 			}
 		}
 		
+		echo $sql;
 		
 		$items = null;
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
@@ -70,7 +71,8 @@
 						"PrixDepart" => $row["PrixDepart"],
 						"VenteDirect" => $row["VenteDirect"],
 						"PrixVenteDirect" => $row["PrixVenteDirect"],
-						"dateMiseEnLigne" => $row["dateMiseEnLigne"]
+						"dateMiseEnLigne" => $row["dateMiseEnLigne"],
+						"image" => $row["Lien"],
 					));
 				}
 				$result -> free_result();
@@ -88,6 +90,8 @@
 			$erreur .= "Une erreur est survenue";
 		}
 		
+		
+		/*
 		echo "<div id='items'>";
 		echo "<h2> ". $nomPage . "</h2>";
 		if(!$items)
@@ -157,7 +161,7 @@
 			}
 		}
 		echo "</div>";
-		
+		*/
 	}
 	else
 	{
@@ -165,3 +169,29 @@
 	}
 ?>
 
+
+
+
+<div class="container">
+	<div class="row">
+		<?php
+			forEach($items as $i)
+			{
+				echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
+				echo '			<div class="card h-100">'."\n";
+				echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
+				echo '				<div class="card-body">'."\n";
+				echo '					<h4 class="card-title">'."\n";
+				echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
+				echo '					</h4>'."\n";
+				echo '					<h5>'. $i["PrixDepart"] .'</h5>'."\n";
+				echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
+				echo '				</div>'."\n";
+				echo '			</div>'."\n";
+				echo '		</div>'."\n";
+			}
+		?>
+
+	</div>
+
+</div>

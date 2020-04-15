@@ -42,7 +42,7 @@
 				$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
 				
 				
-				$sql = "SELECT * FROM `Utilisateur` WHERE `Mail` = '" . $mail . "';";
+				$sql = "SELECT * FROM `utilisateur` WHERE `Mail` = '" . $mail . "';";
 				list ($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
 				if($_) 
 				{
@@ -50,7 +50,7 @@
 				}
 				else
 				{
-					$sql = "INSERT INTO `Utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
+					$sql = "INSERT INTO `utilisateur`(`Mail`, `MotDePasse`, `Nom`, `Prenom`, `TypeCompte`) VALUES ('" . $mail . "', '" . $passwordHash . "', '" . $nom . "', '" . $prenom . "', " . $type . ")";
 					list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 					if($_)
 					{

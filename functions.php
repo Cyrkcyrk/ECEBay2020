@@ -2,9 +2,9 @@
 define ("SECRET", "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6UX7vZUeC5mhQ3CRnBrQfKm2rXh66QkwJCNb2SEzG88NiuV5h4Tf9C58T8w7z8rvvj4E3");
 	$imported = true;
 	$_DATABASE = Array(
-		"host" => "localhost",
-		"user" => "root",
-		"password" => "",
+		"host" => "atopos.site",
+		"user" => "ecebay",
+		"password" => "SV8qIjR9TvhNIFve",
 		"BDD" => "ecebay"
 	);
 	
