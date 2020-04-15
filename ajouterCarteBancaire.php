@@ -41,6 +41,7 @@
 		redirect('./?page=login');
 	}
 ?>
+<?php include("./template/_top.php"); ?>
 
 <style>
 	#formulaire{
@@ -86,3 +87,4 @@
 		</div>
 	</div>
 </form>
+<?php include("./template/_bot.php"); ?>

@@ -1,31 +1,10 @@
 <?php
-require("functions.php");
-
-$logged = false;
-$user = null;
-
-$page = isset($_GET["page"])? $_GET["page"] : "accueil";
-
-$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
-list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
-
-	//https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	require("functions.php");
 	
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
+	$logged = false;
+	$user = null;
 	
+<<<<<<< HEAD
 	<link href="css/style1.css" rel="stylesheet" type="text/css" />
 	<script>
 		function dynamicHeigh() {
@@ -161,21 +140,13 @@ header("Pragma: no-cache");
 					<a  href="#">Admin</a>
 				</li>
 			</ul>
+=======
+	$page = isset($_GET["page"])? $_GET["page"] : "accueil";
+	
+	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
+	list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
+?>
+>>>>>>> 3677e538fcb4ba9dce9ff566f3e304cefc727b51
 
-		</div>
-	</nav>
-	<div id="content" class="content">
-		<br>
-		<br>
-		<?php include("./" . $page . ".php"); ?>
-	</div>
-	<div id="footer" class="footer">
-		ECEbay © all right reserved 2020
-	</div>
-</body>
-</html>
 
-<!-- 
-Sources:
-https://developer.mozilla.org/ 
-!>
+<?php include("./" . $page . ".php"); ?>

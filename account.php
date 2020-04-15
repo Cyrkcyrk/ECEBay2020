@@ -1,3 +1,4 @@
+<?php include("./template/_top.php"); ?>
 <?php
 	$erreur = ""; 
 	
@@ -44,7 +45,7 @@
 			$erreur .= "Une erreur est survenue";
 		}
 		
-		
+		 
 		$cartesbancaires = null;
 		$sql = "SELECT * FROM `cartebancaire` WHERE `OwnerID` = '" . $user["ID"] . "';";
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
@@ -160,3 +161,4 @@
 	}
 ?>
 
+<?php include("./template/_bot.php"); ?>

@@ -1,5 +1,12 @@
 <?php 
-define ("SECRET", "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6UX7vZUeC5mhQ3CRnBrQfKm2rXh66QkwJCNb2SEzG88NiuV5h4Tf9C58T8w7z8rvvj4E3");
+
+	//https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+
+	define ("SECRET", "QQQh7tX36r346B66f8g794c6y3x7FPH5ha2w2ViDQ7LjrLwuDb449hXe7FX6UX7vZUeC5mhQ3CRnBrQfKm2rXh66QkwJCNb2SEzG88NiuV5h4Tf9C58T8w7z8rvvj4E3");
+	
 	$imported = true;
 	$_DATABASE = Array(
 		"host" => "51.77.145.11",
