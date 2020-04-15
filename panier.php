@@ -1,55 +1,19 @@
-<?php
-	$erreur = ""; 
+<?php 
 	
-	$categorie = isset($_GET["cat"])? $_GET["cat"] : "";
-	$type = isset($_GET["type"])? $_GET["type"] : "";
+	$erreur = "";
+	$items = "";
 	
-	if(in_array($categorie, Array("ferraille", "musee", "VIP"), TRUE) || in_array($type, Array("encheres", "offre", "directe"), TRUE))
+	if($logged)
 	{
-		$sql = "";
-		if($categorie != "") {
-			switch ($categorie)
-			{
-				case "ferraille":
-					$nomPage = "Ferraille ou trésor";
-					break;
-				case "musee":
-					$nomPage = "Bon pour le musée";
-					break;
-				case "VIP":
-					$nomPage = "Accessoire VIP";
-					break;
-			}
-			$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`Categorie` = '". $categorie ."' AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
-		}
-		else {
-			switch ($type)
-			{
-				case "offre":
-					$nomPage = "Meilleur offre";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 2 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
-					break;
-				case "encheres":
-					$nomPage = "Vente aux enchères";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
-					break;
-				case "directe":
-					$nomPage = "Achetez le maintenant";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`VenteDirect` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
-					break;
-			}
-		}
-		
-		$items = null;
+		$sql = "SELECT p.`ID` AS 'PanierID', i.* FROM `panier` AS p JOIN (SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE m.`type` = 1 AND m.`Ordre` = 0) AS i ON i.`ID` = p.`ItemID` WHERE p.`OwnerID` = ". $user["ID"] ." ORDER BY `Date` DESC";
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 		mysqli_set_charset($mysqli, "utf8");
-		
+
 		if ($mysqli -> connect_errno) {
 			$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
 		}
 		if ($result = $mysqli -> query($sql)) {
 			if (mysqli_num_rows($result) > 0) {
-				
 				$items = Array();
 				while ($row = mysqli_fetch_assoc($result))
 				{
@@ -72,29 +36,31 @@
 						"image" => $row["Lien"],
 					));
 				}
-				$result -> free_result();
-				$mysqli -> close();
+				
 			}
 			else
 			{
 				$items = false;
-				$result -> free_result();
-				$mysqli -> close();
+				$erreur .= "Cet item n'existe pas<br>";
 			}
+			$result -> free_result();
+			$mysqli -> close();
 		}
 		else
 		{
 			$erreur .= "Une erreur est survenue";
 		}
 		
+		
+		if($erreur != "")
+			echo $erreur;
 	}
 	else
 	{
-		redirect('./?page=accueil');
+		redirect("./?page=login");
 	}
+	
 ?>
-
-
 
 
 <div class="container">

@@ -8,11 +8,6 @@
 	
 	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
 	list($logged , $user, $erreur) = userLogged($_DATABASE, $token);
-	
-	//https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
-	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	header("Pragma: no-cache");
 ?>
 
 <!DOCTYPE html>
@@ -27,32 +22,9 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
 	
 	<link href="css/style1.css" rel="stylesheet" type="text/css" />
-	<script>
-		function dynamicHeigh() {
-			
-			//https://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
-			var body = document.body;
-			var html = document.documentElement;
-
-			var height = Math.max( document.body.scrollHeight, 
-								   document.body.offsetHeight, 
-								   document.documentElement.clientHeight, 
-								   document.documentElement.scrollHeight, 
-								   document.documentElement.offsetHeight 
-								 );
-			
-			var heightContent = height - ( document.getElementById("header").offsetHeight + document.getElementById("menu").offsetHeight + (document.getElementById("footer").offsetHeight*2));
-			
-			
-			document.getElementById("content").style = "height : " + heightContent + "px;";
-		}
-		
-		window.onresize = dynamicHeigh();
-		
-	</script>
 </head>
 
-<body onload="dynamicHeigh();">
+<body>
 	<div id="header" class="header">
 		<div class="logo">
 			<a href="./?page=accueil">
@@ -68,12 +40,12 @@
 					{
 						echo "Bonjour " . $user['Prenom'] . "<br>";
 						// echo "<a href='./?page=account'>Gerer mon compte</a><br>";
-						echo "<a href='Panier.html'>Mon panier</a>";
+						echo "<a href='./?page=panier'>Mon panier</a>";
 					}
 					else
 					{
 						echo "<a href='./?page=login'>Connexion</a> ou <a href='./?page=register'>Creer un compte</a> <br>";
-						echo "<a href='./?page=Panier.html'>Votre panier</a>";
+						// echo "<a href='./?page=Panier.html'>Votre panier</a>";
 					}
 				?>
 				
@@ -103,8 +75,11 @@
 				<li>Admin</li>
 			</ul>
 		</nav>
+		
+		
+		
 	</div>
-	<div id="content" class="content">
+	<div id="content" class="container-fluid h-100 content">
 		<?php include("./" . $page . ".php"); ?>
 	</div>
 	<div id="footer" class="footer">

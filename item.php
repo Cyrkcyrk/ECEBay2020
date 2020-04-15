@@ -157,6 +157,12 @@
 	<div class="col-lg-3 col-md-2 mb-3">
 		<div class="card-body float-right">
 			<?php
+				
+				function venteDirecte($item) {
+					echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+					echo "			<a href='./?page=ajouterAuPanier&item=". $item["ID"] ."'>Ajouter au panier</a><br>\n";
+				}
+				
 				if($item["EtatVente"] != 1)
 				{
 					echo "			<p>Cet objet n'est plus disponible à la vente</p>\n";
@@ -165,7 +171,7 @@
 				{
 					if($item["ModeVente"] == 0)
 					{
-						echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+						venteDirecte($item);
 					}
 					else if($item["ModeVente"] == 1)
 					{
@@ -173,17 +179,15 @@
 						
 						if($item["VenteDirect"])
 						{
-							echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+							venteDirecte($item);
 						}
 					}
 					else if($item["ModeVente"] == 2)
 					{
-						echo "			<p>Faite une offre dans les " . $item["PrixDepartPrixDepart
-						PrixDepart
-						"] . "€ </p>\n";
+						echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
 						if($item["VenteDirect"])
 						{
-							echo "			<p>Achetez le maintenant pour " . $item["PrixVenteDirect"] . "€ </p>\n";
+							venteDirecte($item);
 						}
 					}
 					
