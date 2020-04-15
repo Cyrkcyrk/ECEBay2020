@@ -61,7 +61,7 @@
 	}
 	
 ?>
-
+<?php include("./template/_top.php"); ?>
 
 <div class="container">
 	<div class="row">
@@ -86,3 +86,4 @@
 	</div>
 
 </div>
+<?php include("./template/_bot.php"); ?>

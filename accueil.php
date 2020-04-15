@@ -49,8 +49,7 @@
 		$erreur .= "Une erreur est survenue";
 	}
 ?>
-
-
+<?php include("./template/_top.php"); ?>
 
 <div class="container">
 	<div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -100,5 +99,6 @@
 		?>
 
 	</div>
-
 </div>
+
+<?php include("./template/_bot.php"); ?>

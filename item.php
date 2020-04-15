@@ -98,7 +98,7 @@
 
 
 
-
+<?php include("./template/_top.php"); ?>
 
 
 
@@ -196,3 +196,4 @@
 		</div>
 	</div>
 </div>
+<?php include("./template/_bot.php"); ?>
