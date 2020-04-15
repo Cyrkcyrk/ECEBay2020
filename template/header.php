@@ -5,6 +5,7 @@
 			</a>
 		</div>
 		<div class="text-center" id="site-search">
+			<input type="search" class="inline" name="q" aria-label="Search through site content">
 			<button>Rechercher</button>
 			<div class="Compte">
 				
