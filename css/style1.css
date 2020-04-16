@@ -65,7 +65,7 @@
 }
 .footer
 {
-	float: bottom;
+	float: left;
 	font-size: 0.8em;
 	font-style: italic;
 }
@@ -174,19 +174,34 @@ nav > ul li:hover .sous
 	font-size: 12px;
 }
 
-
-
-
-
+.large
+{
+	width: 100%;
+}
+.Fl-R
+{
+	float: right;
+}
+.repair
+{
+	color: #CCCCCC;
+}
 .content {
 	background-color: #CCCCCC;
-	min-height : 300px;
+	min-height : 325px;
 	height : 100%;
 	/* https://stackoverflow.com/questions/15383088/add-padding-without-changing-overall-width */
 	webkit-box-sizing: border-box;	/* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;	/* Firefox, other Gecko */
 	box-sizing: border-box;			/* Opera/IE 8+ */
 	padding : 15px;
+	margin-bottom: 10px;
+}
+
+.content2
+{
+	background-color: #CCCCCC;
+	min-height : 500px;
 }
 
 .adresse, .cb, .item {
@@ -198,8 +213,6 @@ nav > ul li:hover .sous
 	padding : 5px;
 	border : solid;
 	border-width : 2px;
-	float:left;
-	width : 25%;
 }
 
 

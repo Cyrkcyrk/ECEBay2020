@@ -54,37 +54,56 @@
 
 <form action="./?page=ajouterCarteBancaire" method="post">
 	<div id="identification">
-		<div id="formulaire">
-			<table>
-				<tr>
-					<td>Numéro de la carte:</td>
-					<td> <?php echo "<input type='number' name='Numero' value ='" . $Numero ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Nom affiché sur la carte:</td>
-					<td> <?php echo "<input type='text' name='Nom' value ='" . $Nom ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Date de peremption:</td>
-					<td><?php echo "<input type='text' name='Date' value ='" . $Date ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Cryptogramme:</td>
-					<td><?php echo "<input type='number' name='Cryptogramme' value ='" . $Cryptogramme ."'>";?></td>
-				</tr>
 
-				<tr>
-					<td colspan="2" style="text-align:center;"><input type="submit" value="Valider" name="valider"></td>
-				<tr>
-			</table>
-		</div>
-		<div id="erreur">
-			<?php if($erreur != "")
-				{
-					echo $erreur;
-				}
-			?>
-		</div>
+			<div class="form-row">
+				<div class='form-group col-md-10'>
+					<?php echo "<input class='form-control' type='number' placeholder='N° de la carte' name='Numero' value ='" . $Numero ."'>";?>	
+				</div>
+				<div class='form-group col-md-10'>
+					<?php echo "<input class='form-control' type='text' placeholder='Nom affiché sur la carte' name='Nom' value ='" . $Nom ."'>";?>
+				</div>
+				<div id="erreur" class="Fl-R">
+				<?php if($erreur != "")
+					{
+						echo $erreur;
+					}
+				?>
+			</div>
+			</div>
+
+			<div class="form-row">
+				<div class='form-group col-md-2'>
+					<?php echo "<input class='form-control' type='text' placeholder='Date d&apos;expiration' name='Date' value ='" . $Date ."'>";?>			
+				</div>
+				<div class='form-group col-md-2'>
+					<?php echo "<input class='form-control' type='number' placeholder='Cryptogramme' name='Cryptogramme' value ='" . $Cryptogramme ."'>";?>		
+				</div>
+			</div>
+			<div class="form-row">
+				
+				<div class="form-check form-check-inline">
+					<label class="form-check-label">Type de carte: &ensp;</label>
+					<input class="form-check-input" type="radio" name="typeCarte" id="Visa" value="Visa">
+					<label class="form-check-label" for="Visa">Visa</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="typeCarte" id="Mastercard" value="Mastercard">
+					<label class="form-check-label" for="Mastercard">Mastercard</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="typeCarte" id="American_Express" value="American Express">
+					<label class="form-check-label" for="American-Express">American Express</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="typeCarte" id="Paypal" value="Paypal">
+					<label class="form-check-label" for="Paypal">Paypal</label>
+				</div>
+			</div>
+			<br>
+
+			<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
+		
 	</div>
+	
 </form>
 <?php include("./template/_bot.php"); ?>

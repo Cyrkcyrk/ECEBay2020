@@ -32,13 +32,15 @@
 			{
 				$sql = "INSERT INTO `adresse`(`OwnerID`, `Ligne1`, `Ligne2`, `Ville`, `CodePostal`, `Pays`, `Telephone`) VALUES ('" . $user["ID"] . "', '" . $ligne1 . "', '" . $ligne2 . "', '" . $ville . "', '" . $codePostal . "', '" . $pays . "', '" . $telephone . "')";
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+					if($_)
 					redirect('./?page=account');
 			}
 		}
 	}
 	else
 	{
-		redirect('./?page=login');
+		if($_)
+			redirect('./?page=login');
 	}
 ?>
 <?php include("./template/_top.php"); ?>
@@ -51,40 +53,28 @@
 		float:left;
 	}
 </style>
-
-<form action="./?page=ajouterAdresse" method="post">
-	<div id="identification">
-		<div id="formulaire">
-			<table>
-				<tr>
-					<td>Ligne 1:</td>
-					<td> <?php echo "<input type='text' name='ligne1' value ='" . $ligne1 ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Ligne 2:</td>
-					<td> <?php echo "<input type='text' name='ligne2' value ='" . $ligne2 ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Ville:</td>
-					<td><?php echo "<input type='text' name='ville' value ='" . $ville ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Code Postal:</td>
-					<td><?php echo "<input type='text' name='codePostal' value ='" . $codePostal ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Pays:</td>
-					<td><?php echo "<input type='text' name='pays' value ='" . $pays ."'>";?></td>
-				</tr>
-				<tr>
-					<td>Telephone:</td>
-					<td><?php echo "<input type='text' name='telephone' value ='" . $telephone ."'>";?></td>
-				</tr>
-
-				<tr>
-					<td colspan="2" style="text-align:center;"><input type="submit" value="Valider" name="valider"></td>
-				<tr>
-			</table>
+<form action="./?page=ajouterAdresse" method="post" >
+	<div  id="identification">
+		<div id="formulaire" class="form-row">
+			<div class='form-group col-md-12'>
+				<?php echo "<input class='form-control' type='text' placeholder='Ligne 1' name='ligne1' value ='" . $ligne1 ."'>";?>	
+			</div>
+			<div class='form-group col-md-12'>
+				<?php echo "<input class='form-control' type='text' placeholder='Ligne 2' name='ligne2' value ='" . $ligne2 ."'>";?>
+			</div>
+			<div class='form-group col-md-6'>
+				<?php echo "<input class='form-control' type='text' placeholder='Ville' name='ville' value ='" . $ville ."'>";?>			
+			</div>
+			<div class='form-group col-md-4'>
+				<?php echo "<input class='form-control' type='number' placeholder='Code Postal' name='codePostal' value ='" . $codePostal ."'>";?>			
+			</div>
+			<div class='form-group col-md-2'>
+				<?php echo "<input class='form-control' type='text' placeholder='Pays ' name='pays' value ='" . $pays ."'>";?>
+			</div>
+			<div class='form-group col-md-12'>
+				<?php echo "<input class='form-control' type='text' placeholder='Téléphone' name='telephone' value ='" . $telephone ."'>";?>
+			</div>
+			<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
 		</div>
 		<div id="erreur">
 			<?php if($erreur != "")
