@@ -89,7 +89,7 @@
 		}
 		
 		
-		<?php include("./template/_top.php"); ?>
+		include("./template/_top.php");
 		
 
 		
@@ -163,7 +163,7 @@
 		echo "</div>";
 		
 		
-		<?php include("./template/_bot.php"); ?>
+		include("./template/_bot.php");
 	}
 	else
 	{
