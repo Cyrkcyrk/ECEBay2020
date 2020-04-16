@@ -1,4 +1,4 @@
-<?php include("./template/_top.php"); ?>
+
 <?php
 	$erreur = ""; 
 	
@@ -89,7 +89,7 @@
 		}
 		
 		
-		
+		<?php include("./template/_top.php"); ?>
 		
 
 		
@@ -154,11 +154,12 @@
 		}
 		echo "<a href='./?page=ajouterCarteBancaire'>Ajouter une carte bancaire</a><hr>";
 		echo "</div>";
+		
+		
+		<?php include("./template/_bot.php"); ?>
 	}
 	else
 	{
 		redirect('./?page=login');
 	}
 ?>
-
-<?php include("./template/_bot.php"); ?>

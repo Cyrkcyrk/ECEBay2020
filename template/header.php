@@ -1,7 +1,7 @@
 	<div id="header" class="header">
 		<div class="logo">
 			<a href="./?page=accueil">
-				<img src="void-02.jpg" width="100" height="60">
+				<img src="void-02.jpg" width="100" height="60" alt="logo">
 			</a>
 		</div>
 		<div class="text-center" id="site-search">
