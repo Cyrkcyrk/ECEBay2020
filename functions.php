@@ -129,4 +129,9 @@
 		}
 		return hash_hmac('md5', RandomString() , time() . SECRET);
 	}
+	
+	function blindage($string)
+	{
+		return $string;
+	}
 ?>

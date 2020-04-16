@@ -5,9 +5,12 @@
 	$item = "";
 	$images = "";
 	
+	
 	if($itemID != "")
 	{
-		$sql = "SELECT i.*, o.`Nom` AS 'OwnerNom', o.`Prenom` AS 'OwnerPrenom' FROM `item` AS i JOIN `utilisateur` AS o ON o.`ID` = i.`OwnerID` WHERE i.`ID` = ". $itemID .";";
+		// $sql = "SELECT i.*, o.`Nom` AS 'OwnerNom', o.`Prenom` AS 'OwnerPrenom' FROM `item` AS i JOIN `utilisateur` AS o ON o.`ID` = i.`OwnerID` WHERE i.`ID` = ". $itemID .";";
+		$sql = "SELECT i.*, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID`ORDER BY `Prix` DESC LIMIT 1) THEN e.`Prix`+1 ELSE i.`PrixDepart` END AS 'PrixEnchereMax', o.`Nom` AS 'OwnerNom', o.`Prenom` AS 'OwnerPrenom' FROM `item` AS i LEFT JOIN `encheres` AS e ON e.`ItemID` = i.`ID` JOIN `utilisateur` AS o ON o.`ID` = i.`OwnerID` WHERE i.`ID` = ". $itemID .";";
+		
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 		mysqli_set_charset($mysqli, "utf8");
 
@@ -37,7 +40,8 @@
 					"dateMiseEnLigne" => $row["dateMiseEnLigne"],
 					"OwnerID" => $row["OwnerID"],
 					"OwnerNom" => $row["OwnerNom"],
-					"OwnerPrenom" => $row["OwnerPrenom"]
+					"OwnerPrenom" => $row["OwnerPrenom"],
+					"PrixEnchereMax" => $row["PrixEnchereMax"]
 				);
 				
 				$result -> free_result();
@@ -173,15 +177,22 @@
 					{
 						venteDirecte($item);
 					}
+					
+					
 					else if($item["ModeVente"] == 1)
 					{
-						echo "			<p>Encherissez pour " . $item["PrixDepart"] . "€ </p>\n";
-						
+						echo "			<p>Encherissez pour " . $item ["PrixEnchereMax"] . "€ </p>\n";
+						echo "			<form action='./?page=ajouterEnchere' method='post'>\n";
+						echo "				<input type='number' name='Enchere' step='0.01' min='". $item ["PrixEnchereMax"] ."'>\n";
+						echo "				<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";
+						echo "				<input type='submit' value='Soumettre' name='valider'>\n";
+						echo "			</form>\n";
 						if($item["VenteDirect"])
 						{
 							venteDirecte($item);
 						}
 					}
+					
 					else if($item["ModeVente"] == 2)
 					{
 						echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
