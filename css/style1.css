@@ -1,5 +1,17 @@
+html
+{
+  height: 100%;
+}
+body
+{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #CCCCCC;
+}
 .header
 {
+	background-color: white;
 	width: 100%;
 	height: 75px;
 	float: top;
@@ -16,6 +28,7 @@
 .menu
 {
 	width: 100%;
+	background-color: white;
 }
 .wrapper 
 {
@@ -65,9 +78,11 @@
 }
 .footer
 {
-	float: left;
+	background-color: white;
 	font-size: 0.8em;
 	font-style: italic;
+	position:fixed;
+	bottom: 0;
 }
 .huuum
 {
@@ -178,18 +193,17 @@ nav > ul li:hover .sous
 {
 	width: 100%;
 }
-.Fl-R
-{
-	float: right;
-}
 .repair
 {
 	color: #CCCCCC;
 }
 .content {
 	background-color: #CCCCCC;
-	min-height : 325px;
-	height : 100%;
+	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  	background-size: cover; /* version standardisée */
+	min-height: 100%;
+	height: 200%;
+	max-height: 1000%;
 	/* https://stackoverflow.com/questions/15383088/add-padding-without-changing-overall-width */
 	webkit-box-sizing: border-box;	/* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;	/* Firefox, other Gecko */
@@ -198,11 +212,6 @@ nav > ul li:hover .sous
 	margin-bottom: 10px;
 }
 
-.content2
-{
-	background-color: #CCCCCC;
-	min-height : 450px;
-}
 
 .adresse, .cb, .item {
 	background-color: #DDDDDD;
@@ -221,9 +230,17 @@ nav > ul li:hover .sous
 	height: auto;
 }
 
+.re_img_phone
+{
+	max-width: 100%;
+	height: auto;
+}
+
+
 #images_rec
 {
-	width: 100%;
+	width: 50%;
+	float:left;
 }
 
 
