@@ -63,7 +63,7 @@
 				<img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
 			</div>
 			<div class="carousel-item">
-				<img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
+				<img class="d-block img-fluid" src="./template/Cat_musee.jpg" alt="Second slide">
 			</div>
 			<div class="carousel-item">
 				<img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">

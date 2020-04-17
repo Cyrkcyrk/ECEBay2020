@@ -39,8 +39,7 @@
 	}
 	else
 	{
-		if($_)
-			redirect('./?page=login');
+		redirect('./?page=login');
 	}
 ?>
 <?php include("./template/_top.php"); ?>

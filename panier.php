@@ -3,6 +3,10 @@
 	$erreur = "";
 	$items = "";
 	$TotalImmediat = 0.00;
+	$NombreImmediat = 0;
+	
+	
+	
 	$TotalTout = 0.00;
 	$NombreArticles = 0;
 	
@@ -40,11 +44,14 @@
 						"PanierID" => $row["PanierID"],
 						"TypeAchat" => $row["TypeAchat"]
 					));
-					$NombreArticles += 1;
+					
 					if($row["TypeAchat"] == 0)
 					{
+						$NombreImmediat += 1;
+						$NombreArticles += 1;
+						
 						$TotalImmediat += $row["PrixVenteDirect"];
-						$TotalTout = $row["PrixVenteDirect"];
+						$TotalTout += $row["PrixVenteDirect"];
 					}
 					
 				}
@@ -63,6 +70,100 @@
 			$erreur .= "Une erreur est survenue";
 		}
 		
+		/*
+		SELECT e.`Prix` AS "EncherePrix", e.`ID` AS "EnchereID",
+			CASE WHEN EXISTS (SELECT tmpE.`Prix` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` =  e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1)
+			THEN (SELECT tmpE.`ID` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` =  e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1)
+			ELSE 0
+			END AS "EncherePrixMaxID",
+			i.*
+		FROM `encheres` AS e 
+		JOIN (
+			SELECT 
+				TMPi.*, TMPm.`Lien`,
+				CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1)
+					THEN (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) + 1
+					WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1)
+					THEN TMPi.`PrixDepart`+1
+					ELSE TMPi.`PrixDepart`
+				END AS 'PrixAPayer'
+			FROM `item` AS TMPi
+			INNER JOIN `medias` AS TMPm 
+				ON TMPm.`ItemID` = TMPi.`ID` 
+			WHERE TMPm.`type` = 1 
+			AND TMPm.`Ordre` = 0
+			AND TMPi.`EtatVente` = 1
+		) AS i
+			ON i.`ID` = e.`ItemID`
+		WHERE e.`BuyerID` = $user[ID]
+		*/
+		$sql = "SELECT e.`Prix` AS 'EncherePrix', e.`ID` AS 'EnchereID', CASE WHEN EXISTS (SELECT tmpE.`Prix` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` = e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1) THEN (SELECT tmpE.`ID` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` = e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1) ELSE 0 END AS 'EncherePrixMaxID', i.* FROM `encheres` AS e JOIN ( SELECT TMPi.*, TMPm.`Lien`, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) THEN (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) + 1 WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1) THEN TMPi.`PrixDepart` ELSE TMPi.`PrixDepart` END AS 'PrixAPayer' FROM `item` AS TMPi INNER JOIN `medias` AS TMPm ON TMPm.`ItemID` = TMPi.`ID` WHERE TMPm.`type` = 1 AND TMPm.`Ordre` = 0 AND TMPi.`EtatVente` = 1 ) AS i ON i.`ID` = e.`ItemID` WHERE e.`BuyerID` = ". $user["ID"] .";";
+		
+		$itemsEnchere = "";
+		$TotalEnchere = 0.00;
+		$NombreEncheres = 0;
+		
+		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+		mysqli_set_charset($mysqli, "utf8");
+
+		if ($mysqli -> connect_errno) {
+			$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+		}
+		if ($result = $mysqli -> query($sql)) {
+			if (mysqli_num_rows($result) > 0) {
+				$itemsEnchere = Array();
+				while ($row = mysqli_fetch_assoc($result))
+				{
+					if($row["Categorie"] == "ferraille") $_categorie = "Ferraille ou trésor";
+					else if($row["Categorie"] == "musee") $_categorie = "Bon pour le musée";
+					else if($row["Categorie"] == "VIP") $_categorie = "Accessoire VIP";
+					
+					if($row["EnchereID"] == $row["EncherePrixMaxID"])
+						$EnchereValide = True;
+					else
+						$EnchereValide = False;
+					
+					array_push($itemsEnchere, Array(
+						"ID" => $row["ID"],
+						"Nom" => $row["Nom"],
+						"DescriptionQ" => $row["DescriptionQualites"],
+						"DescriptionD" => $row["DescriptionDefauts"],
+						"Categorie" => $_categorie,
+						"EtatVente" => $row["EtatVente"],
+						"ModeVente" => $row["ModeVente"],
+						"PrixDepart" => $row["PrixDepart"],
+						"VenteDirect" => $row["VenteDirect"],
+						"PrixVenteDirect" => $row["PrixVenteDirect"],
+						"dateMiseEnLigne" => $row["dateMiseEnLigne"],
+						"image" => $row["Lien"],
+						
+						"EnchereValide" => $EnchereValide,
+						"PrixAPayer" => $row["PrixAPayer"],
+						"EnchereActuelle" => $row["EncherePrix"]
+						
+					));
+					if($EnchereValide)
+					{
+						$NombreEncheres += 1;
+						$NombreArticles += 1;
+						
+						$TotalEnchere += $row["PrixAPayer"];
+						$TotalTout += $row["PrixAPayer"];
+					}
+				}
+			}
+			else
+			{
+				$itemsEnchere = false;
+			}
+			$result -> free_result();
+			$mysqli -> close();
+		}
+		else
+		{
+			$erreur .= "Une erreur est survenue";
+		}
+
 		
 		if($erreur != "")
 			echo $erreur;
@@ -76,6 +177,7 @@
 <?php include("./template/_top.php"); ?>
 
 <div class="container">
+	<h2>Achat Directs</h2>
 	<div class='row'>
 		<div class='col-md-2'>
 			<p>Article</p>
@@ -136,14 +238,108 @@
 					}
 					else
 					{
-						echo "Total (". $NombreArticles ." articles) : ";
+						echo "Total (". $NombreImmediat ." articles) : ";
 					}
 					echo $TotalImmediat . "€";
 				?>
 			</div>
 		</div>
 	</div>
-		
+	
+	
+	<hr>
+	<h2>Encheres</h2>
+	<div class='row'>
+		<div class='col-md-2'>
+			<p>Article</p>
+		</div>
+		<div class='col-md-7'>
+		</div>
+		<div class='col-md-3 px-3'>
+			<div class='float-right'>
+				Prix
+			</div>
+		</div>
+	</div>
+	<?php
+		if(!$itemsEnchere)
+		{
+			echo "Vous n'avez pas d'encheres. <br>";
+		}
+		else
+		{
+			forEach($itemsEnchere as $i)
+			{
+				//https://bootsnipp.com/snippets/XR0Dv
+				echo "	<div class='py-2'>\n";
+				
+				if($i["EnchereValide"]){
+					echo "		<div class='card enchereValide' >\n";
+				} else {
+					echo "		<div class='card enchereInvalide'>\n";
+				}
+				echo "			<div class='row '>\n";
+				echo "				<div class='col-md-2'>\n";
+				echo "					<img src='". $i["image"] ."' class='w-100'>\n";
+				echo "				</div>\n";
+				echo "				<div class='col-md-7'>\n";
+				echo "					<div class='card-block px-3'>\n";
+				echo "						<h4 class='card-title'><a href=?page=item&item='". $i["ID"] ."'>" . $i["Nom"] ."</a></h4>\n";
+				echo "					</div>\n";
+				echo "				</div>\n";
+				echo "				<div class='col-md-3'>\n";
+				echo "					<div class='card-block px-3 float-right'>\n";
+				
+				if($i["EnchereValide"])
+				{
+					echo "						<p>Votre enchere maximum </p><h5>". $i["EnchereActuelle"] ." €</h5>\n";
+					echo "						<p>Prix à payer </p><h5>". $i["PrixAPayer"] ." € </h5>\n";
+				}
+				else
+				{
+					echo "						<p>Votre enchere maximum</p><h5>". $i["EnchereActuelle"] ." €</h5>\n";
+					echo "						<p>Surenchère à faire </p><h5>". $i["PrixAPayer"] ." € </h5>\n";
+				}
+				echo "					</div>\n";
+				echo "				</div>\n";
+				echo "			</div>\n";
+				echo "		</div>\n";
+				echo "	</div>\n";
+			}
+		}
+	?>
+	<div class='row'>
+		<div class='col-md-9'>
+		</div>
+		<div class='col-md-3 px-3'>
+			<div class='float-right'>
+				<?php
+					if($NombreEncheres < 2)
+					{
+						echo "Total (". $NombreEncheres ." article) : ";
+					}
+					else
+					{
+						echo "Total (". $NombreEncheres ." articles) : ";
+					}
+					echo $TotalEnchere . "€";
+				?>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </div>
 <?php include("./template/_bot.php"); ?>
