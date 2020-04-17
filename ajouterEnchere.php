@@ -19,8 +19,9 @@ $erreur = "";
 			if($erreur == "")
 			{
 				
+				// $sql = "SELECT i.*, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID`ORDER BY `Prix` DESC LIMIT 1) THEN e.`Prix` ELSE i.`PrixDepart` END AS 'PrixEnchereMax' FROM `item` AS i LEFT JOIN `encheres` AS e ON e.`ItemID` = i.`ID` WHERE i.`ID` = ". $ItemID ." AND i.`EtatVente` = 1 AND i.`ModeVente` = 1 ";
 				
-				$sql = "SELECT i.*, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID`ORDER BY `Prix` DESC LIMIT 1) THEN e.`Prix` ELSE i.`PrixDepart` END AS 'PrixEnchereMax' FROM `item` AS i LEFT JOIN `encheres` AS e ON e.`ItemID` = i.`ID` WHERE i.`ID` = ". $ItemID ." AND i.`EtatVente` = 1 AND i.`ModeVente` = 1 ";
+				$sql = "SELECT * FROM ( SELECT i.*, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID` ORDER BY `Prix` DESC LIMIT 1,1) THEN (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID` ORDER BY `Prix` DESC LIMIT 1,1) + 1 WHEN EXISTS (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID` ORDER BY `Prix` DESC LIMIT 1) THEN (SELECT `Prix` FROM `encheres` AS e WHERE e.`ItemID` = i.`ID` ORDER BY `Prix` DESC LIMIT 1) + 1 ELSE i.`PrixDepart` END AS 'PrixEnchereMax', o.`Nom` AS 'OwnerNom', o.`Prenom` AS 'OwnerPrenom' FROM `item` AS i LEFT JOIN `encheres` AS e ON e.`ItemID` = i.`ID` JOIN `utilisateur` AS o ON o.`ID` = i.`OwnerID` WHERE i.`ID` = ". $ItemID ." AND i.`EtatVente` = 1  AND i.`ModeVente` = 1 ) AS R ORDER BY R.`PrixEnchereMax` DESC LIMIT 1 ;";
 				
 				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 				mysqli_set_charset($mysqli, "utf8");
@@ -39,10 +40,11 @@ $erreur = "";
 							$erreur .= "Vous ne pouvez pas enchérir à moins de ". $item["PrixEnchereMax"] ."€.";
 						} else {
 							$sql = "SELECT * FROM `encheres` WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
-							list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+							
+							list ($_, $erreur) = SQLcheck($_DATABASE, $sql, $erreur);
 							if($_)
 							{
-								$sql = "UPDATE `encheres` SET `Prix`= ". $Enchere ." WHERE `ItemID` = `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
+								$sql = "UPDATE `encheres` SET `Prix`= ". $Enchere ." WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
 								list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 								if($_)
 								{
@@ -51,6 +53,7 @@ $erreur = "";
 							}
 							else
 							{
+								echo "on insert";
 								$sql = "INSERT INTO `encheres`(`ItemID`, `BuyerID`, `Prix`) VALUES (". $ItemID . ", ". $user["ID"] . ", ". $Enchere .")";
 								list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 								if($_)
