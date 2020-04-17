@@ -201,7 +201,7 @@ nav > ul li:hover .sous
 .content2
 {
 	background-color: #CCCCCC;
-	min-height : 500px;
+	min-height : 450px;
 }
 
 .adresse, .cb, .item {
@@ -215,8 +215,16 @@ nav > ul li:hover .sous
 	border-width : 2px;
 }
 
+.re_img
+{
+	max-width: 16%;
+	height: auto;
+}
 
-
+#images_rec
+{
+	width: 50%;
+}
 
 
 div.item div.image {
@@ -235,24 +243,36 @@ div.item div.image img{
 
 /* https://bootsnipp.com/snippets/56bAW */
 
-.preview-thumbnail.nav-tabs {
-  border: none;
-  margin-top: 15px; }
-  .preview-thumbnail.nav-tabs li {
-    width: 18%;
-    margin-right: 2.5%; }
-    .preview-thumbnail.nav-tabs li img {
-      max-width: 100%;
-      display: block; }
-    .preview-thumbnail.nav-tabs li a {
-      padding: 0;
-      margin: 0; }
-    .preview-thumbnail.nav-tabs li:last-of-type {
-      margin-right: 0; }
+.preview-thumbnail.nav-tabs 
+{
+	border: none;
+	margin-top: 15px;
+}
+.preview-thumbnail.nav-tabs li 
+{
+	width: 18%;
+	margin-right: 2.5%; 
+}
+.preview-thumbnail.nav-tabs li img 
+{
+	max-width: 100%;
+	display: block;
+}
+.preview-thumbnail.nav-tabs li a 
+{
+	padding: 0;
+	margin: 0; 
+}
+.preview-thumbnail.nav-tabs li:last-of-type 
+{
+	margin-right: 0; 
+}
 
-.tab-content {
+.tab-content
+{
 	overflow: hidden; 
 }
+
 .tab-content img 
 {
 	width: 100%;

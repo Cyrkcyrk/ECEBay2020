@@ -10,7 +10,7 @@ $checkboxVenteDirecte =  isset($_POST["checkboxVenteDirecte"])? $_POST["checkbox
 $prixDepart =  isset($_POST["prixDepart"])? $_POST["prixDepart"] :"";
 $prixDirect =  isset($_POST["prixDirect"])? $_POST["prixDirect"] :"";
 
-$images =  isset($_POST["images"])? $_POST["images"] :"";
+$images =  isset($_POST["images"])? $_POST["images"] : array();
 $valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 
 if($logged)
@@ -235,7 +235,6 @@ https://www.dropzonejs.com
 	<div class="content2">
 		<div id="images"></div>
 
-
 		<div id="formulaire">
 			<form action="./?page=ajouterItem" id="form" method="post">
 				<div class="form-row">
@@ -301,6 +300,15 @@ https://www.dropzonejs.com
 				<br>
 				<br>
 				<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
+				<?php
+                if(count($images) != 0)
+                {
+                	forEach($images as $img)
+                    {
+                        echo "<input type='hidden' name='images[]' value='".  $img . "'>";
+                    }
+                }
+            ?>
 			</form>
 		</div>
 		<div id="erreur">
@@ -309,6 +317,19 @@ https://www.dropzonejs.com
 				echo $erreur;
 			}
 			?>
+		</div>
+		<br>
+		<div id="images_rec">
+			<?php
+                if(count($images) != 0)
+                {
+                	echo "Image(s) déja présente(s): <br> Attention elles seront supprimés si de nouvelles sont ajoutées <br>";
+                	forEach($images as $img)
+                    {
+                        echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img'>";
+                    }
+                }
+            ?>
 		</div>
 	</div>
 	<?php include("./template/_bot.php"); ?>
