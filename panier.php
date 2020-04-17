@@ -130,7 +130,7 @@
 		<div class='col-md-3 px-3'>
 			<div class='float-right'>
 				<?php
-					if($NombreArticles > 2)
+					if($NombreArticles < 2)
 					{
 						echo "Total (". $NombreArticles ." article) : ";
 					}
