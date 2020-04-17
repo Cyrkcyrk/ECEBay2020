@@ -4,6 +4,7 @@
 	$Nom =  isset($_POST["Nom"])? $_POST["Nom"] :"";
 	$Date =  isset($_POST["Date"])? $_POST["Date"] :"";
 	$Cryptogramme =  isset($_POST["Cryptogramme"])? $_POST["Cryptogramme"] :"";
+	$typeCarte =  isset($_POST["typeCarte"])? $_POST["typeCarte"] :"";
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)
@@ -21,14 +22,31 @@
 			} 
 			if($Cryptogramme == "") {
 				$erreur .= "Cryptogramme incomplet <br>";
-			} 
+			}
+			if($typeCarte == "") {
+				$erreur .= "Veuillez selectionner un type de carte.<br>";
+			}
+			
 			if($erreur == "")
 			{
 				// $sql = "INSERT INTO `adresse`(`OwnerID`, `Ligne1`, `Ligne2`, `Ville`, `CodePostal`, `Pays`, `Telephone`) VALUES ('" . $user["ID"] . "', '" . $ligne1 . "', '" . $ligne2 . "', '" . $ville . "', '" . $codePostal . "', '" . $pays . "', '" . $telephone . "')";
 				
+				switch ($typeCarte)
+				{
+					case "Visa":
+					case "Mastercard":
+					case "Paypal":
+						break;
+					case "American_Express":
+						$typeCarte = "American Express";
+						break;
+					default:
+						$typeCarte = "";
+						break;
+				}
 				
 				
-				$sql = "INSERT INTO `cartebancaire`(`OwnerID`, `TypeCarte`, `NumeroCarte`, `NomAffiche`, `DatePeremption`, `Cryptogramme`) VALUES (" . $user["ID"] . ", " . '"Visa"' . ", '" . $Numero . "', '" . $Nom . "', '" . $Date . "', '" . $Cryptogramme . "');";
+				$sql = "INSERT INTO `cartebancaire`(`OwnerID`, `TypeCarte`, `NumeroCarte`, `NomAffiche`, `DatePeremption`, `Cryptogramme`) VALUES (" . $user["ID"] . ", '" . $typeCarte . "', '" . $Numero . "', '" . $Nom . "', '" . $Date . "', '" . $Cryptogramme . "');";
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 				
 				if($_)
@@ -91,7 +109,7 @@
 					<label class="form-check-label" for="Mastercard">Mastercard</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typeCarte" id="American_Express" value="American Express">
+					<input class="form-check-input" type="radio" name="typeCarte" id="American_Express" value="American_Express">
 					<label class="form-check-label" for="American-Express">American Express</label>
 				</div>
 				<div class="form-check form-check-inline">

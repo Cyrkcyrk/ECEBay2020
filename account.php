@@ -144,6 +144,7 @@
 			{
 				$string_cb = '';
 				$string_cb .= "<div class='cb card'>\n<div class='card-body'>";
+				$string_cb .= $cb["TypeCarte"] . "<br>";
 				$string_cb .= $cb["NumeroCarteCensuree"] . "<br>";
 				
 				$string_cb .= $cb["NomAffiche"] . "<br>";
