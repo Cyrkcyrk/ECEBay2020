@@ -323,7 +323,7 @@ https://www.dropzonejs.com
 			<?php
                 if(count($images) != 0)
                 {
-                	echo "Image(s) déja présente(s): <br> Attention elles seront supprimés si de nouvelles sont ajoutées <br>";
+                	echo "Image(s) déja présente(s): <br>";
                 	forEach($images as $img)
                     {
                         echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img'>";
