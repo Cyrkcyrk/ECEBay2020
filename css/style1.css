@@ -25,6 +25,10 @@ body
 	float: right;
 	padding-right: 5px;
 }
+.search-bar input[type="search"]
+{
+	width : 60%
+}
 .menu
 {
 	width: 100%;
