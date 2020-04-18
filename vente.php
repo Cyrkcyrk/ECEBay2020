@@ -89,6 +89,7 @@
 						if($i["PrixVenteDirect"]>"0")
 							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
 						echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+						echo date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]));
 
 					}
 					if($i["ModeVente"]=="2")

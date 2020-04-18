@@ -111,11 +111,12 @@
 				echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
 				echo '					</h4>'."\n";
 				if($type=="encheres")
-					echo '					<h5>'. $i["PrixDepart"] .'€</h5>'."\n";
+					echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+					echo '<p>Fin de l&apos;enchère le&nbsp'.date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]))."</p>\n";
 				if($type=="offre")
-					echo '					<h5>'. $i["PrixDepart"] .'€</h5>'."\n";
+					echo '					<h5>Prix de départ&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
 				if($type=="directe")
-					echo '					<h5>'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+					echo '					<h5>Prix d&apos;achat&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
 				if($type=="")
 				{
 					if($i["ModeVente"]=="0")
@@ -125,6 +126,7 @@
 						if($i["PrixVenteDirect"]>"0")
 							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
 						echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+						echo '<p>Fin de l&apos;enchère le&nbsp'.date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]))."</p>\n";
 
 					}
 					if($i["ModeVente"]=="2")
