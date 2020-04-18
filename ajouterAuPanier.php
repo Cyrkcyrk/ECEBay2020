@@ -1,4 +1,3 @@
-<?php include("./template/_top.php"); ?>
 <?php 
 	$erreur = "";
 	$itemID = blindage(isset($_GET["item"])? $_GET["item"] : "");
@@ -34,7 +33,7 @@
 						}
 						else
 						{
-							echo "Cet item n'est plus a vendre";
+							$erreur .= "Cet item n'est plus a vendre";
 						}
 					}
 					else
@@ -51,10 +50,6 @@
 			{
 				$erreur .= "Une erreur est survenue";
 			}
-			
-			
-			if($erreur != "")
-				echo $erreur;
 		}
 		else
 		{
@@ -66,5 +61,11 @@
 		redirect("./?page=accueil");
 	}
 	
-?>
-<?php include("./template/_bot.php"); ?>
+
+
+include("./template/_top.php");
+
+if($erreur != "")
+	echo $erreur;
+
+include("./template/_bot.php"); ?>

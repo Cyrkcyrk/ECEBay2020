@@ -25,9 +25,9 @@
 				ON e.`ItemID` = i.`ID` 
 			JOIN `utilisateur` AS o 
 				ON o.`ID` = i.`OwnerID` 
-			WHERE i.`ID` = ". $itemID .
-			//AND i.`EtatVente` = 1
-		") AS R 
+			WHERE i.`ID` = ". $itemID ."
+			AND i.`EtatVente` >= 0
+		) AS R 
 		ORDER BY R.`PrixEnchereMax` DESC 
 		LIMIT 1;";
 		
@@ -194,57 +194,49 @@
 						echo "			<a href='./?page=ajouterAuPanier&item=". $item["ID"] ."'>Ajouter au panier</a><br>\n";
 					}
 					
-					if($item["EtatVente"] != 1)
+					if($item["ModeVente"] == 0)
 					{
-						echo "			<p>Cet objet n'est plus disponible à la vente</p>\n";
+						venteDirecte($item);
 					}
-					else
+					
+					
+					else if($item["ModeVente"] == 1)
 					{
-						if($item["ModeVente"] == 0)
+						echo "			<p>Encherissez pour " . $item ["PrixEnchereMax"] . "€ </p>\n";
+						echo "			<form action='./?page=ajouterEnchere' method='post'>\n";
+						echo "				<input type='number' name='Enchere' step='0.01' min='". $item ["PrixEnchereMax"] ."'>\n";
+						echo "				<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";
+						echo "				<input type='submit' value='Soumettre' name='valider'>\n";
+						echo "			</form>\n";
+						echo "			<hr>";
+						if($item["VenteDirect"])
 						{
 							venteDirecte($item);
 						}
+					}
+					
+					else if($item["ModeVente"] == 2)
+					{
+						echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
 						
+						echo "			<form action='./?page=nouvelleOffre' method='post' >\n";
+						echo "				<div id='formulaire' class='form-row'>\n";
+						echo "					<div class='form-group col-md-12'>\n";
+						echo "						<input class='form-control' type='number' step='0.01' placeholder='Prix' name='prix'>\n";
+						echo "					</div>\n";
+						echo "					<div class='form-group col-md-12'>\n";
+						echo "						<textarea placeholder='Message' class='form-control' name='message'></textarea>\n";
+						echo "					</div>\n";
+						echo "					<input type='hidden' name='itemID' value='". $item ["ID"] ."'>\n";
+						echo "					<button type='submit' class='btn btn-primary' value='Envoyer l'offre' name='valider'>Valider</button>	\n";
+						echo "				</div>\n";
+						echo "			</form>\n";
+						echo "			<hr>";
 						
-						else if($item["ModeVente"] == 1)
+						if($item["VenteDirect"])
 						{
-							echo "			<p>Encherissez pour " . $item ["PrixEnchereMax"] . "€ </p>\n";
-							echo "			<form action='./?page=ajouterEnchere' method='post'>\n";
-							echo "				<input type='number' name='Enchere' step='0.01' min='". $item ["PrixEnchereMax"] ."'>\n";
-							echo "				<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";
-							echo "				<input type='submit' value='Soumettre' name='valider'>\n";
-							echo "			</form>\n";
-							echo "			<hr>";
-							if($item["VenteDirect"])
-							{
-								venteDirecte($item);
-							}
+							venteDirecte($item);
 						}
-						
-						else if($item["ModeVente"] == 2)
-						{
-							echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
-							
-							echo "			<form action='./?page=nouvelleOffre' method='post' >\n";
-							echo "				<div id='formulaire' class='form-row'>\n";
-							echo "					<div class='form-group col-md-12'>\n";
-							echo "						<input class='form-control' type='number' step='0.01' placeholder='Prix' name='prix'>\n";
-							echo "					</div>\n";
-							echo "					<div class='form-group col-md-12'>\n";
-							echo "						<textarea placeholder='Message' class='form-control' name='message'></textarea>\n";
-							echo "					</div>\n";
-							echo "					<input type='hidden' name='itemID' value='". $item ["ID"] ."'>\n";
-							echo "					<button type='submit' class='btn btn-primary' value='Envoyer l'offre' name='valider'>Valider</button>	\n";
-							echo "				</div>\n";
-							echo "			</form>\n";
-							echo "			<hr>";
-							
-							if($item["VenteDirect"])
-							{
-								venteDirecte($item);
-							}
-						}
-						
 					}
 				}
 			?>

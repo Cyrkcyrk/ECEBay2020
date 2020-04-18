@@ -26,7 +26,11 @@
 					
 				</li>
 				<li>
-					<p><a href="./?page=admin">Admin</a></p>
+					<li class="deroul"><p>Admin &ensp;</p>
+					<ul class="sous">
+						<li><a href="./?page=adminItems">Gérer les items</a></li>
+						<li><a href="./?page=adminUser">Gérer les vendeurs</a></li>
+					</ul>
 				</li>
 			</ul>
 		</nav>
@@ -58,7 +62,9 @@
                     <a  href="./?page=account">Mon compte</a>
                 </li>
                 <li class="tropetit">
-                    <a href="./?page=admin">Admin</a>
+                    Admin
+                    <ul class="tropetit"><a href="./?page=adminItems">Gérer les items</a></ul>
+                    <ul class="tropetit"><a href="./?page=adminUser">Gérer les vendeurs</a></ul>
                 </li>
             </ul>
 

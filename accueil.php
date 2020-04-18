@@ -1,7 +1,20 @@
 <?php
 	$items = null;
 	
-	$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` JOIN (SELECT `ID` FROM `item` ORDER BY `dateMiseEnLigne` DESC LIMIT 30) AS d ON d.`ID` = i.`ID` WHERE i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY RAND() LIMIT 6";
+	$sql = "
+	SELECT 
+		i.*, 
+		m.`Lien` 
+	FROM `item` AS i 
+	INNER JOIN `medias` AS m 
+		ON m.`ItemID` = i.`ID` 
+	JOIN (SELECT `ID` FROM `item` ORDER BY `dateMiseEnLigne` DESC LIMIT 30) AS d 
+		ON d.`ID` = i.`ID` 
+	WHERE i.`EtatVente` = 1 
+	AND m.`type` = 1 
+	AND m.`Ordre` = 0 
+	ORDER BY RAND() 
+	LIMIT 6";
 	$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 	mysqli_set_charset($mysqli, "utf8");
 	

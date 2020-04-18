@@ -26,7 +26,13 @@
 				SELECT o.*, i.`OwnerID` FROM `offres` AS o
 				JOIN `item` as i
 					ON o.`ItemID` = i.`ID`
-				WHERE o.`ID` = ". $offerID ." AND (o.`BuyerID` = ". $user["ID"] ." OR i.`OwnerID` = ". $user["ID"] .");";
+				WHERE o.`ID` = ". $offerID ." 
+				AND (
+					o.`BuyerID` = ". $user["ID"] ." 
+					OR i.`OwnerID` = ". $user["ID"] ."
+				)
+				AND i.`EtatVente` = 1
+				AND i.`ModeVente` = 2;";
 				
 				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 				mysqli_set_charset($mysqli, "utf8");

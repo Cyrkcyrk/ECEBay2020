@@ -12,7 +12,17 @@
 	
 	if($logged)
 	{
-		$sql = "SELECT p.`ID` AS 'PanierID', p.`TypeAchat`, i.* FROM `panier` AS p JOIN (SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE m.`type` = 1 AND m.`Ordre` = 0) AS i ON i.`ID` = p.`ItemID` WHERE p.`OwnerID` = ". $user["ID"] ." ORDER BY `Date` DESC";
+		$sql = "
+		SELECT 
+			p.`ID` AS 'PanierID', 
+			p.`TypeAchat`, 
+			i.* 
+		FROM `panier` AS p 
+		JOIN (SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE m.`type` = 1 AND m.`Ordre` = 0) AS i 
+			ON i.`ID` = p.`ItemID` 
+		WHERE p.`OwnerID` = ". $user["ID"] ."
+		AND i.`EtatVente` >= 0
+		ORDER BY `Date` DESC";
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 		mysqli_set_charset($mysqli, "utf8");
 
@@ -45,7 +55,7 @@
 						"TypeAchat" => $row["TypeAchat"]
 					));
 					
-					if($row["TypeAchat"] == 0)
+					if($row["TypeAchat"] == 0 && $row["EtatVente"] == 1)
 					{
 						$NombreImmediat += 1;
 						$NombreArticles += 1;
@@ -70,17 +80,21 @@
 			$erreur .= "Une erreur est survenue";
 		}
 		
-		/*
-		SELECT e.`Prix` AS "EncherePrix", e.`ID` AS "EnchereID",
+		
+		$sql = "
+		SELECT 
+			e.`Prix` AS 'EncherePrix', 
+			e.`ID` AS 'EnchereID',
 			CASE WHEN EXISTS (SELECT tmpE.`Prix` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` =  e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1)
-			THEN (SELECT tmpE.`ID` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` =  e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1)
-			ELSE 0
-			END AS "EncherePrixMaxID",
+				THEN (SELECT tmpE.`ID` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` =  e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1)
+				ELSE 0
+			END AS 'EncherePrixMaxID',
 			i.*
 		FROM `encheres` AS e 
 		JOIN (
 			SELECT 
-				TMPi.*, TMPm.`Lien`,
+				TMPi.*, 
+				TMPm.`Lien`,
 				CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1)
 					THEN (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) + 1
 					WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE  `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1)
@@ -92,12 +106,10 @@
 				ON TMPm.`ItemID` = TMPi.`ID` 
 			WHERE TMPm.`type` = 1 
 			AND TMPm.`Ordre` = 0
-			AND TMPi.`EtatVente` = 1
 		) AS i
 			ON i.`ID` = e.`ItemID`
-		WHERE e.`BuyerID` = $user[ID]
-		*/
-		$sql = "SELECT e.`Prix` AS 'EncherePrix', e.`ID` AS 'EnchereID', CASE WHEN EXISTS (SELECT tmpE.`Prix` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` = e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1) THEN (SELECT tmpE.`ID` FROM `encheres` AS tmpE WHERE tmpE.`ItemID` = e.`ItemID` ORDER BY tmpE.`Prix` DESC LIMIT 1) ELSE 0 END AS 'EncherePrixMaxID', i.* FROM `encheres` AS e JOIN ( SELECT TMPi.*, TMPm.`Lien`, CASE WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) THEN (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1,1) + 1 WHEN EXISTS (SELECT `Prix` FROM `encheres` WHERE `encheres`.`ItemID` = TMPi.`ID` ORDER BY `Prix` DESC LIMIT 1) THEN TMPi.`PrixDepart` ELSE TMPi.`PrixDepart` END AS 'PrixAPayer' FROM `item` AS TMPi INNER JOIN `medias` AS TMPm ON TMPm.`ItemID` = TMPi.`ID` WHERE TMPm.`type` = 1 AND TMPm.`Ordre` = 0 AND TMPi.`EtatVente` = 1 ) AS i ON i.`ID` = e.`ItemID` WHERE e.`BuyerID` = ". $user["ID"] .";";
+		WHERE i.`EtatVente` >= 0
+		AND e.`BuyerID` = ". $user["ID"] . ";";
 		
 		$itemsEnchere = "";
 		$TotalEnchere = 0.00;
@@ -142,7 +154,7 @@
 						"EnchereActuelle" => $row["EncherePrix"]
 						
 					));
-					if($EnchereValide)
+					if($EnchereValide && $row["EtatVente"] == 1)
 					{
 						$NombreEncheres += 1;
 						$NombreArticles += 1;
@@ -200,7 +212,7 @@
 			forEach($items as $i)
 			{
 				//https://bootsnipp.com/snippets/XR0Dv
-				if($i['TypeAchat'] == 0)
+				if($i['TypeAchat'] == 0 && $i["EtatVente"] == 1)
 				{
 					echo "	<div class='py-2'>\n";
 					echo "		<div class='card'>\n";
@@ -210,7 +222,7 @@
 					echo "				</div>\n";
 					echo "				<div class='col-md-7'>\n";
 					echo "					<div class='card-block px-3'>\n";
-					echo "						<h4 class='card-title'><a href=?page=item&item='". $i["ID"] ."'>" . $i["Nom"] ."</a></h4>\n";
+					echo "						<h4 class='card-title'><a href=?page=item&item=". $i["ID"] .">" . $i["Nom"] ."</a></h4>\n";
 					echo "						<h7 class='card-title'><a href=?page=supprimerDuPanier&ID='". $i['PanierID'] ."'>" . "Supprimer du panier" ."</a></h7>\n";
 					echo "					</div>\n";
 					echo "				</div>\n";
@@ -272,8 +284,7 @@
 			{
 				//https://bootsnipp.com/snippets/XR0Dv
 				echo "	<div class='py-2'>\n";
-				
-				if($i["EnchereValide"]){
+				if($i["EnchereValide"] && $i["EtatVente"] == 1){
 					echo "		<div class='card enchereValide' >\n";
 				} else {
 					echo "		<div class='card enchereInvalide'>\n";
@@ -284,7 +295,7 @@
 				echo "				</div>\n";
 				echo "				<div class='col-md-7'>\n";
 				echo "					<div class='card-block px-3'>\n";
-				echo "						<h4 class='card-title'><a href=?page=item&item='". $i["ID"] ."'>" . $i["Nom"] ."</a></h4>\n";
+				echo "						<h4 class='card-title'><a href=?page=item&item=". $i["ID"] .">" . $i["Nom"] ."</a></h4>\n";
 				echo "					</div>\n";
 				echo "				</div>\n";
 				echo "				<div class='col-md-3'>\n";

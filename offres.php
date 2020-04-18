@@ -104,6 +104,7 @@
 					o.`ItemID` 		AS 'ItemID',
 					i.`Nom` 		AS 'ItemNom',
 					i.`Lien` 		AS 'ItemImage',
+					i.`EtatVente` 	AS 'ItemEtatVente',
 					(SELECT `offremessage`.`Message` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessage',
 					(SELECT `offremessage`.`Prix` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastOffer',
 					(SELECT `offremessage`.`Date` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessageDate',
@@ -137,6 +138,7 @@
 							"ItemID" => $row["ItemID"],
 							"ItemNom" => $row["ItemNom"],
 							"ItemImage" => $row["ItemImage"],
+							"ItemEtatVente" => $row["ItemEtatVente"],
 							"LastMessage" => $row["LastMessage"],
 							"LastOffer" => $row["LastOffer"],
 							"LastMessageDate" => $row["LastMessageDate"],
@@ -194,16 +196,31 @@
 						if($offerID != "" && $d["OffreID"] == $offerID)
 							$_activeDiscution .= " active_chat";
 						
-						
+						$endedOffer = "";
+						if($d["ItemEtatVente"] == 1)
+						{
+							$endedOffer = 'offrevalide';
+						}
+						else if($d["ItemEtatVente"] == 0)
+						{
+							$endedOffer = 'offreinvalide';
+						}
+						else if($d["ItemEtatVente"] == -1)
+						{
+							$endedOffer = 'offredeleted';
+							$d["ItemImage"] = "./img/deletedimg.png";
+						}
+
 						echo "
 						<a href='./?page=offres&offerID=". $d["OffreID"] ."'>
-							<div class='chat_list". $_activeDiscution ."'>
-								<div class='chat_people'>
-									<!--<a href='./?page=item&item=". $d['ItemID'] ."'><div class='chat_img'> <img src='". $d["ItemImage"] ."' alt='Image article'> </div></a>-->
-									<div class='chat_img'> <img src='". $d["ItemImage"] ."' alt='Image article'> </div>
-									<div class='chat_ib'>
-										<h5>". $_personne ."<span class='chat_date'>". $_date ."</span></h5>
-										<p><b>". $d["LastOffer"] ."€</b>: ". $d["LastMessage"] . "</p>
+							<div class='chat_list ". $_activeDiscution ."'>
+								<div class='". $endedOffer ."'>
+									<div class='chat_people'>
+										<div class='chat_img'> <img src='". $d["ItemImage"] ."' alt='Image article'> </div>
+										<div class='chat_ib'>
+											<h5>". $_personne . " - " . $d["ItemNom"] . " <span class='chat_date'>". $_date ."</span></h5>
+											<p><b>". $d["LastOffer"] ."€</b>: ". $d["LastMessage"] . "</p>
+										</div>
 									</div>
 								</div>
 							</div>
