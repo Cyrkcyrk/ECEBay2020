@@ -3,10 +3,30 @@
 			<a href="./?page=accueil">
 				<img src="./img/logo.png" height="60" alt="logo">
 			</a>
-		</div>
-		<div class="text-center" id="site-search">
+		</div> 
+		<div class="text-center d-none d-sm-block" id="site-search">
 			<input type="search" class="inline" name="q" aria-label="Search through site content">
 			<button>Rechercher</button>
+			<div class="Compte">
+				
+				<?php
+					if($logged)
+					{
+						echo "Bonjour " . $user['Prenom'] . "<br>";
+						// echo "<a href='./?page=account'>Gerer mon compte</a><br>";
+						echo "<a href='./?page=panier'>Mon panier</a>";
+					}
+					else
+					{
+						echo "<a href='./?page=login'>Connexion</a> ou <a href='./?page=register'>Creer un compte</a> <br>";
+						// echo "<a href='./?page=Panier.html'>Votre panier</a>";
+					}
+				?>
+				
+				
+			</div>
+		</div>
+		<div class="text-center d-sm-none">
 			<div class="Compte">
 				
 				<?php

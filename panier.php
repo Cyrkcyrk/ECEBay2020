@@ -211,7 +211,7 @@
 					echo "				<div class='col-md-7'>\n";
 					echo "					<div class='card-block px-3'>\n";
 					echo "						<h4 class='card-title'><a href=?page=item&item='". $i["ID"] ."'>" . $i["Nom"] ."</a></h4>\n";
-					echo "						<h4 class='card-title'><a href=?page=supprimerDuPanier&ID='". $i['PanierID'] ."'>" . "Supprimer" ."</a></h4>\n";
+					echo "						<h7 class='card-title'><a href=?page=supprimerDuPanier&ID='". $i['PanierID'] ."'>" . "Supprimer du panier" ."</a></h7>\n";
 					echo "					</div>\n";
 					echo "				</div>\n";
 					echo "				<div class='col-md-3'>\n";

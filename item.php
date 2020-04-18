@@ -198,8 +198,7 @@
 					{
 						echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
 						
-						
-						echo "			<form action='./?page=ajouterOffre' method='post' >\n";
+						echo "			<form action='./?page=nouvelleOffre' method='post' >\n";
 						echo "				<div id='formulaire' class='form-row'>\n";
 						echo "					<div class='form-group col-md-12'>\n";
 						echo "						<input class='form-control' type='number' step='0.01' placeholder='Prix' name='prix'>\n";
@@ -207,7 +206,7 @@
 						echo "					<div class='form-group col-md-12'>\n";
 						echo "						<textarea placeholder='Message' class='form-control' name='message'></textarea>\n";
 						echo "					</div>\n";
-						echo "					<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";
+						echo "					<input type='hidden' name='itemID' value='". $item ["ID"] ."'>\n";
 						echo "					<button type='submit' class='btn btn-primary' value='Envoyer l'offre' name='valider'>Valider</button>	\n";
 						echo "				</div>\n";
 						echo "			</form>\n";
