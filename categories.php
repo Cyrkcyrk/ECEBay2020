@@ -105,11 +105,36 @@
 				echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
 				echo '			<div class="card h-100">'."\n";
 				echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
+				echo '				<div class="h-100">&ensp;</div>'."\n";
 				echo '				<div class="card-body">'."\n";
 				echo '					<h4 class="card-title">'."\n";
 				echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
 				echo '					</h4>'."\n";
-				echo '					<h5>'. $i["PrixDepart"] .'</h5>'."\n";
+				if($type=="encheres")
+					echo '					<h5>'. $i["PrixDepart"] .'€</h5>'."\n";
+				if($type=="offre")
+					echo '					<h5>'. $i["PrixDepart"] .'€</h5>'."\n";
+				if($type=="directe")
+					echo '					<h5>'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+				if($type=="")
+				{
+					if($i["ModeVente"]=="0")
+						echo '					<h5>Prix d&apos;achat&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+					if($i["ModeVente"]=="1")
+					{
+						if($i["PrixVenteDirect"]>"0")
+							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+						echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+
+					}
+					if($i["ModeVente"]=="2")
+					{
+						if($i["PrixVenteDirect"]>"0")
+							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+						echo '					<h5>Prix de départ&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+
+					}
+				}
 				echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
 				echo '				</div>'."\n";
 				echo '			</div>'."\n";
