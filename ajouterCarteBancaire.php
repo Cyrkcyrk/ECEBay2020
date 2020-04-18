@@ -1,10 +1,10 @@
 <?php
 	$erreur = ""; 
-	$Numero =  isset($_POST["Numero"])? $_POST["Numero"] :"";
-	$Nom =  isset($_POST["Nom"])? $_POST["Nom"] :"";
-	$Date =  isset($_POST["Date"])? $_POST["Date"] :"";
-	$Cryptogramme =  isset($_POST["Cryptogramme"])? $_POST["Cryptogramme"] :"";
-	$typeCarte =  isset($_POST["typeCarte"])? $_POST["typeCarte"] :"";
+	$Numero =  blindage(isset($_POST["Numero"])? $_POST["Numero"] :"");
+	$Nom =  blindage(isset($_POST["Nom"])? $_POST["Nom"] :"");
+	$Date =  blindage(isset($_POST["Date"])? $_POST["Date"] :"");
+	$Cryptogramme =  blindage(isset($_POST["Cryptogramme"])? $_POST["Cryptogramme"] :"");
+	$typeCarte =  blindage(isset($_POST["typeCarte"])? $_POST["typeCarte"] :"");
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)

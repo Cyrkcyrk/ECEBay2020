@@ -1,8 +1,8 @@
 <?php
 
 $erreur = ""; 
-	$Enchere =  isset($_POST["Enchere"])? $_POST["Enchere"] :"";
-	$ItemID =  isset($_POST["ID"])? $_POST["ID"] :"";
+	$Enchere =  blindage(isset($_POST["Enchere"])? $_POST["Enchere"] :"");
+	$ItemID =  blindage(isset($_POST["ID"])? $_POST["ID"] :"");
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)

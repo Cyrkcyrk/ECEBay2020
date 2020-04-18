@@ -1,6 +1,6 @@
 <?php 
 	$erreur = "";
-	$offerID = isset($_GET["offerID"])? $_GET["offerID"] : "";
+	$offerID = blindage(isset($_GET["offerID"])? $_GET["offerID"] : "");
 	
 	$offer = "";
 	$messages = "";

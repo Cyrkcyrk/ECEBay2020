@@ -17,7 +17,7 @@
 		}
 		
 		if (!empty($_FILES)) {
-			$fileName = "item" . tokenGenerator() . "_" . time() . '_' . $_FILES['file']['name'];
+			$fileName = "item" . tokenGenerator() . "_" . time() . '_' . blindage($_FILES['file']['name']);
 			$targetFile = $targetDir . $fileName;
 			move_uploaded_file($_FILES['file']['tmp_name'],$targetFile);
 			

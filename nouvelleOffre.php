@@ -1,9 +1,11 @@
 <?php
 	$erreur = ""; 
-	$prix =  isset($_POST["prix"])? $_POST["prix"] :"";
-	$message =  isset($_POST["message"])? $_POST["message"] :"";
-	$ItemID = isset($_POST["itemID"])? $_POST["itemID"] :"";
+	$prix =  blindage(isset($_POST["prix"])? $_POST["prix"] :"");
+	$message =  blindage(isset($_POST["message"])? $_POST["message"] :"");
+	$ItemID = blindage(isset($_POST["itemID"])? $_POST["itemID"] :"");
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
+	
+	
 	
 	if($logged)
 	{

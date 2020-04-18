@@ -1,17 +1,17 @@
 <?php
 $erreur = ""; 
-$Nom =  isset($_POST["Nom"])? $_POST["Nom"] :"";
-$DescriptionQ =  isset($_POST["DescriptionQ"])? $_POST["DescriptionQ"] :"";
-$DescriptionD =  isset($_POST["DescriptionD"])? $_POST["DescriptionD"] :"";
-$categorie =  isset($_POST["categorie"])? $_POST["categorie"] :"";
+$Nom =  					blindage(isset($_POST["Nom"])? $_POST["Nom"] :"");
+$DescriptionQ = 			blindage(isset($_POST["DescriptionQ"])? $_POST["DescriptionQ"] :"");
+$DescriptionD = 			blindage(isset($_POST["DescriptionD"])? $_POST["DescriptionD"] :"");
+$categorie = 				blindage(isset($_POST["categorie"])? $_POST["categorie"] :"");
 
-$modeVente =  isset($_POST["modeVente"])? $_POST["modeVente"] :"";
-$checkboxVenteDirecte =  isset($_POST["checkboxVenteDirecte"])? $_POST["checkboxVenteDirecte"] :"";
-$prixDepart =  isset($_POST["prixDepart"])? $_POST["prixDepart"] :"";
-$prixDirect =  isset($_POST["prixDirect"])? $_POST["prixDirect"] :"";
+$modeVente = 				blindage(isset($_POST["modeVente"])? $_POST["modeVente"] :"");
+$checkboxVenteDirecte =  	blindage(isset($_POST["checkboxVenteDirecte"])? $_POST["checkboxVenteDirecte"] :"");
+$prixDepart = 				blindage(isset($_POST["prixDepart"])? $_POST["prixDepart"] :"");
+$prixDirect = 				blindage(isset($_POST["prixDirect"])? $_POST["prixDirect"] :"");
 
-$images =  isset($_POST["images"])? $_POST["images"] : array();
-$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
+$images = 					isset($_POST["images"])? $_POST["images"] : array();
+$valider = 					isset($_POST["valider"])? $_POST["valider"] :"";
 
 if($logged)
 {

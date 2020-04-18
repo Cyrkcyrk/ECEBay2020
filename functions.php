@@ -19,6 +19,11 @@
 		"secret" => SECRET
 	);
 		
+	
+	
+	 $GLOBALS['_link'] = new mysqli($_DATABASE["host"], $_DATABASE["user"], $_DATABASE["password"]);
+	mysqli_set_charset($_link, "utf8");
+	
 	function SQLquery($_DATABASE, $sql, $error)
 	{
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
@@ -132,6 +137,9 @@
 	
 	function blindage($string)
 	{
+		$string = mysqli_real_escape_string($GLOBALS['_link'], $string);
+		$string = str_replace("<", "&lt", $string);
+		
 		return $string;
 	}
 ?>

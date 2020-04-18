@@ -1,6 +1,6 @@
 <?php
 	$erreur = ""; 
-	$token = isset($_COOKIE["token"])? $_COOKIE["token"] :"";
+	$token = blindage(isset($_COOKIE["token"])? $_COOKIE["token"] :"");
 
 	if($token != "")
 	{

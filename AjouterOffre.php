@@ -1,8 +1,8 @@
 <?php
 	$erreur = ""; 
-	$prix =  isset($_POST["prix"])? $_POST["prix"] :"";
-	$message =  isset($_POST["message"])? $_POST["message"] :"";
-	$offerID =  isset($_POST["offerID"])? $_POST["offerID"] :"";
+	$prix =  blindage(isset($_POST["prix"])? $_POST["prix"] :"");
+	$message =  blindage(isset($_POST["message"])? $_POST["message"] :"");
+	$offerID =  blindage(isset($_POST["offerID"])? $_POST["offerID"] :"");
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)
