@@ -25,6 +25,10 @@ body
 	float: right;
 	padding-right: 5px;
 }
+.larg
+{
+	width: 80vh;
+}
 .search-bar input[type="search"]
 {
 	width : 60%
