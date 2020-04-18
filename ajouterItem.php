@@ -232,8 +232,10 @@ https://www.dropzonejs.com
 
 	</script>
 	<form action="upload.php" class="dropzone" id="my-dropzone"></form>
-	<div class="content2">
-		<div id="images"></div>
+	<div class="content2 container-fluid h-100">
+		<div id="images">
+			
+		</div>
 
 		<div id="formulaire">
 			<form action="./?page=ajouterItem" id="form" method="post">
@@ -242,12 +244,10 @@ https://www.dropzonejs.com
 						<?php echo "<input class='form-control' type='text' placeholder='Titre de l&apos;offre' name='Nom' value ='" . $Nom ."'>";?>	
 					</div>
 					<div class='form-group col-md-10'>
-						<?php echo "<input class='form-control' rows='3' type='text' placeholder='Description des qualitées' name='DescriptionQ' value ='" . $DescriptionQ ."'>";?>
+						<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des qualitées' name='DescriptionQ' >". $DescriptionQ ."</textarea>";?>
 					</div>
 					<div class='form-group col-md-10'>
-						<?php echo "<input class='form-control' rows='3' type='text' placeholder='Description des défauts' name='DescriptionD' value ='" . $DescriptionD ."'>";?>
-					</div>
-					<div id="erreur" class="Fl-R">
+						<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des défauts' name='DescriptionD' >" . $DescriptionD ."</textarea>";?>
 					</div>
 				</div>
 				<div class="form-row">
@@ -311,15 +311,14 @@ https://www.dropzonejs.com
             ?>
 			</form>
 		</div>
-		<div id="erreur">
+		<div id="erreur" class="content3 " >
 			<?php if($erreur != "")
 			{
 				echo $erreur;
 			}
 			?>
 		</div>
-		<br>
-		<div id="images_rec">
+		<div id="images_rec" class="d-none d-sm-block">
 			<?php
                 if(count($images) != 0)
                 {
@@ -327,6 +326,18 @@ https://www.dropzonejs.com
                 	forEach($images as $img)
                     {
                         echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img'>";
+                    }
+                }
+            ?>
+		</div>
+		<div id="images_rec" class="d-sm-none">
+			<?php
+                if(count($images) != 0)
+                {
+                	echo "Image(s) déja présente(s): <br>";
+                	forEach($images as $img)
+                    {
+                        echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img_phone'>";
                     }
                 }
             ?>

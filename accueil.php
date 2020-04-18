@@ -60,13 +60,13 @@
 		</ol>
 		<div class="carousel-inner" role="listbox">
 			<div class="carousel-item active">
-				<a href="#"><img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide"></a>
+				<img class="d-block img-fluid mx-auto" src="./img/Ferraille.png" alt="First slide">
 			</div>
 			<div class="carousel-item">
-				<a href="./?page=categories&cat=musee"><img class="d-block img-fluid" src="./img/musee.png" alt="Bon pour le musée"></a>
+				<img class="d-block img-fluid mx-auto" src="./img/musee.png" alt="Second slide">
 			</div>
 			<div class="carousel-item">
-				<a href="#"><img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide"></a>
+				<img class="d-block img-fluid mx-auto" src="./img/VIP.png" alt="Third slide">
 			</div>
 		</div>
 		<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
