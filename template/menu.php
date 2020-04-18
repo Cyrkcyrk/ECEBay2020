@@ -25,7 +25,9 @@
 					<p><a href='./?page=account'>Mon compte</a></p>
 					
 				</li>
-				<li><a href="./?page=admin">Admin</a></li>
+				<li>
+					<p><a href="./?page=admin">Admin</a></p>
+				</li>
 			</ul>
 		</nav>
 	</div>
