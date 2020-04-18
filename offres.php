@@ -6,92 +6,94 @@
 	$messages = "";
 	$discutions = "";
 	
-	if($offerID == "")
+	/*if($offerID == "")
 	{
 		$erreur .= "Une erreur est survenue avec l'ID de l'offre.";
-	}
+	}*/
 	
 	if($erreur == "")
 	{
 		if($logged)
 		{
-			$sql = "
-				SELECT o.*, i.`OwnerID`, Buyer.`NomBuyer`, Buyer.`PrenomBuyer`, Owner.`NomOwner`, Owner.`PrenomOwner` 
-				FROM `offres` AS o
-				JOIN `item` as i
-					on o.`ItemID` = i.`ID`
-				JOIN (SELECT `ID` AS 'OwnerID', `Nom` AS 'NomOwner', `Prenom` AS 'PrenomOwner' FROM `utilisateur`) AS Owner
-					ON Owner.`OwnerID` = i.`OwnerID`
-				JOIN (SELECT `ID` AS 'BuyerID', `Nom` AS 'NomBuyer', `Prenom` AS 'PrenomBuyer' FROM `utilisateur`) AS Buyer
-					ON Buyer.`BuyerID` = o.`BuyerID`
-				WHERE o.`ID` = ". $offerID .";";
-			
-			$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-			mysqli_set_charset($mysqli, "utf8");
-			
-			if ($mysqli -> connect_errno) {
-				$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-			}
-			if ($result = $mysqli -> query($sql)) {
-				if (mysqli_num_rows($result) > 0) {
-					
-					$offer = mysqli_fetch_assoc($result);
-				}
-				else
-				{
-					$erreur .= "Cette offre n'existe pas";
-				}
-			}
-			else
+			if($offerID != "")
 			{
-				$erreur .= "Une erreur est survenue";
-			}
-			$result -> free_result();
-			$mysqli -> close();
-			
-
-			$sql = "
-					SELECT O.*, U.`Prenom`, U.`Nom` FROM `offremessage` AS O
-					JOIN (SELECT `ID` AS 'UserID', `Nom` AS 'Nom', `Prenom` AS 'Prenom' FROM `utilisateur`) AS U
-						ON U.`UserID` = O.`SenderID`
-					WHERE `OffreID` = ". $offer["ID"] ."
-					ORDER BY `NumeroNegociation` ASC";
-			
-			$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-			mysqli_set_charset($mysqli, "utf8");
-			
-			if ($mysqli -> connect_errno) {
-				$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-			}
-			if ($result = $mysqli -> query($sql)) {
-				if (mysqli_num_rows($result) > 0) {
-					
-					$messages = Array();
-					while ($row = mysqli_fetch_assoc($result))
+				$sql = "
+					SELECT o.*, i.`OwnerID`, Buyer.`NomBuyer`, Buyer.`PrenomBuyer`, Owner.`NomOwner`, Owner.`PrenomOwner` 
+					FROM `offres` AS o
+					JOIN `item` as i
+						on o.`ItemID` = i.`ID`
+					JOIN (SELECT `ID` AS 'OwnerID', `Nom` AS 'NomOwner', `Prenom` AS 'PrenomOwner' FROM `utilisateur`) AS Owner
+						ON Owner.`OwnerID` = i.`OwnerID`
+					JOIN (SELECT `ID` AS 'BuyerID', `Nom` AS 'NomBuyer', `Prenom` AS 'PrenomBuyer' FROM `utilisateur`) AS Buyer
+						ON Buyer.`BuyerID` = o.`BuyerID`
+					WHERE o.`ID` = ". $offerID .";";
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+				
+				if ($mysqli -> connect_errno) {
+					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						
+						$offer = mysqli_fetch_assoc($result);
+					}
+					else
 					{
-						array_push($messages, Array(
-							"ID" => $row["ID"],
-							"Message" => $row["Message"],
-							"Prix" => $row["Prix"],
-							"Date" => $row["Date"],
-							"NumeroNegociation" => $row["NumeroNegociation"],
-							"SenderID" => $row["SenderID"],
-							"SenderNom" => $row["Nom"],
-							"SenderPrenom" => $row["Prenom"],
-						));
+						$erreur .= "Cette offre n'existe pas";
 					}
 				}
 				else
 				{
-					$message = False;
-					$erreur .= "Cette offre n'existe pas";
+					$erreur .= "Une erreur est survenue";
+				}
+				$result -> free_result();
+				$mysqli -> close();
+				
+
+				$sql = "
+						SELECT O.*, U.`Prenom`, U.`Nom` FROM `offremessage` AS O
+						JOIN (SELECT `ID` AS 'UserID', `Nom` AS 'Nom', `Prenom` AS 'Prenom' FROM `utilisateur`) AS U
+							ON U.`UserID` = O.`SenderID`
+						WHERE `OffreID` = ". $offer["ID"] ."
+						ORDER BY `NumeroNegociation` ASC";
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+				
+				if ($mysqli -> connect_errno) {
+					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						
+						$messages = Array();
+						while ($row = mysqli_fetch_assoc($result))
+						{
+							array_push($messages, Array(
+								"ID" => $row["ID"],
+								"Message" => $row["Message"],
+								"Prix" => $row["Prix"],
+								"Date" => $row["Date"],
+								"NumeroNegociation" => $row["NumeroNegociation"],
+								"SenderID" => $row["SenderID"],
+								"SenderNom" => $row["Nom"],
+								"SenderPrenom" => $row["Prenom"],
+							));
+						}
+					}
+					else
+					{
+						$message = False;
+						$erreur .= "Cette offre n'existe pas";
+					}
+				}
+				else
+				{
+					$erreur .= "Une erreur est survenue";
 				}
 			}
-			else
-			{
-				$erreur .= "Une erreur est survenue";
-			}
-			
 			
 			
 			
@@ -189,8 +191,10 @@
 							$_personne = $d["PrenomBuyer"] . " " . $d["NomBuyer"];
 						
 						$_activeDiscution = "";
-						if($d["OffreID"] == $offerID)
+						if($offerID != "" && $d["OffreID"] == $offerID)
 							$_activeDiscution .= " active_chat";
+						
+						
 						echo "
 						<a href='./?page=offres&offerID=". $d["OffreID"] ."'>
 							<div class='chat_list". $_activeDiscution ."'>
@@ -207,59 +211,40 @@
 					}
 					
 				?>
-				<!--
-				<div class="chat_list active_chat">
-					<div class="chat_people">
-					<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-					<div class="chat_ib">
-						<h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-						<p>Test, which is a new approach to have all solutions 
-						astrology under one roof.</p>
-					</div>
-					</div>
-				</div>
-				<div class="chat_list">
-					<div class="chat_people">
-					<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-					<div class="chat_ib">
-						<h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-						<p>Test, which is a new approach to have all solutions 
-						astrology under one roof.</p>
-					</div>
-					</div>
-				</div>
-				-->
 			</div>
 		</div>
 		
 		<div class="mesgs">
 			<div class="msg_history">
 				<?php
-					forEach($messages as $m)
+					if($offerID != "")
 					{
-						$_date = date("G:i   |   F j", $m["Date"]);
-						if($user["ID"] == $m["SenderID"])
+						forEach($messages as $m)
 						{
-							
-							echo "
-							<div class='outgoing_msg'>
-								<div class='sent_msg'>
-									<p><b>". $m["Prix"] ."€ </b><br>". $m["Message"] ."</p>
-									<span class='time_date'>". $_date ."</span> 
-								</div>
-							</div>\n";
-						}
-						else
-						{
-							echo "
-							<div class='incoming_msg'>
-								<div class='received_msg'>
-									<div class='received_withd_msg'>
+							$_date = date("G:i   |   F j", $m["Date"]);
+							if($user["ID"] == $m["SenderID"])
+							{
+								
+								echo "
+								<div class='outgoing_msg'>
+									<div class='sent_msg'>
 										<p><b>". $m["Prix"] ."€ </b><br>". $m["Message"] ."</p>
 										<span class='time_date'>". $_date ."</span> 
 									</div>
-								</div>
-							</div>\n";
+								</div>\n";
+							}
+							else
+							{
+								echo "
+								<div class='incoming_msg'>
+									<div class='received_msg'>
+										<div class='received_withd_msg'>
+											<p><b>". $m["Prix"] ."€ </b><br>". $m["Message"] ."</p>
+											<span class='time_date'>". $_date ."</span> 
+										</div>
+									</div>
+								</div>\n";
+							}
 						}
 					}
 					
@@ -267,47 +252,37 @@
 				
 
 			</div>
-			
 			<div class="type_msg">
-				<div class="input_msg_write">
-					<input type="text" class="write_msg" placeholder="Type a message" />
-					<button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+				<div class='input_msg_write'>
+					<?php
+						$_offreID = "";
+						if($offerID != "") {
+							$_offreID = $offerID;
+						} else {
+							$_offreID = "";
+						}
+							echo "
+							<form action='./?page=AjouterOffre' method='post'>
+								<div class='row'>
+									<div class='col-md-2'>
+										<input type='number' step='0.01' class='write_msg' placeholder='Prix' name='prix'/>
+									</div>
+									<div class='col-md-10'>
+										<input type='text' class='write_msg' placeholder='Type a message' name='message' />
+										<input type='hidden' name='offerID' value='". $_offreID ."'>
+										
+										<button class='msg_send_btn' name='valider' value='valider' type='submit'><i class='fa fa-paper-plane-o' aria-hidden='true'></i></button>
+									</div>
+								</div>
+							</form>\n";
+					?>
+					
+					
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-<?php
-
-	if(!$messages)
-	{
-		// echo "Cette offre n'existe pas. <br>";
-	}
-	else
-	{
-		
-		
-
-		
-		/*forEach($messages as $m)
-		{
-			echo "	<div class='py-2'>\n";
-			echo "		<div class='card'>\n";
-			echo "			<div class='row '>\n";
-			echo "				<div class='col-md-7'>\n";
-			echo "					<div class='card-block px-3'>\n";
-			echo "						<h4 class='card-title'><a href=?page=item&item='". $i["ID"] ."'>" . $i["Nom"] ."</a></h4>\n";
-			echo "						<h4 class='card-title'><a href=?page=supprimerDuPanier&ID='". $i['PanierID'] ."'>" . "Supprimer" ."</a></h4>\n";
-			echo "					</div>\n";
-			echo "				</div>\n";
-			echo "			</div>\n";
-			echo "		</div>\n";
-			echo "	</div>\n";
-		}*/
-	}
-?>
 
 
 

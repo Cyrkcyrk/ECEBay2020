@@ -5,8 +5,10 @@
 			</a>
 		</div>
 		<div class="text-center" id="site-search">
-			<input type="search" class="inline" name="q" aria-label="Search through site content">
-			<button>Rechercher</button>
+			<form action='./?page=categories&search=1' method='post'>
+				<input type="search" class="inline" name="searchQuestion" aria-label="Rechercher sur le site">
+				<button type="sumbit" name="valider" value="valider">Rechercher</button>
+			</form>
 			<div class="Compte">
 				
 				<?php
@@ -14,7 +16,8 @@
 					{
 						echo "Bonjour " . $user['Prenom'] . "<br>";
 						// echo "<a href='./?page=account'>Gerer mon compte</a><br>";
-						echo "<a href='./?page=panier'>Mon panier</a>";
+						echo "<a href='./?page=panier'>Mon panier</a><br>";
+						echo "<a href='./?page=offres'>Mes offres</a>";
 					}
 					else
 					{

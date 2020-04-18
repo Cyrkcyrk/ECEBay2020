@@ -3,8 +3,9 @@
 	
 	$categorie = isset($_GET["cat"])? $_GET["cat"] : "";
 	$type = isset($_GET["type"])? $_GET["type"] : "";
+	$search = isset($_GET["search"])? $_GET["search"] : "";
 	
-	if(in_array($categorie, Array("ferraille", "musee", "VIP"), TRUE) || in_array($type, Array("encheres", "offre", "directe"), TRUE))
+	if(in_array($categorie, Array("ferraille", "musee", "VIP"), TRUE) || in_array($type, Array("encheres", "offre", "directe"), TRUE) || $search)
 	{
 		$sql = "";
 		if($categorie != "") {
@@ -21,6 +22,24 @@
 					break;
 			}
 			$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`Categorie` = '". $categorie ."' AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
+		}
+		else if ($search != "")
+		{
+			$searchQuestion =  isset($_POST["searchQuestion"])? strtolower($_POST["searchQuestion"]) :"";
+			
+			$nomPage = "Résultats pour : " . $searchQuestion;
+			$sql = "
+			SELECT i.*, m.`Lien` FROM `item` AS i
+			INNER JOIN `medias` AS m 
+				ON m.`ItemID` = i.`ID`
+			WHERE 
+			   (LOWER(i.`Nom`) LIKE '%". $searchQuestion ."%'
+			OR	LOWER(i.`DescriptionQualites`) LIKE '%". $searchQuestion ."%'
+			OR	LOWER(i.`DescriptionDefauts`) LIKE '%". $searchQuestion ."%')
+			AND m.`type` = 1 
+			AND m.`Ordre` = 0";
+			
+			echo $sql;
 		}
 		else {
 			switch ($type)
@@ -40,7 +59,7 @@
 			}
 		}
 		
-		$items = null;
+		$items = Array();
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 		mysqli_set_charset($mysqli, "utf8");
 		
@@ -50,7 +69,6 @@
 		if ($result = $mysqli -> query($sql)) {
 			if (mysqli_num_rows($result) > 0) {
 				
-				$items = Array();
 				while ($row = mysqli_fetch_assoc($result))
 				{
 					if($row["Categorie"] == "ferraille") $_categorie = "Ferraille ou trésor";
@@ -98,22 +116,30 @@
 
 
 <div class="container">
+	<h2><?php echo $nomPage;?></h2>
 	<div class="row">
 		<?php
-			forEach($items as $i)
+			if($items && count($items) > 0)
 			{
-				echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
-				echo '			<div class="card h-100">'."\n";
-				echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
-				echo '				<div class="card-body">'."\n";
-				echo '					<h4 class="card-title">'."\n";
-				echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
-				echo '					</h4>'."\n";
-				echo '					<h5>'. $i["PrixDepart"] .'</h5>'."\n";
-				echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
-				echo '				</div>'."\n";
-				echo '			</div>'."\n";
-				echo '		</div>'."\n";
+				forEach($items as $i)
+				{
+					echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
+					echo '			<div class="card h-100">'."\n";
+					echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
+					echo '				<div class="card-body">'."\n";
+					echo '					<h4 class="card-title">'."\n";
+					echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
+					echo '					</h4>'."\n";
+					echo '					<h5>'. $i["PrixDepart"] .'</h5>'."\n";
+					echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
+					echo '				</div>'."\n";
+					echo '			</div>'."\n";
+					echo '		</div>'."\n";
+				}
+			}
+			else
+			{
+				echo "Aucun résultat a afficher";
 			}
 		?>
 
