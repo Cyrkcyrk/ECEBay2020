@@ -38,8 +38,6 @@
 			OR	LOWER(i.`DescriptionDefauts`) LIKE '%". $searchQuestion ."%')
 			AND m.`type` = 1 
 			AND m.`Ordre` = 0";
-			
-			echo $sql;
 		}
 		else {
 			switch ($type)

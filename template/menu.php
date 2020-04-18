@@ -25,7 +25,7 @@
 					<p><a href='./?page=account'>Mon compte</a></p>
 					
 				</li>
-				<li><p>Admin</p></li>
+				<li><a href="./?page=admin">Admin</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -56,7 +56,7 @@
                     <a  href="./?page=account">Mon compte</a>
                 </li>
                 <li class="tropetit">
-                    <a  href="#">Admin</a>
+                    <a href="./?page=admin">Admin</a>
                 </li>
             </ul>
 
