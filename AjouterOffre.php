@@ -17,7 +17,30 @@
 			
 			if($erreur == "")
 			{
-				$sql = "INSERT INTO `adresse`(`OwnerID`, `Ligne1`, `Ligne2`, `Ville`, `CodePostal`, `Pays`, `Telephone`) VALUES ('" . $user["ID"] . "', '" . $ligne1 . "', '" . $ligne2 . "', '" . $ville . "', '" . $codePostal . "', '" . $pays . "', '" . $telephone . "')";
+				$sql = "SELECT * FROM `Offres` WHERE `ItemID` = ".  ." AND `BuyerID` = ".  .";"
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+				
+				if ($mysqli -> connect_errno) {
+					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						
+						$Offre = mysqli_fetch_assoc($result);
+						$result -> free_result();
+						$mysqli -> close();
+					}
+					else
+					{
+						
+					}
+				
+				
+				
+				
+				// $sql = "INSERT INTO `adresse`(`OwnerID`, `Ligne1`, `Ligne2`, `Ville`, `CodePostal`, `Pays`, `Telephone`) VALUES ('" . $user["ID"] . "', '" . $ligne1 . "', '" . $ligne2 . "', '" . $ville . "', '" . $codePostal . "', '" . $pays . "', '" . $telephone . "')";
 				list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 				if($_)
 					redirect('./?page=panier');
@@ -35,7 +58,7 @@
 	#formulaire{
 		float:left;
 	}
-	#erreur{
+	#erreur{ 
 		float:left;
 	}
 </style>
