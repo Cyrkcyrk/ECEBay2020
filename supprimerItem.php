@@ -1,8 +1,8 @@
 <?php
 	$erreur = ""; 
 	
-	$ID = isset($_GET["ID"])? $_GET["ID"] : "";
-	$PrecedentPage = isset($_GET["pp"])? $_GET["pp"] : "";
+	$ID = blindage(isset($_GET["ID"])? $_GET["ID"] : "");
+	$PrecedentPage = blindage(isset($_GET["pp"])? $_GET["pp"] : "");
 	if($logged)
 	{
 		if($ID != "")

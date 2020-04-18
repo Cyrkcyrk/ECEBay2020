@@ -1,11 +1,11 @@
 <?php
 	$erreur = ""; 
 	
-	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
-	$password =  isset($_POST["password"])? $_POST["password"] :"";
-	$nom =  isset($_POST["nom"])? $_POST["nom"] :"";
-	$prenom =  isset($_POST["prenom"])? $_POST["prenom"] :"";
-	$type =  isset($_POST["type"])? $_POST["type"] :"";
+	$mail =  blindage(isset($_POST["mail"])? $_POST["mail"] :"");
+	$password =  blindage(isset($_POST["password"])? $_POST["password"] :"");
+	$nom =  blindage(isset($_POST["nom"])? $_POST["nom"] :"");
+	$prenom =  blindage(isset($_POST["prenom"])? $_POST["prenom"] :"");
+	$type = blindage(isset($_POST["type"])? $_POST["type"] :"");
 	$inscription =  isset($_POST["inscription"])? $_POST["inscription"] :"";
 	
 	

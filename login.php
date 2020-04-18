@@ -1,7 +1,7 @@
 <?php
 	$erreur = ""; 
-	$mail =  isset($_POST["mail"])? $_POST["mail"] :"";
-	$password =  isset($_POST["password"])? $_POST["password"] :"";
+	$mail =  blindage(isset($_POST["mail"])? $_POST["mail"] :"");
+	$password =  blindage(isset($_POST["password"])? $_POST["password"] :"");
 	$connection =  isset($_POST["connection"])? $_POST["connection"] :"";
 	
 	if(!$logged)

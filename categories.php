@@ -1,9 +1,9 @@
 <?php
 	$erreur = ""; 
 	
-	$categorie = isset($_GET["cat"])? $_GET["cat"] : "";
-	$type = isset($_GET["type"])? $_GET["type"] : "";
-	$search = isset($_GET["search"])? $_GET["search"] : "";
+	$categorie = blindage(isset($_GET["cat"])? $_GET["cat"] : "");
+	$type = blindage(isset($_GET["type"])? $_GET["type"] : "");
+	$search = blindage(isset($_GET["search"])? $_GET["search"] : "");
 	
 	if(in_array($categorie, Array("ferraille", "musee", "VIP"), TRUE) || in_array($type, Array("encheres", "offre", "directe"), TRUE) || $search)
 	{

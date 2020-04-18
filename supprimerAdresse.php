@@ -1,7 +1,7 @@
 <?php
 	$erreur = ""; 
 	
-	$ID = isset($_GET["ID"])? $_GET["ID"] : "";
+	$ID = blindage(isset($_GET["ID"])? $_GET["ID"] : "");
 	
 	if($logged)
 	{

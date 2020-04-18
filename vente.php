@@ -1,8 +1,8 @@
 <?php
 	$erreur = ""; 
 	
-	$categorie = isset($_GET["cat"])? $_GET["cat"] : "";
-	$type = isset($_GET["type"])? $_GET["type"] : "";
+	$categorie = blindage(isset($_GET["cat"])? $_GET["cat"] : "");
+	$type = blindage(isset($_GET["type"])? $_GET["type"] : "");
 	
 	
 	if($logged)

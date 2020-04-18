@@ -1,11 +1,11 @@
 <?php
 	$erreur = ""; 
-	$ligne1 =  isset($_POST["ligne1"])? $_POST["ligne1"] :"";
-	$ligne2 =  isset($_POST["ligne2"])? $_POST["ligne2"] :"";
-	$ville =  isset($_POST["ville"])? $_POST["ville"] :"";
-	$codePostal =  isset($_POST["codePostal"])? $_POST["codePostal"] :"";
-	$pays =  isset($_POST["pays"])? $_POST["pays"] :"";
-	$telephone =  isset($_POST["telephone"])? $_POST["telephone"] :"";
+	$ligne1 =  blindage(isset($_POST["ligne1"])? $_POST["ligne1"] :"");
+	$ligne2 =  blindage(isset($_POST["ligne2"])? $_POST["ligne2"] :"");
+	$ville =  blindage(isset($_POST["ville"])? $_POST["ville"] :"");
+	$codePostal =  blindage(isset($_POST["codePostal"])? $_POST["codePostal"] :"");
+	$pays =  blindage(isset($_POST["pays"])? $_POST["pays"] :"");
+	$telephone =  blindage(isset($_POST["telephone"])? $_POST["telephone"] :"");
 	$valider =  isset($_POST["valider"])? $_POST["valider"] :"";
 	
 	if($logged)

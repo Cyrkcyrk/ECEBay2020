@@ -1,7 +1,7 @@
 <?php include("./template/_top.php"); ?>
 <?php 
 	$erreur = "";
-	$itemID = isset($_GET["item"])? $_GET["item"] : "";
+	$itemID = blindage(isset($_GET["item"])? $_GET["item"] : "");
 	if($itemID != "")
 	{
 		if($logged)

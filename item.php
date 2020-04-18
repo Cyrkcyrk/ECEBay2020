@@ -1,5 +1,5 @@
 <?php
-	$itemID = isset($_GET["item"])? $_GET["item"] : "";
+	$itemID = blindage(isset($_GET["item"])? $_GET["item"] : "");
 	$erreur = "";
 	
 	$item = "";
@@ -220,6 +220,7 @@
 								venteDirecte($item);
 							}
 						}
+						
 						else if($item["ModeVente"] == 2)
 						{
 							echo "			<p>Faite une offre dans les " . $item["PrixDepart"] . "€ </p>\n";
