@@ -40,49 +40,74 @@
 						$result -> free_result();
 						$mysqli -> close();
 						
-						$erreur .= "Une offre existe déjà à votre nom";
-						//Rediriger vers la page de discution
+						$erreur .= "Une offre existe déjà à votre nom<br>";
+						redirect("./?page=offres&offerID=" . $Offre["ID"]);
 					}
 					else
 					{
-						$result -> free_result();
-						$mysqli -> close();
 						
-						$sql = "INSERT INTO `offres`(`ItemID`, `BuyerID`) VALUES (". $ItemID .", ". $user["ID"] .");";
-						list($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-						if($_)
-						{
-							$sql = "SELECT * FROM `offres` WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
-							$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-							mysqli_set_charset($mysqli, "utf8");
-							
-							if ($mysqli -> connect_errno) {
-								$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-							}
-							if ($result = $mysqli -> query($sql)) {
-								if (mysqli_num_rows($result) > 0) {
-									
-									$Offre = mysqli_fetch_assoc($result);
-									$result -> free_result();
-									$mysqli -> close();
-									
-									$sql = "INSERT INTO `offremessage` (`OffreID`, `SenderID`, `Prix`, `NumeroNegociation`, `Message`, `Date`) VALUES (". $Offre["ID"] .", ". $user["ID"] .", ". $prix .", ". 0 .", '". $message ."', '". time() ."' )";
-									
+						$sql = "SELECT * FROM `item` WHERE `ID` = ". $ItemID .";";
+						$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+						mysqli_set_charset($mysqli, "utf8");
+						
+						if ($mysqli -> connect_errno) {
+							$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+						}
+						if ($result = $mysqli -> query($sql)) {
+							if (mysqli_num_rows($result) > 0) {
+								
+								$item = mysqli_fetch_assoc($result);
+								$result -> free_result();
+								$mysqli -> close();
+								
+								if($item["ModeVente"] == 2)
+								{
+									$sql = "INSERT INTO `offres`(`ItemID`, `BuyerID`) VALUES (". $ItemID .", ". $user["ID"] .");";
 									list($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 									if($_)
-										redirect("./?page=./?page=offres&offerID=" . $Offre["ID"]);
+									{
+										$sql = "SELECT * FROM `offres` WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
+										$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+										mysqli_set_charset($mysqli, "utf8");
+										
+										if ($mysqli -> connect_errno) {
+											$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+										}
+										if ($result = $mysqli -> query($sql)) {
+											if (mysqli_num_rows($result) > 0) {
+												
+												$Offre = mysqli_fetch_assoc($result);
+												$result -> free_result();
+												$mysqli -> close();
+												
+												$sql = "INSERT INTO `offremessage` (`OffreID`, `SenderID`, `Prix`, `NumeroNegociation`, `Message`, `Date`) VALUES (". $Offre["ID"] .", ". $user["ID"] .", ". $prix .", ". 0 .", '". $message ."', '". time() ."' )";
+												
+												list($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+												if($_)
+													redirect("./?page=offres&offerID=" . $Offre["ID"]);
+												else
+													$erreur .= "Une erreur s'est produite lors de l'ajout de l'offre";
+											}
+											else
+											{
+												$erreur .= "Une erreur s'est produite lors de l'ajout de l'offre";
+											}
+										}
+									}
 									else
-										$erreur .= "Une erreur s'est produite lors de l'ajout de l'offre";
+									{
+										$erreur .= "Une erreur s'est produite lors de la création de l'offre";
+									}
 								}
 								else
 								{
-									$erreur .= "Une erreur s'est produite lors de l'ajout de l'offre";
+									$erreur .= "Vous ne pouvez pas proposer d'offre pour cet item. <br>";
 								}
 							}
-						}
-						else
-						{
-							$erreur .= "Une erreur s'est produite lors de la création de l'offre";
+							else
+							{
+								$erreur .= "L'item n'existe pas. <br>";
+							}
 						}
 					}
 				}
@@ -108,6 +133,7 @@
 		float:left;
 	}
 </style>
+
 <form action="./?page=nouvelleOffre" method="post" >
 	<div  id="identification">
 		<div id='formulaire' class='form-row'>
