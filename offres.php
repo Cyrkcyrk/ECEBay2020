@@ -2,21 +2,19 @@
 	$erreur = "";
 	$offerID = blindage(isset($_GET["offerID"])? $_GET["offerID"] : "");
 	
-	$offer = "";
-	$messages = "";
-	$discutions = "";
+	// $offer = false;
+	$messages = false;
+	$discutions = false;
 	
-	/*if($offerID == "")
-	{
-		$erreur .= "Une erreur est survenue avec l'ID de l'offre.";
-	}*/
+	
 	
 	if($erreur == "")
 	{
 		if($logged)
-		{
+		{	
 			if($offerID != "")
-			{
+			{	
+				/*
 				$sql = "
 					SELECT o.*, i.`OwnerID`, Buyer.`NomBuyer`, Buyer.`PrenomBuyer`, Owner.`NomOwner`, Owner.`PrenomOwner` 
 					FROM `offres` AS o
@@ -50,53 +48,71 @@
 				}
 				$result -> free_result();
 				$mysqli -> close();
+				*/
 				
-
+				
 				$sql = "
-						SELECT O.*, U.`Prenom`, U.`Nom` FROM `offremessage` AS O
-						JOIN (SELECT `ID` AS 'UserID', `Nom` AS 'Nom', `Prenom` AS 'Prenom' FROM `utilisateur`) AS U
-							ON U.`UserID` = O.`SenderID`
-						WHERE `OffreID` = ". $offer["ID"] ."
-						ORDER BY `NumeroNegociation` ASC";
+					SELECT o.`ID`
+					FROM `offres` AS o
+					JOIN `item` as i
+						on o.`ItemID` = i.`ID`
+					WHERE o.`ID` = ". $offerID ." AND (o.`BuyerID` = '". $user["ID"] ."' OR i.`OwnerID` = '". $user["ID"] ."');";
+				list($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
+				if($_)
+				{
 				
-				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-				mysqli_set_charset($mysqli, "utf8");
-				
-				if ($mysqli -> connect_errno) {
-					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-				}
-				if ($result = $mysqli -> query($sql)) {
-					if (mysqli_num_rows($result) > 0) {
-						
-						$messages = Array();
-						while ($row = mysqli_fetch_assoc($result))
+					$sql = "
+							SELECT O.*, U.`Prenom`, U.`Nom` FROM `offremessage` AS O
+							JOIN (SELECT `ID` AS 'UserID', `Nom` AS 'Nom', `Prenom` AS 'Prenom' FROM `utilisateur`) AS U
+								ON U.`UserID` = O.`SenderID`
+							WHERE `OffreID` = ". $offerID ."
+							ORDER BY `NumeroNegociation` ASC";
+					
+					$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+					mysqli_set_charset($mysqli, "utf8");
+					
+					if ($mysqli -> connect_errno) {
+						$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
+					}
+					if ($result = $mysqli -> query($sql)) {
+						if (mysqli_num_rows($result) > 0) {
+							
+							$messages = Array();
+							while ($row = mysqli_fetch_assoc($result))
+							{
+								array_push($messages, Array(
+									"ID" => $row["ID"],
+									"Message" => $row["Message"],
+									"Prix" => $row["Prix"],
+									"Date" => $row["Date"],
+									"NumeroNegociation" => $row["NumeroNegociation"],
+									"SenderID" => $row["SenderID"],
+									"SenderNom" => $row["Nom"],
+									"SenderPrenom" => $row["Prenom"],
+								));
+							}
+						}
+						else
 						{
-							array_push($messages, Array(
-								"ID" => $row["ID"],
-								"Message" => $row["Message"],
-								"Prix" => $row["Prix"],
-								"Date" => $row["Date"],
-								"NumeroNegociation" => $row["NumeroNegociation"],
-								"SenderID" => $row["SenderID"],
-								"SenderNom" => $row["Nom"],
-								"SenderPrenom" => $row["Prenom"],
-							));
+							$message = False;
+							$erreur .= "Cette offre n'existe pas";
 						}
 					}
 					else
 					{
-						$message = False;
-						$erreur .= "Cette offre n'existe pas";
+						
+						$erreur .= "Une erreur est survenue";
 					}
 				}
 				else
 				{
-					$erreur .= "Une erreur est survenue";
+					$message = False;
+					$erreur .= "Vous ne pouvez pas voir cette offre car vous n'en etes pas acteur.";
 				}
 			}
 			
 			
-			
+			/*
 			$sql = "
 			SELECT * FROM (
 				SELECT
@@ -120,6 +136,41 @@
 					ON Buyer.`BuyerID` = o.`BuyerID`
 				WHERE (Owner.`OwnerID` = ". $user["ID"] ." OR Buyer.`BuyerID` = ". $user["ID"] .")
 				) AS T ORDER BY T.`LastMessageDate` DESC";
+			*/
+			
+			
+			$sql = "
+			SELECT * FROM (
+				SELECT
+					o.`ID` 			AS 'OffreID',
+					o.`ItemID` 		AS 'ItemID',
+					i.`Nom` 		AS 'ItemNom',
+					i.`Lien` 		AS 'ItemImage',
+					i.`EtatVente` 	AS 'ItemEtatVente',
+					(SELECT `offremessage`.`Message` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessage',
+					(SELECT `offremessage`.`Prix` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastOffer',
+					(SELECT `offremessage`.`Date` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessageDate',
+					(SELECT `offremessage`.`SenderID` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastSenderID',
+					Owner.*,
+					Buyer.*
+				FROM `offres` AS o
+				LEFT JOIN (
+					SELECT 
+						i.*, 
+						CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+							THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+							ELSE './img/notfound.jpg'
+						END AS `Lien`
+					FROM `item` AS i ) AS i
+					ON o.`ItemID` = i.`ID`
+				LEFT JOIN (SELECT `ID` AS 'OwnerID', `Nom` AS 'NomOwner', `Prenom` AS 'PrenomOwner' FROM `utilisateur`) AS Owner
+					ON Owner.`OwnerID` = i.`OwnerID`
+				LEFT JOIN (SELECT `ID` AS 'BuyerID', `Nom` AS 'NomBuyer', `Prenom` AS 'PrenomBuyer' FROM `utilisateur`) AS Buyer
+					ON Buyer.`BuyerID` = o.`BuyerID`
+				WHERE (Owner.`OwnerID` = ". $user["ID"] ." OR Buyer.`BuyerID` = ". $user["ID"] .")
+				) AS T ORDER BY T.`LastMessageDate` DESC";
+			
+			// echo $sql;
 			
 			$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 			mysqli_set_charset($mysqli, "utf8");
@@ -210,7 +261,7 @@
 							else if($d["ItemEtatVente"] == -1)
 							{
 								$endedOffer = 'offredeleted';
-								$d["ItemImage"] = "./img/deletedimg.png";
+								// $d["ItemImage"] = "./img/notfound.jpg";
 							}
 
 							echo "
@@ -240,7 +291,7 @@
 		<div class="mesgs">
 			<div class="msg_history">
 				<?php
-					if($offerID != "")
+					if($offerID != "" && $messages)
 					{
 						forEach($messages as $m)
 						{

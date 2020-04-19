@@ -94,7 +94,7 @@
 
 		
 		echo "Bienvenue, " . $user['Prenom'] . " " . $user['Nom'] . " :D <br>";
-		echo "<a href='./?page=logout&_=" . $token ."'>Se deconnecter</a><br>";
+		echo "<a href='./?page=logout'>Se deconnecter</a><br>";
 		echo "<div class='row'>";
 		echo "<div class='col-md'>";
 		echo "<h2> Vos adresses</h2>";

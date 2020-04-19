@@ -49,6 +49,7 @@
 								if($_)
 								{
 									setcookie("token", $token, time()+3600);
+									$_SESSION["token"] = $token;
 									redirect('./?page=accueil');
 								}
 								else
