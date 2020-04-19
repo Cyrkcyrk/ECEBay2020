@@ -15,6 +15,9 @@
 		{
 			if($mail == "") {
 				$erreur .= "mail incomplet <br>";
+			}
+			else if (!preg_match("/[a-zA-Z.]+@[a-zA-Z.]+\.[a-zA-Z]+/", $mail)) {
+				$erreur .= "mauvais format d'entree <br>";
 			} 
 			if($password == "") {
 				$erreur .= "password incomplet <br>";
