@@ -254,6 +254,13 @@ nav > ul li:hover .sous
 	height: auto;
 }
 
+.petite_img
+{
+	max-height: 10vh;
+	width: auto;
+	display: inline-block;
+	text-align: center;
+}
 
 #images_rec
 {
@@ -305,12 +312,15 @@ div.item div.image img{
 
 .tab-content
 {
+	
 	overflow: hidden; 
 }
 
 .tab-content img 
 {
-	width: 100%;
+	max-width: 100%;
+	width: auto;
+	max-height: 40vh;
 	-webkit-animation-name: opacity;
 			animation-name: opacity;
 	-webkit-animation-duration: .3s;

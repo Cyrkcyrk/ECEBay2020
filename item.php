@@ -140,16 +140,16 @@
 <div class="row">
 	<div class="col-lg-4 col-md-5 mb-4">
 		<div class="card h-100">
-			<div class="preview-pic tab-content">
+			<div class="preview-pic tab-content text-center ">
 				<?php
 					if($images)
 					{
 						forEach($images as $i)
 						{
 							if($i["ordre"] == 0)
-								echo "				<div class='tab-pane active' id='pic-". $i["ordre"] ."'><img src='".$i["Lien"]."' /></div>";
+								echo "				<div class='tab-pane active' id='pic-". $i["ordre"] ."'><img class='align-items-center' src='".$i["Lien"]."' /></div>";
 							else
-								echo "				<div class='tab-pane' id='pic-". $i["ordre"] ."'><img src='".$i["Lien"]."' /></div>";
+								echo "				<div class='tab-pane' id='pic-". $i["ordre"] ."'><img class='align-items-center' src='".$i["Lien"]."' /></div>";
 							
 						}
 					}
@@ -159,17 +159,17 @@
 					}
 				?>
 			</div>
-						<ul class="preview-thumbnail nav nav-tabs">
+						<ul class="preview-thumbnail nav nav-tabs  ">
 				<?php
 					if($images)
 					{
 						forEach($images as $i)
 						{
 							if($i["ordre"] == 0)
-								echo "				<li class='active'><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img src='". $i["Lien"] ."' /></a></li>\n";
+								echo "				<li class='active'><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img class='petite_img align-items-center text-center' src='". $i["Lien"] ."' /></a></li>\n";
 							else
-								echo "				<li><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img src='". $i["Lien"] ."' /></a></li>\n";
-						}
+								echo "				<li><a data-target='#pic-". $i["ordre"] ."' data-toggle='tab'><img class='petite_img align-items-center text-center' src='". $i["Lien"] ."' /></a></li>\n";
+						} 
 					}
 				?>
 			</ul>

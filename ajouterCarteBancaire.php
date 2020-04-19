@@ -13,15 +13,24 @@
 		{
 			if($Numero == "") {
 				$erreur .= "Numero incomplete <br>";
+			}
+			else if (!preg_match("/^\d{16}$/", $Numero)) {
+				$erreur .= "Trop/pas assez de chiffre pour une Carte Bancaire <br>";
 			} 
 			if($Nom == "") {
 				$erreur .= "Nom incomplet <br>";
 			} 
 			if($Date == "") {
 				$erreur .= "Date incomplet <br>";
+			}
+			else if (!preg_match("/^\d{2}+\/+\d{2}$/", $Date)) {
+				$erreur .= "Mauvais format de date MM/AA <br>";
 			} 
 			if($Cryptogramme == "") {
 				$erreur .= "Cryptogramme incomplet <br>";
+			}
+			else if (!preg_match("/^\d{3,4}$/", $Cryptogramme)) {
+				$erreur .= "Trop/pas assez de chiffre pour un Cryptogramme <br>";
 			}
 			if($typeCarte == "") {
 				$erreur .= "Veuillez selectionner un type de carte.<br>";
