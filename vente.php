@@ -8,7 +8,17 @@
 	if($logged)
 	{
 		// $sql = "SELECT * FROM `item` WHERE `OwnerID` = '" . $user["ID"] . "' ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
-		$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE `OwnerID` = '" . $user["ID"] . "' AND m.`Ordre` = 0 ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
+		// $sql = "SELECT i.*, m.`Lien` FROM `item` AS i LEFT JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE `OwnerID` = '" . $user["ID"] . "' AND m.`Ordre` = 0 ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
+		
+		$sql = "
+		SELECT i.*, 
+		CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0)
+			THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0)
+			ELSE './img/notfound.jpg'
+		END AS `Lien`
+		FROM `item` AS i 
+		WHERE `OwnerID` = ". $user["ID"] ."
+		ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
 		
 		$items = null;
 		$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
