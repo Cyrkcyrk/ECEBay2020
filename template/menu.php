@@ -29,7 +29,7 @@
 					<li class="deroul"><p>Admin &ensp;</p>
 					<ul class="sous">
 						<li><a href="./?page=adminItems">Gérer les items</a></li>
-						<li><a href="./?page=adminUser">Gérer les vendeurs</a></li>
+						<li><a href="./?page=adminUsers">Gérer les vendeurs</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -64,7 +64,7 @@
                 <li class="tropetit">
                     Admin
                     <ul class="tropetit"><a href="./?page=adminItems">Gérer les items</a></ul>
-                    <ul class="tropetit"><a href="./?page=adminUser">Gérer les vendeurs</a></ul>
+                    <ul class="tropetit"><a href="./?page=adminUsers">Gérer les utilisateurs</a></ul>
                 </li>
             </ul>
 
