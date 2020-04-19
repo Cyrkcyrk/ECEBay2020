@@ -9,6 +9,16 @@ body
   padding: 0;
   background-color: #CCCCCC;
 }
+.enchereValide
+{
+	background-color: #B4FFA4 ;
+}
+
+.enchereInvalide
+{
+	background-color: #FF9699;
+}
+
 .header
 {
 	background-color: white;
