@@ -82,8 +82,10 @@ if($logged)
 			if ($mysqli -> connect_errno) {
 				$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
 			}
-			if ($result = $mysqli -> query($sql)) {
-				if (mysqli_num_rows($result) > 0) {
+			if ($result = $mysqli -> query($sql)) 
+			{
+				if (mysqli_num_rows($result) > 0) 
+				{
 
 					$itemID = mysqli_fetch_assoc($result)["ID"];
 					$cheminAcces = "./uploads/". $user["ID"] . "/";
@@ -117,230 +119,231 @@ if($logged)
 			{
 				$erreur .= "Une erreur est survenue";
 			}
-
-
-
-					/*forEach($images as $img)
-					{
-						echo $img . "<br>\n";
-					}*/
-					//redirect('./?page=vente&SQL=' . $sql);
-				}
-			}
-		}
-		else
-		{
-			redirect('./?page=login');
-		}
-		?>
-
-		<?php include("./template/_top.php"); ?>
-
-<!--
-http://www.expertphp.in/article/php-upload-multiple-file-using-dropzone-js-with-drag-and-drop-features
-https://www.dropzonejs.com
--->
-<link href="http://demo.expertphp.in/css/dropzone.css" rel="stylesheet">
-<script src="http://demo.expertphp.in/js/dropzone.js"></script>
-
-<style>
-	#formulaire{
-		float:left;
-	}
-	#erreur{
-		float:left;
-	}
-</style>
-
-
-
-<script>
-	function EnchereOffre() {
-		document.getElementById('spanVenteDirecteCheckbox').style = 'display:1;';
-		document.getElementById('trPrixDepart').style = 'display:1;';
-		if(document.getElementById('venteCheckboxDirecte').checked)
-		{
-			document.getElementById('trPrixVenteDirecte').style = 'display:1;';
-		}
-		else
-		{
-			document.getElementById('trPrixVenteDirecte').style = 'display:none;';
 		}
 	}
+}
+else
+{
+	redirect('./?page=login');
+}
+?>
 
-	function VenteDirecte () {
-		document.getElementById('spanVenteDirecteCheckbox').style = 'display:none;';
-		document.getElementById('venteCheckboxDirecte').checked  = false;
-		document.getElementById('trPrixVenteDirecte').style = 'display:1;';
-		document.getElementById('trPrixDepart').style = 'display:none;';
-		
-	}
-	
-	function changeCheckboxVenteDirecte () {
-		if(document.getElementById('venteCheckboxDirecte').checked)
-		{
-			document.getElementById('trPrixVenteDirecte').style = 'display:1;';
+<?php include("./template/_top.php"); ?>
+<?php if($user["TypeCompte"] > 1)
+{?>
+	<!--
+	http://www.expertphp.in/article/php-upload-multiple-file-using-dropzone-js-with-drag-and-drop-features
+	https://www.dropzonejs.com
+	-->
+	<link href="http://demo.expertphp.in/css/dropzone.css" rel="stylesheet">
+	<script src="http://demo.expertphp.in/js/dropzone.js"></script>
+
+	<style>
+		#formulaire{
+			float:left;
 		}
-		else
-		{
-			document.getElementById('trPrixVenteDirecte').style = 'display:none;';
+		#erreur{
+			float:left;
 		}
-	}
-	
-	
-	Dropzone.options.myDropzone = {
-		init: function() {
-			this.on("addedfile", function(file) {
-				// alert(file.name)
-			});
-		},
-		//https://stackoverflow.com/questions/23332464/how-to-return-new-filename-to-dropzone-after-upload-is-complete-as-hidden-form-i/27143904
-		accept: function(file, done) 
-		{
-			var re = /(?:\.([^.]+))?$/;
-			var ext = re.exec(file.name)[1];
-			ext = ext.toUpperCase();
-			if ( ext == "JPG" || ext == "JPEG" || ext == "PNG" ||  ext == "GIF" ||  ext == "BMP") 
+	</style>
+
+
+
+	<script>
+		function EnchereOffre() {
+			document.getElementById('spanVenteDirecteCheckbox').style = 'display:1;';
+			document.getElementById('trPrixDepart').style = 'display:1;';
+			if(document.getElementById('venteCheckboxDirecte').checked)
 			{
-				done();
-			}else { 
-				done("Please select only supported picture files."); 
+				document.getElementById('trPrixVenteDirecte').style = 'display:1;';
 			}
-		},
-		success: function( file, response ){
-			obj = JSON.parse(response);
-			 // alert(obj.filename);
-			 
-			 /*var _img = document.createElement("img");
-			 _img.src = "./uploads/" + <?php echo "'" . $user["ID"] . "'";?> + "/" + obj.filename;
-			 
-			 document.getElementById("images").appendChild(_img);
-			 document.getElementById("images").appendChild(document.createElement("br"));
-			 dynamicHeigh()
-			 setTimeout(dynamicHeigh(), 1000);
-			 */
-			 
-			 var _input = document.createElement("input");
-			 _input.type = "hidden";
-			 _input.value = obj.filename;
-			 _input.name = "images[]";
-			 document.getElementById("form").appendChild(_input);
-			 
-			 
+			else
+			{
+				document.getElementById('trPrixVenteDirecte').style = 'display:none;';
 			}
-		};
+		}
 
-	</script>
-	<form action="upload.php" class="dropzone" id="my-dropzone"></form>
-	<div class="content2 container-fluid h-100">
-		<div id="images">
+		function VenteDirecte () {
+			document.getElementById('spanVenteDirecteCheckbox').style = 'display:none;';
+			document.getElementById('venteCheckboxDirecte').checked  = false;
+			document.getElementById('trPrixVenteDirecte').style = 'display:1;';
+			document.getElementById('trPrixDepart').style = 'display:none;';
 			
-		</div>
-
-		<div id="formulaire">
-			<form action="./?page=ajouterItem" id="form" method="post">
-				<div class="form-row">
-					<div class='form-group col-md-10'>
-						<?php echo "<input class='form-control' type='text' placeholder='Titre de l&apos;offre' name='Nom' value ='" . $Nom ."'>";?>	
-					</div>
-					<div class='form-group col-md-10'>
-						<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des qualitées' name='DescriptionQ' >". $DescriptionQ ."</textarea>";?>
-					</div>
-					<div class='form-group col-md-10'>
-						<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des défauts' name='DescriptionD' >" . $DescriptionD ."</textarea>";?>
-					</div>
-				</div>
-				<div class="form-row">
-
-					<div class="form-check form-check-inline">
-						<label class="form-check-label">Catégorie: &ensp;</label>
-						<input class="form-check-input" type="radio" name="categorie" value="ferraille" <?php if($categorie == "ferraille") echo "checked";?>> 
-						<label class="form-check-label" for="ferraille">Ferraille ou trésor</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="categorie" value="musee" <?php if($categorie == "musee") echo "checked";?>> 
-						<label class="form-check-label" for="musee">Bon pour le musée</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="categorie" value="VIP" <?php if($categorie == "VIP") echo "checked";?>> 
-						<label class="form-check-label" for="VIP">Accessoire VIP</label>
-					</div>
-				</div>
-				<br>
-				<div class="form-row">
-					<div class="form-check form-check-inline">
-						<label class="form-check-label">Mode de vente: &ensp;</label>
-						<input class="form-check-input" type="radio" id="venteRadioEncheres" onChange="EnchereOffre();" name="modeVente" value="encheres" <?php if($modeVente == "encheres") echo "checked";?>> 
-						<label class="form-check-label" for="encheres">Enchères</label>
-					</div>
-					<div class="form-check form-check-inline" >
-						<input class="form-check-input" type="radio" id="venteRadioOffre" onChange="EnchereOffre();"name="modeVente" value="offre" <?php if($modeVente == "offre") echo "checked";?>> 
-						<label class="form-check-label" for="offre">Meilleur Offre</label>
-					</div>
-					<div class="form-check form-check-inline" >
-						<input class="form-check-input" type="radio" id="venteRadioDirecte" onChange="VenteDirecte();"name="modeVente" value="directe" <?php if($modeVente == "directe") echo "checked";?>> 
-						<label class="form-check-label" for="directe">Vente directe</label>
-					</div>
-
-				</div>
-				<br>
-				<div class="form-check form-check-inline" id="spanVenteDirecteCheckbox"<?php if($modeVente != "directe") echo "style='display:1'";?>>
-					<input class="form-check-input" type="checkbox" onclick="changeCheckboxVenteDirecte();" id="venteCheckboxDirecte" name="checkboxVenteDirecte" value="checkboxVenteDirecte"<?php if($checkboxVenteDirecte == "checkboxVenteDirecte") echo "checked";?>>
-					<label class="form-check-label" for="directe">Proposer aussi en vente directe</label>
-				</div>
-				<br>
-				
-				<div class="form-check form-check-inline" id="trPrixDepart" <?php if($modeVente == "directe") echo "style='display:none'"?>>
-					<?php echo "<input type='number' step='0.01' name='prixDepart' class='form-control' placeholder='Prix de départ' value ='" . $prixDepart ."'>";?>
-				</div>
-
-				<div class="form-check form-check-inline" id="trPrixVenteDirecte" <?php if($modeVente != "directe" && $checkboxVenteDirecte != "checkboxVenteDirecte") echo "style='display:none'"?>>
-					<?php echo "<input type='number' class='form-control' placeholder='Prix vente directe' step='0.01' name='prixDirect' value ='" . $prixDirect ."'>";?>
-				</div>
-				<br>
-				<br>
-				<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
-				<?php
-                if(count($images) != 0)
-                {
-                	forEach($images as $img)
-                    {
-                        echo "<input type='hidden' name='images[]' value='".  $img . "'>";
-                    }
-                }
-            ?>
-			</form>
-		</div>
-		<div id="erreur" class="content3 " >
-			<?php if($erreur != "")
+		}
+		
+		function changeCheckboxVenteDirecte () {
+			if(document.getElementById('venteCheckboxDirecte').checked)
 			{
-				echo $erreur;
+				document.getElementById('trPrixVenteDirecte').style = 'display:1;';
 			}
-			?>
+			else
+			{
+				document.getElementById('trPrixVenteDirecte').style = 'display:none;';
+			}
+		}
+		
+		
+		Dropzone.options.myDropzone = {
+			init: function() {
+				this.on("addedfile", function(file) {
+					// alert(file.name)
+				});
+			},
+			//https://stackoverflow.com/questions/23332464/how-to-return-new-filename-to-dropzone-after-upload-is-complete-as-hidden-form-i/27143904
+			accept: function(file, done) 
+			{
+				var re = /(?:\.([^.]+))?$/;
+				var ext = re.exec(file.name)[1];
+				ext = ext.toUpperCase();
+				if ( ext == "JPG" || ext == "JPEG" || ext == "PNG" ||  ext == "GIF" ||  ext == "BMP") 
+				{
+					done();
+				}else { 
+					done("Please select only supported picture files."); 
+				}
+			},
+			success: function( file, response ){
+				obj = JSON.parse(response);
+				 // alert(obj.filename);
+				 
+				 /*var _img = document.createElement("img");
+				 _img.src = "./uploads/" + <?php echo "'" . $user["ID"] . "'";?> + "/" + obj.filename;
+				 
+				 document.getElementById("images").appendChild(_img);
+				 document.getElementById("images").appendChild(document.createElement("br"));
+				 dynamicHeigh()
+				 setTimeout(dynamicHeigh(), 1000);
+				 */
+				 
+				 var _input = document.createElement("input");
+				 _input.type = "hidden";
+				 _input.value = obj.filename;
+				 _input.name = "images[]";
+				 document.getElementById("form").appendChild(_input);
+				 
+				 
+				}
+			};
+
+		</script>
+		<form action="upload.php" class="dropzone" id="my-dropzone"></form>
+		<div class="content2 container-fluid h-100">
+			<div id="images">
+				
+			</div>
+
+			<div id="formulaire">
+				<form action="./?page=ajouterItem" id="form" method="post">
+					<div class="form-row">
+						<div class='form-group col-md-10'>
+							<?php echo "<input class='form-control' type='text' placeholder='Titre de l&apos;offre' name='Nom' value ='" . $Nom ."'>";?>	
+						</div>
+						<div class='form-group col-md-10'>
+							<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des qualitées' name='DescriptionQ' >". $DescriptionQ ."</textarea>";?>
+						</div>
+						<div class='form-group col-md-10'>
+							<?php echo "<textarea class='form-control' rows='3' type='text' placeholder='Description des défauts' name='DescriptionD' >" . $DescriptionD ."</textarea>";?>
+						</div>
+					</div>
+					<div class="form-row">
+
+						<div class="form-check form-check-inline">
+							<label class="form-check-label">Catégorie: &ensp;</label>
+							<input class="form-check-input" type="radio" name="categorie" value="ferraille" <?php if($categorie == "ferraille") echo "checked";?>> 
+							<label class="form-check-label" for="ferraille">Ferraille ou trésor</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="categorie" value="musee" <?php if($categorie == "musee") echo "checked";?>> 
+							<label class="form-check-label" for="musee">Bon pour le musée</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="categorie" value="VIP" <?php if($categorie == "VIP") echo "checked";?>> 
+							<label class="form-check-label" for="VIP">Accessoire VIP</label>
+						</div>
+					</div>
+					<br>
+					<div class="form-row">
+						<div class="form-check form-check-inline">
+							<label class="form-check-label">Mode de vente: &ensp;</label>
+							<input class="form-check-input" type="radio" id="venteRadioEncheres" onChange="EnchereOffre();" name="modeVente" value="encheres" <?php if($modeVente == "encheres") echo "checked";?>> 
+							<label class="form-check-label" for="encheres">Enchères</label>
+						</div>
+						<div class="form-check form-check-inline" >
+							<input class="form-check-input" type="radio" id="venteRadioOffre" onChange="EnchereOffre();"name="modeVente" value="offre" <?php if($modeVente == "offre") echo "checked";?>> 
+							<label class="form-check-label" for="offre">Meilleur Offre</label>
+						</div>
+						<div class="form-check form-check-inline" >
+							<input class="form-check-input" type="radio" id="venteRadioDirecte" onChange="VenteDirecte();"name="modeVente" value="directe" <?php if($modeVente == "directe") echo "checked";?>> 
+							<label class="form-check-label" for="directe">Vente directe</label>
+						</div>
+
+					</div>
+					<br>
+					<div class="form-check form-check-inline" id="spanVenteDirecteCheckbox"<?php if($modeVente != "directe") echo "style='display:1'";?>>
+						<input class="form-check-input" type="checkbox" onclick="changeCheckboxVenteDirecte();" id="venteCheckboxDirecte" name="checkboxVenteDirecte" value="checkboxVenteDirecte"<?php if($checkboxVenteDirecte == "checkboxVenteDirecte") echo "checked";?>>
+						<label class="form-check-label" for="directe">Proposer aussi en vente directe</label>
+					</div>
+					<br>
+					
+					<div class="form-check form-check-inline" id="trPrixDepart" <?php if($modeVente == "directe") echo "style='display:none'"?>>
+						<?php echo "<input type='number' step='0.01' name='prixDepart' class='form-control' placeholder='Prix de départ' value ='" . $prixDepart ."'>";?>
+					</div>
+
+					<div class="form-check form-check-inline" id="trPrixVenteDirecte" <?php if($modeVente != "directe" && $checkboxVenteDirecte != "checkboxVenteDirecte") echo "style='display:none'"?>>
+						<?php echo "<input type='number' class='form-control' placeholder='Prix vente directe' step='0.01' name='prixDirect' value ='" . $prixDirect ."'>";?>
+					</div>
+					<br>
+					<br>
+					<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
+					<?php
+					if(count($images) != 0)
+					{
+						forEach($images as $img)
+						{
+							echo "<input type='hidden' name='images[]' value='".  $img . "'>";
+						}
+					}
+				?>
+				</form>
+			</div>
+			<div id="erreur" class="content3 " >
+				<?php if($erreur != "")
+				{
+					echo $erreur;
+				}
+				?>
+			</div>
+			<div id="images_rec" class="d-none d-sm-block">
+				<?php
+					if(count($images) != 0)
+					{
+						echo "Image(s) déja présente(s): <br>";
+						forEach($images as $img)
+						{
+							echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img'>";
+						}
+					}
+				?>
+			</div>
+			<div id="images_rec" class="d-sm-none">
+				<?php
+					if(count($images) != 0)
+					{
+						echo "Image(s) déja présente(s): <br>";
+						forEach($images as $img)
+						{
+							echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img_phone'>";
+						}
+					}
+				?>
+			</div>
 		</div>
-		<div id="images_rec" class="d-none d-sm-block">
-			<?php
-                if(count($images) != 0)
-                {
-                	echo "Image(s) déja présente(s): <br>";
-                	forEach($images as $img)
-                    {
-                        echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img'>";
-                    }
-                }
-            ?>
-		</div>
-		<div id="images_rec" class="d-sm-none">
-			<?php
-                if(count($images) != 0)
-                {
-                	echo "Image(s) déja présente(s): <br>";
-                	forEach($images as $img)
-                    {
-                        echo "<img src='./uploads/". $user["ID"] . "/".$img."' class='re_img_phone'>";
-                    }
-                }
-            ?>
-		</div>
-	</div>
-	<?php include("./template/_bot.php"); ?>
+		<?php include("./template/_bot.php"); ?>
+
+<?php 
+	} 
+	else
+	{
+		echo "<p>Vous êtes acheteur et ne pouvez pas vendre d'items</p>";
+	}
+?>

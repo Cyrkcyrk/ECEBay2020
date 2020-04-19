@@ -76,7 +76,6 @@
 			else
 			{
 				$items = false;
-				$erreur .= "Cet item n'existe pas<br>";
 			}
 			$result -> free_result();
 			$mysqli -> close();
@@ -181,10 +180,6 @@
 		{
 			$erreur .= "Une erreur est survenue";
 		}
-
-		
-		if($erreur != "")
-			echo $erreur;
 	}
 	else
 	{
@@ -346,7 +341,10 @@
 	</div>
 	
 	
-	
+	<?php
+		if($erreur != "")
+			echo "Erreur: ". $erreur;
+	?>
 	
 	
 	

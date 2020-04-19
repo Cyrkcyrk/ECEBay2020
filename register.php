@@ -32,10 +32,10 @@
 			if($erreur == "")
 			{
 				if ($type = "vendeur") {
-					$type = 1;
+					$type = 2;
 				}
 				else {
-					$type = 0;
+					$type = 1;
 				}
 				
 				// $password = password_hash ($password , PASSWORD_BCRYPT);

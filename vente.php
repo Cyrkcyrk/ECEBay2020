@@ -1,15 +1,9 @@
 <?php
 	$erreur = ""; 
-	
-	$categorie = blindage(isset($_GET["cat"])? $_GET["cat"] : "");
-	$type = blindage(isset($_GET["type"])? $_GET["type"] : "");
-	
+
 	
 	if($logged)
 	{
-		// $sql = "SELECT * FROM `item` WHERE `OwnerID` = '" . $user["ID"] . "' ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
-		// $sql = "SELECT i.*, m.`Lien` FROM `item` AS i LEFT JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE `OwnerID` = '" . $user["ID"] . "' AND m.`Ordre` = 0 ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
-		
 		$sql = "
 		SELECT i.*, 
 		CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
@@ -74,7 +68,6 @@
 		{
 			$erreur .= "Une erreur est survenue";
 		}
-		
 	}
 	else
 	{
@@ -86,8 +79,10 @@
 
 
 <div class="container">
-	<div class="row">
-		<?php
+	<?php
+		if($user["TypeCompte"] > 1)
+		{
+			echo "	<div class='row'>";
 			if($items)
 			{
 				forEach($items as $i)
@@ -127,14 +122,19 @@
 					echo "	</div>\n";
 				}
 			}
-			else
+			else 
 			{
 				echo "		Vous ne vendez rien pour l'instant <br>";
 			}
-		?>
-		<div><a href='./?page=ajouterItem'>Vendre un item</a></div>
-	</div>
-
+			
+			echo "		<div><a href='./?page=ajouterItem'>Vendre un item</a></div>";
+			echo "	</div>";
+		}
+		else
+		{
+			echo "<p>Vous êtes acheteur et ne pouvez pas vendre d'items</p>";
+		}
+	?>
 </div>
 <?php include("./template/_bot.php"); ?>
 

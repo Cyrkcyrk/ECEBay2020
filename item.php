@@ -183,7 +183,7 @@
 				if($item)
 				{
 					echo "			<h4 class='card-title'>". $item["Nom"] ."</h4>\n";
-					echo "			<p>Vendu par <a href=./?page=user&user='". $item["OwnerID"] ."'>". $item["OwnerPrenom"] ." ". $item["OwnerNom"] ."</a></p>\n";
+					echo "			<p>Vendu par <a href=./?page=user&user=". $item["OwnerID"] .">". $item["OwnerPrenom"] ." ". $item["OwnerNom"] ."</a></p>\n";
 					echo "			<p class='card-text'>". $item["DescriptionQ"] ."</p>\n";
 					echo "			<p class='card-text'>". $item["DescriptionD"] ."</p>\n";
 				}
@@ -193,7 +193,11 @@
 	<div class="col-lg-3 col-md-2 mb-3">
 		<div class="card-body float-right d-none d-sm-block">
 			<?php
-				if($item["EtatVente"] != 1)
+				if($item["OwnerID"] == $user["ID"])
+				{
+					echo "			<p>Vous ne pouvez pas acheter un item que vous vendez</p>\n";
+				}
+				else if($item["EtatVente"] != 1)
 				{
 					echo "			<p>Cet objet n'est plus disponible à la vente</p>\n";
 				}
@@ -254,7 +258,11 @@
 		<div class="card-body d-sm-none">
 			<?php
 				
-				if($item["EtatVente"] != 1)
+				if($item["OwnerID"] == $user["ID"])
+				{
+					echo "			<p>Vous ne pouvez pas acheter un item que vous vendez</p>\n";
+				}
+				else if($item["EtatVente"] != 1)
 				{
 					echo "			<p>Cet objet n'est plus disponible à la vente</p>\n";
 				}

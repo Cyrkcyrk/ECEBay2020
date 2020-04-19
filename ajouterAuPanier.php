@@ -24,11 +24,18 @@
 					{
 						if($row["EtatVente"] == 1)
 						{
-							$sql = "INSERT INTO `panier`(`ItemID`, `OwnerID`, `Date`, `TypeAchat`) VALUES (". $itemID .", ". $user["ID"] .", '". time() ."', ". 0 .");";
-							list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-							if($_)
+							if($row["OwnerID"] != $user["ID"])
 							{
-								redirect("./?page=panier");
+								$sql = "INSERT INTO `panier`(`ItemID`, `OwnerID`, `Date`, `TypeAchat`) VALUES (". $itemID .", ". $user["ID"] .", '". time() ."', ". 0 .");";
+								list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+								if($_)
+								{
+									redirect("./?page=panier");
+								}
+							}
+							else
+							{
+								$erreur .= "Vous ne pouvez pas acheter un item que vous vendez.";
 							}
 						}
 						else

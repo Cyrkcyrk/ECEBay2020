@@ -57,31 +57,37 @@ $erreur = "";
 						$result -> free_result();
 						$mysqli -> close();
 						
-						if($item["PrixEnchereMax"] > $Enchere) {
-							$erreur .= "Vous ne pouvez pas enchérir à moins de ". $item["PrixEnchereMax"] ."€.";
+						
+						if($row["OwnerID"] == $user["ID"])
+						{
+							$erreur .= "Vous ne pouvez pas acheter un item que vous vendez.";
 						} else {
-							$sql = "SELECT * FROM `encheres` WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
-							
-							list ($_, $erreur) = SQLcheck($_DATABASE, $sql, $erreur);
-							if($_)
-							{
-								$sql = "UPDATE `encheres` SET `Prix`= ". $Enchere ." WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
-								list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+							if($item["PrixEnchereMax"] > $Enchere) {
+								$erreur .= "Vous ne pouvez pas enchérir à moins de ". $item["PrixEnchereMax"] ."€.";
+							} else {
+								$sql = "SELECT * FROM `encheres` WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
+								
+								list ($_, $erreur) = SQLcheck($_DATABASE, $sql, $erreur);
 								if($_)
 								{
-									redirect("./?page=panier");
+									$sql = "UPDATE `encheres` SET `Prix`= ". $Enchere ." WHERE `ItemID` = ". $ItemID ." AND `BuyerID` = ". $user["ID"] .";";
+									list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+									if($_)
+									{
+										redirect("./?page=panier");
+									}
 								}
-							}
-							else
-							{
-								$sql = "INSERT INTO `encheres`(`ItemID`, `BuyerID`, `Prix`) VALUES (". $ItemID . ", ". $user["ID"] . ", ". $Enchere .")";
-								list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
-								if($_)
+								else
 								{
-									redirect("./?page=panier");
+									$sql = "INSERT INTO `encheres`(`ItemID`, `BuyerID`, `Prix`) VALUES (". $ItemID . ", ". $user["ID"] . ", ". $Enchere .")";
+									list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+									if($_)
+									{
+										redirect("./?page=panier");
+									}
 								}
-							}
 
+							}
 						}
 					}
 					else
