@@ -10,7 +10,7 @@
 					ELSE './img/notfound.jpg'
 				END AS `Lien`
 				FROM `item` AS i 
-				ORDER BY i.`dateMiseEnLigne` DESC;";
+				ORDER BY i.`EtatVente` DESC, i.`dateMiseEnLigne` DESC;";
 		
 		
 		$items = Array();

@@ -95,7 +95,7 @@
 						ELSE './img/notfound.jpg'
 					END AS `Lien`
 					FROM `item` AS i 
-					i.`VenteDirect` = 1
+					WHERE i.`VenteDirect` = 1
 					AND i.`EtatVente` = 1 
 					ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;

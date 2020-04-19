@@ -104,6 +104,10 @@
 			{
 				forEach($items as $i)
 				{
+					$_description = $i["DescriptionQ"];
+					if(strlen($_description) > 100)
+						$_description = substr ( $_description , 0, 100 ) . "...";
+					
 					echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
 					echo '			<div class="card h-100">'."\n";
 					echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
@@ -130,7 +134,7 @@
 
 					}
 					
-					echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
+					echo '					<p class="card-text">'. $_description .'</p>'."\n";
 					echo '				</div>'."\n";
 					echo '			</div>'."\n";
 					echo '		</div>'."\n";

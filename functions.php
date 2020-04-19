@@ -139,6 +139,7 @@
 	{
 		$string = mysqli_real_escape_string($GLOBALS['_link'], $string);
 		$string = str_replace("<", "&lt", $string);
+		$string = nl2br($string);
 		
 		return $string;
 	}

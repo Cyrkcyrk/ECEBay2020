@@ -17,7 +17,8 @@
 			ELSE './img/notfound.jpg'
 		END AS `Lien`
 		FROM `item` AS i 
-		WHERE `OwnerID` = ". $user["ID"] ."
+		WHERE i.`OwnerID` = ". $user["ID"] ."
+		AND i.`EtatVente` >= 0
 		ORDER BY `EtatVente` DESC, `dateMiseEnLigne` DESC;";
 		
 		$items = null;
@@ -120,7 +121,7 @@
 					echo "				</div>\n";
 					echo "			</div>\n";
 					echo "			<div class='text-right'>\n";
-					echo "				<a href='./?page=supprimerItem&ID=". $i["ID"] ."&pp=admin' class='card-link'>Supprimer item</a>\n";
+					echo "				<a href='./?page=supprimerItem&ID=". $i["ID"] ."' class='card-link'>Supprimer item</a>\n";
 					echo "			</div>\n";
 					echo "		</div>\n";
 					echo "	</div>\n";
