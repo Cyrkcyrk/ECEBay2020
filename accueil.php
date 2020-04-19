@@ -32,6 +32,12 @@
 				else if($row["Categorie"] == "musee") $_categorie = "Bon pour le musée";
 				else if($row["Categorie"] == "VIP") $_categorie = "Accessoire VIP";
 				
+				$_lien = "";
+					if(file_exists($row["Lien"]))
+						$_lien = $row["Lien"];
+					else
+						$_lien = "./img/notfound.jpg";
+				
 				array_push($items, Array(
 					"ID" => $row["ID"],
 					"Nom" => $row["Nom"],
@@ -44,7 +50,7 @@
 					"VenteDirect" => $row["VenteDirect"],
 					"PrixVenteDirect" => $row["PrixVenteDirect"],
 					"dateMiseEnLigne" => $row["dateMiseEnLigne"],
-					"image" => $row["Lien"],
+					"image" => $_lien
 				));
 			}
 			$result -> free_result();
@@ -94,38 +100,45 @@
 	
 	<div class="row">
 		<?php
-			forEach($items as $i)
+			if($items)
 			{
-				echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
-				echo '			<div class="card h-100">'."\n";
-				echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
-				echo '				<div class="h-100">&ensp;</div>'."\n";
-				echo '				<div class="card-body align-items-end">'."\n";
-				echo '					<h4 class="card-title">'."\n";
-				echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
-				echo '					</h4>'."\n";
-				if($i["ModeVente"]=="0")
-					echo '					<h5>Prix d&apos;achat&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
-				if($i["ModeVente"]=="1")
+				forEach($items as $i)
 				{
-					if($i["PrixVenteDirect"]>"0")
-						echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
-					echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+					echo '		<div class="col-lg-4 col-md-6 mb-4">' ."\n";
+					echo '			<div class="card h-100">'."\n";
+					echo '				<a href="?page=item&item='. $i["ID"] .'"><img class="card-img-top" src="'. $i["image"] .'" alt=""></a>'."\n";
+					echo '				<div class="h-100">&ensp;</div>'."\n";
+					echo '				<div class="card-body align-items-end">'."\n";
+					echo '					<h4 class="card-title">'."\n";
+					echo '						<a href="?page=item&item='. $i["ID"] .'">'. $i["Nom"] .'</a>'."\n";
+					echo '					</h4>'."\n";
+					if($i["ModeVente"]=="0")
+						echo '					<h5>Prix d&apos;achat&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+					if($i["ModeVente"]=="1")
+					{
+						if($i["PrixVenteDirect"]>"0")
+							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+						echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
 
-				}
-				if($i["ModeVente"]=="2")
-				{
-					if($i["PrixVenteDirect"]>"0")
-						echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
-					echo '					<h5>Prix de départ&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
-					echo '<p>Fin de l&apos;enchère le&nbsp'.date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]))."</p>\n";
+					}
+					if($i["ModeVente"]=="2")
+					{
+						if($i["PrixVenteDirect"]>"0")
+							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
+						echo '					<h5>Prix de départ&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+						echo '<p>Fin de l&apos;enchère le&nbsp'.date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]))."</p>\n";
 
+					}
+					
+					echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
+					echo '				</div>'."\n";
+					echo '			</div>'."\n";
+					echo '		</div>'."\n";
 				}
-				
-				echo '					<p class="card-text">'. $i["DescriptionQ"] .'</p>'."\n";
-				echo '				</div>'."\n";
-				echo '			</div>'."\n";
-				echo '		</div>'."\n";
+			}
+			else
+			{
+				echo "Pas d'items a afficher";
 			}
 		?>
 

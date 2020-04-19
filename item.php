@@ -98,9 +98,15 @@
 				$images = Array();
 				while ($row = mysqli_fetch_assoc($result))
 				{
+					$_lien = "";
+					if(file_exists($row["Lien"]))
+						$_lien = $row["Lien"];
+					else
+						$_lien = "./img/notfound.jpg";
+					
 					array_push($images, Array(
 						"ID" => $row["ID"],
-						"Lien" => $row["Lien"],
+						"Lien" => $_lien,
 						"type" => $row["type"],
 						"ordre" => $row["Ordre"],
 					));
@@ -146,6 +152,10 @@
 								echo "				<div class='tab-pane' id='pic-". $i["ordre"] ."'><img src='".$i["Lien"]."' /></div>";
 							
 						}
+					}
+					else
+					{
+							echo "				<div class='tab-pane active' id='pic-". 0 ."'><img src='./img/notfound.jpg' /></div>";
 					}
 				?>
 			</div>

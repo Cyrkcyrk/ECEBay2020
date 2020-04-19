@@ -17,7 +17,18 @@
 		}
 		
 		if (!empty($_FILES)) {
-			$fileName = "item" . tokenGenerator() . "_" . time() . '_' . blindage($_FILES['file']['name']);
+			
+			$oldFileName  = $_FILES['file']['name'];
+			$oldFileName  = str_replace("'", "", $oldFileName );
+			$oldFileName  = str_replace('"', "", $oldFileName);
+			$oldFileName  = str_replace('\\', "", $oldFileName);
+			$oldFileName  = str_replace('%', "", $oldFileName);
+			// $oldFileName  = str_replace(' ', "", $oldFileName);
+			$oldFileName  = preg_replace('/\s*/', "", $oldFileName);
+			$oldFileName  = str_replace('_', "", $oldFileName);
+			$oldFileName  = str_replace('<', "", $oldFileName);
+			
+			$fileName = "item" . tokenGenerator() . "_" . time() . '_' . $oldFileName;
 			$targetFile = $targetDir . $fileName;
 			move_uploaded_file($_FILES['file']['tmp_name'],$targetFile);
 			

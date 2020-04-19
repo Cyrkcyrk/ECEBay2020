@@ -183,50 +183,56 @@
 		<div class="inbox_people">
 			<div class="inbox_chat">
 				<?php
-					forEach($discutions as $d)
+					if($discutions)
 					{
-						$_date = date("F j - G:i", $d["LastMessageDate"]);
-						$_personne = "";
-						if($user["ID"] == $d["BuyerID"])
-							$_personne = $d["PrenomOwner"] . " " . $d["NomOwner"];
-						else
-							$_personne = $d["PrenomBuyer"] . " " . $d["NomBuyer"];
-						
-						$_activeDiscution = "";
-						if($offerID != "" && $d["OffreID"] == $offerID)
-							$_activeDiscution .= " active_chat";
-						
-						$endedOffer = "";
-						if($d["ItemEtatVente"] == 1)
+						forEach($discutions as $d)
 						{
-							$endedOffer = 'offrevalide';
-						}
-						else if($d["ItemEtatVente"] == 0)
-						{
-							$endedOffer = 'offreinvalide';
-						}
-						else if($d["ItemEtatVente"] == -1)
-						{
-							$endedOffer = 'offredeleted';
-							$d["ItemImage"] = "./img/deletedimg.png";
-						}
+							$_date = date("F j - G:i", $d["LastMessageDate"]);
+							$_personne = "";
+							if($user["ID"] == $d["BuyerID"])
+								$_personne = $d["PrenomOwner"] . " " . $d["NomOwner"];
+							else
+								$_personne = $d["PrenomBuyer"] . " " . $d["NomBuyer"];
+							
+							$_activeDiscution = "";
+							if($offerID != "" && $d["OffreID"] == $offerID)
+								$_activeDiscution .= " active_chat";
+							
+							$endedOffer = "";
+							if($d["ItemEtatVente"] == 1)
+							{
+								$endedOffer = 'offrevalide';
+							}
+							else if($d["ItemEtatVente"] == 0)
+							{
+								$endedOffer = 'offreinvalide';
+							}
+							else if($d["ItemEtatVente"] == -1)
+							{
+								$endedOffer = 'offredeleted';
+								$d["ItemImage"] = "./img/deletedimg.png";
+							}
 
-						echo "
-						<a href='./?page=offres&offerID=". $d["OffreID"] ."'>
-							<div class='chat_list ". $_activeDiscution ."'>
-								<div class='". $endedOffer ."'>
-									<div class='chat_people'>
-										<div class='chat_img'> <img src='". $d["ItemImage"] ."' alt='Image article'> </div>
-										<div class='chat_ib'>
-											<h5>". $_personne . " - " . $d["ItemNom"] . " <span class='chat_date'>". $_date ."</span></h5>
-											<p><b>". $d["LastOffer"] ."€</b>: ". $d["LastMessage"] . "</p>
+							echo "
+							<a href='./?page=offres&offerID=". $d["OffreID"] ."'>
+								<div class='chat_list ". $_activeDiscution ."'>
+									<div class='". $endedOffer ."'>
+										<div class='chat_people'>
+											<div class='chat_img'> <img src='". $d["ItemImage"] ."' alt='Image article'> </div>
+											<div class='chat_ib'>
+												<h5>". $_personne . " - " . $d["ItemNom"] . " <span class='chat_date'>". $_date ."</span></h5>
+												<p><b>". $d["LastOffer"] ."€</b>: ". $d["LastMessage"] . "</p>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</a>\n";
+							</a>\n";
+						}
 					}
-					
+					else
+					{
+						echo "Aucune offre à afficher";
+					}
 				?>
 			</div>
 		</div>

@@ -21,7 +21,17 @@
 					$nomPage = "Accessoire VIP";
 					break;
 			}
-			$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`Categorie` = '". $categorie ."' AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
+
+			$sql = "
+			SELECT i.*, 
+			CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+				THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+				ELSE './img/notfound.jpg'
+			END AS `Lien`
+			FROM `item` AS i 
+			WHERE i.`Categorie` = '". $categorie ."' 
+			AND i.`EtatVente` = 1 
+			ORDER BY i.`dateMiseEnLigne` DESC;";
 		}
 		else if ($search != "")
 		{
@@ -29,30 +39,65 @@
 			
 			$nomPage = "Résultats pour : " . $searchQuestion;
 			$sql = "
-			SELECT i.*, m.`Lien` FROM `item` AS i
-			INNER JOIN `medias` AS m 
-				ON m.`ItemID` = i.`ID`
+			SELECT i.*, 
+			CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+				THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+				ELSE './img/notfound.jpg'
+			END AS `Lien`
+			FROM `item` AS i 
 			WHERE 
 			   (LOWER(i.`Nom`) LIKE '%". $searchQuestion ."%'
 			OR	LOWER(i.`DescriptionQualites`) LIKE '%". $searchQuestion ."%'
-			OR	LOWER(i.`DescriptionDefauts`) LIKE '%". $searchQuestion ."%')
-			AND m.`type` = 1 
-			AND m.`Ordre` = 0";
+			OR	LOWER(i.`DescriptionDefauts`) LIKE '%". $searchQuestion ."%');";
+			
+			
+			
 		}
 		else {
 			switch ($type)
 			{
 				case "offre":
 					$nomPage = "Meilleur offre";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 2 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
+					
+					$sql = "
+					SELECT i.*, 
+					CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						ELSE './img/notfound.jpg'
+					END AS `Lien`
+					FROM `item` AS i 
+					WHERE i.`ModeVente` = 2 
+					AND i.`EtatVente` = 1 
+					ORDER BY i.`dateMiseEnLigne` DESC;";
+					
+					
 					break;
 				case "encheres":
 					$nomPage = "Vente aux enchères";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`ModeVente` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
+					$sql = "
+					SELECT i.*, 
+					CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						ELSE './img/notfound.jpg'
+					END AS `Lien`
+					FROM `item` AS i 
+					WHERE i.`ModeVente` = 1
+					AND i.`EtatVente` = 1 
+					ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;
 				case "directe":
 					$nomPage = "Achetez le maintenant";
-					$sql = "SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE i.`VenteDirect` = 1 AND i.`EtatVente` = 1 AND m.`type` = 1 AND m.`Ordre` = 0 ORDER BY i.`dateMiseEnLigne` DESC;";
+					
+					$sql = "
+					SELECT i.*, 
+					CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+						ELSE './img/notfound.jpg'
+					END AS `Lien`
+					FROM `item` AS i 
+					i.`VenteDirect` = 1
+					AND i.`EtatVente` = 1 
+					ORDER BY i.`dateMiseEnLigne` DESC;";
 					break;
 			}
 		}
@@ -73,6 +118,12 @@
 					else if($row["Categorie"] == "musee") $_categorie = "Bon pour le musée";
 					else if($row["Categorie"] == "VIP") $_categorie = "Accessoire VIP";
 					
+					$_lien = "";
+					if(file_exists($row["Lien"]))
+						$_lien = $row["Lien"];
+					else
+						$_lien = "./img/notfound.jpg";
+					
 					array_push($items, Array(
 						"ID" => $row["ID"],
 						"Nom" => $row["Nom"],
@@ -85,7 +136,7 @@
 						"VenteDirect" => $row["VenteDirect"],
 						"PrixVenteDirect" => $row["PrixVenteDirect"],
 						"dateMiseEnLigne" => $row["dateMiseEnLigne"],
-						"image" => $row["Lien"],
+						"image" => $_lien
 					));
 				}
 				$result -> free_result();

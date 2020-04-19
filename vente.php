@@ -12,8 +12,8 @@
 		
 		$sql = "
 		SELECT i.*, 
-		CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0)
-			THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0)
+		CASE WHEN EXISTS (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
+			THEN (SELECT m.`Lien` FROM `medias` AS m WHERE m.`ItemID` = i.`ID` AND m.`Ordre` = 0 AND m.`type` = 1 )
 			ELSE './img/notfound.jpg'
 		END AS `Lien`
 		FROM `item` AS i 
@@ -37,6 +37,13 @@
 					else if($row["Categorie"] == "musee") $_categorie = "Bon pour le musée";
 					else if($row["Categorie"] == "VIP") $_categorie = "Accessoire VIP";
 					
+					
+					$_lien = "";
+					if(file_exists($row["Lien"]))
+						$_lien = $row["Lien"];
+					else
+						$_lien = "./img/notfound.jpg";
+					
 					array_push($items, Array(
 						"ID" => $row["ID"],
 						"Nom" => $row["Nom"],
@@ -49,7 +56,7 @@
 						"VenteDirect" => $row["VenteDirect"],
 						"PrixVenteDirect" => $row["PrixVenteDirect"],
 						"dateMiseEnLigne" => $row["dateMiseEnLigne"],
-						"image" => $row["Lien"],
+						"image" => $_lien
 					));
 				}
 				$result -> free_result();

@@ -21,7 +21,7 @@
 				list($_, $erreur) = SQLCheck($_DATABASE, $sql, $erreur);
 				if(!$_) 
 				{
-					$erreur .= "Ce compte n'existe pas. <br>" . $sql . "<hr>";
+					$erreur .= "Ce compte n'existe pas. <br>";
 				}
 				else
 				{
@@ -38,7 +38,6 @@
 							
 							$row = mysqli_fetch_assoc($result);
 							
-							// echo $row["ID"]. " - " . $row["Mail"]. " - " . $row["MotDePasse"]. " - " . $row["Nom"]. " - " . $row["Prenom"]. " - " . $row["TypeCompte"]. " - " . $row["FondFavoris"] . "<hr>";
 							
 							$passwordHash = hash_hmac('md5', $password, $_INFO["secret"]);
 							if($row["MotDePasse"] == $passwordHash)
