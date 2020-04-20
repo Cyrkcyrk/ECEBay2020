@@ -87,7 +87,7 @@
 ?>
 
 <?php include("./template/_top.php"); ?>
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 <style>
 	#formulaire{
 		float:left;
@@ -95,26 +95,85 @@
 	#erreur{
 		float:left;
 	}
+	
+	.showPassword{
+		cursor: pointer;
+		position: relative;
+		top : 4px;
+		right : 30px;
+	}
+	
 </style>
+
+<script>
+	
+	var hidden = true;
+	
+	function hideShowPassword()
+	{
+		document.getElementById("ShowPasswordButton").addEventListener('mousedown', e => {
+			document.getElementById("password").type = "text";
+			document.getElementById("eyeOpenPassword").style = "display:none;";
+			document.getElementById("eyeClosePassword").style = "display:1;";
+		});
+		
+		
+		document.getElementById("ShowPasswordButton").addEventListener('mouseup', e => {
+			document.getElementById("password").type = "password";
+			document.getElementById("eyeOpenPassword").style = "display:1;";
+			document.getElementById("eyeClosePassword").style = "display:none;";
+		});
+	}
+	
+</script>
+
+
+
+
 
 <form action="./?page=login" method="post">
 	<div id="identification">
-		<div id="formulaire">
+		<div id="formulaire" class="form-row">
+			<div class='form-group col-md-12'>
+				<input class='form-control col-md-11' type='text' placeholder="Adresse email" name='mail' value ='<?php echo $mail; ?>'>
+			</div>
+			<div class='form-group col-md-12'>
+				<table class="w-100">
+					<tr>
+						<td><input class='form-control oeilB' id='password' placeholder="Mot de passe" type='password' name='password'> </td>
+						<td><span class='showPassword oeilC' id="ShowPasswordButton" onClick="hideShowPassword();">
+							<i id="eyeOpenPassword"  class='fa fa-eye' aria-hidden='true'></i>
+							<i id="eyeClosePassword" class='fa fa-eye-slash' aria-hidden='true' style="display:none"></i>
+						</span></td>
+					</tr>
+				</table>
+			</div>
+			
+			<button type="submit" class="btn btn-primary" value="Se connecter" name="connection">Valider</button>
+		</div>
+	<!--<div id="formulaire" >
 			<table>
 				<tr>
 					<td>Adresse email:</td>
-					<td> <?php echo "<input type='text' name='mail' value ='" . $mail ."'>";?></td>
+					<td><input type='text' name='mail' value ='<?php echo $mail; ?>'></td>
 				</tr>
 				<tr>
 					<td>Mot de passe:</td>
 					
-					<td><?php echo "<input type='password' name='password'>";?></td>
+					<td><input id='password' type='password' name='password'>
+					<span class='showPassword' id="ShowPasswordButton" onClick="hideShowPassword();">
+						<i id="eyeOpenPassword"  class='fa fa-eye' aria-hidden='true'></i>
+						<i id="eyeClosePassword" class='fa fa-eye-slash' aria-hidden='true' style="display:none"></i>
+					</span>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" style="text-align:center;"><input type="submit" value="Se connecter" name="connection"></td>
 				<tr>
 			</table>
-		</div>
+			
+		</div>-->
+		
 		<div id="erreur">
 			<?php if($erreur != "")
 				{

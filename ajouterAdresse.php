@@ -56,22 +56,22 @@
 	<div  id="identification">
 		<div id="formulaire" class="form-row">
 			<div class='form-group col-md-12'>
-				<?php echo "<input class='form-control' type='text' placeholder='Ligne 1' name='ligne1' value ='" . $ligne1 ."'>";?>	
+				<input class='form-control' type='text' placeholder='Ligne 1' name='ligne1' value ='<?php echo  $ligne1; ?>'>
 			</div>
 			<div class='form-group col-md-12'>
-				<?php echo "<input class='form-control' type='text' placeholder='Ligne 2' name='ligne2' value ='" . $ligne2 ."'>";?>
+				<input class='form-control' type='text' placeholder='Ligne 2' name='ligne2' value ='<?php echo $ligne2; ?>'>
 			</div>
 			<div class='form-group col-md-6'>
-				<?php echo "<input class='form-control' type='text' placeholder='Ville' name='ville' value ='" . $ville ."'>";?>			
+				<input class='form-control' type='text' placeholder='Ville' name='ville' value ='<?php echo $ville; ?>'>			
 			</div>
 			<div class='form-group col-md-4'>
-				<?php echo "<input class='form-control' type='number' placeholder='Code Postal' name='codePostal' value ='" . $codePostal ."'>";?>			
+				<input class='form-control' type='number' placeholder='Code Postal' name='codePostal' value ='<?php echo $codePostal; ?>'>			
 			</div>
 			<div class='form-group col-md-2'>
-				<?php echo "<input class='form-control' type='text' placeholder='Pays ' name='pays' value ='" . $pays ."'>";?>
+				<input class='form-control' type='text' placeholder='Pays ' name='pays' value ='<?php echo $pays; ?>'>
 			</div>
 			<div class='form-group col-md-12'>
-				<?php echo "<input class='form-control' type='text' placeholder='Téléphone' name='telephone' value ='" . $telephone ."'>";?>
+				<input class='form-control' type='text' placeholder='Téléphone' name='telephone' value ='<?php echo $telephone ?>'>";
 			</div>
 			<button type="submit" class="btn btn-primary" value="Valider" name="valider">Valider</button>	
 		</div>
