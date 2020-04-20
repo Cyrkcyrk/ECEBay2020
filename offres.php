@@ -5,7 +5,7 @@
 	// $offer = false;
 	$messages = false;
 	$discutions = false;
-	
+	$offre = false;
 	
 	
 	if($erreur == "")
@@ -14,43 +14,6 @@
 		{	
 			if($offerID != "")
 			{	
-				/*
-				$sql = "
-					SELECT o.*, i.`OwnerID`, Buyer.`NomBuyer`, Buyer.`PrenomBuyer`, Owner.`NomOwner`, Owner.`PrenomOwner` 
-					FROM `offres` AS o
-					JOIN `item` as i
-						on o.`ItemID` = i.`ID`
-					JOIN (SELECT `ID` AS 'OwnerID', `Nom` AS 'NomOwner', `Prenom` AS 'PrenomOwner' FROM `utilisateur`) AS Owner
-						ON Owner.`OwnerID` = i.`OwnerID`
-					JOIN (SELECT `ID` AS 'BuyerID', `Nom` AS 'NomBuyer', `Prenom` AS 'PrenomBuyer' FROM `utilisateur`) AS Buyer
-						ON Buyer.`BuyerID` = o.`BuyerID`
-					WHERE o.`ID` = ". $offerID .";";
-				
-				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
-				mysqli_set_charset($mysqli, "utf8");
-				
-				if ($mysqli -> connect_errno) {
-					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error;
-				}
-				if ($result = $mysqli -> query($sql)) {
-					if (mysqli_num_rows($result) > 0) {
-						
-						$offer = mysqli_fetch_assoc($result);
-					}
-					else
-					{
-						$erreur .= "Cette offre n'existe pas";
-					}
-				}
-				else
-				{
-					$erreur .= "Une erreur est survenue";
-				}
-				$result -> free_result();
-				$mysqli -> close();
-				*/
-				
-				
 				$sql = "
 					SELECT o.`ID`
 					FROM `offres` AS o
@@ -112,41 +75,16 @@
 			}
 			
 			
-			/*
-			$sql = "
-			SELECT * FROM (
-				SELECT
-					o.`ID` 			AS 'OffreID',
-					o.`ItemID` 		AS 'ItemID',
-					i.`Nom` 		AS 'ItemNom',
-					i.`Lien` 		AS 'ItemImage',
-					i.`EtatVente` 	AS 'ItemEtatVente',
-					(SELECT `offremessage`.`Message` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessage',
-					(SELECT `offremessage`.`Prix` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastOffer',
-					(SELECT `offremessage`.`Date` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessageDate',
-					(SELECT `offremessage`.`SenderID` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastSenderID',
-					Owner.*,
-					Buyer.*
-				FROM `offres` AS o
-				LEFT JOIN (SELECT i.*, m.`Lien` FROM `item` AS i INNER JOIN `medias` AS m ON m.`ItemID` = i.`ID` WHERE m.`type` = 1 AND m.`Ordre` = 0) AS i
-					ON o.`ItemID` = i.`ID`
-				LEFT JOIN (SELECT `ID` AS 'OwnerID', `Nom` AS 'NomOwner', `Prenom` AS 'PrenomOwner' FROM `utilisateur`) AS Owner
-					ON Owner.`OwnerID` = i.`OwnerID`
-				LEFT JOIN (SELECT `ID` AS 'BuyerID', `Nom` AS 'NomBuyer', `Prenom` AS 'PrenomBuyer' FROM `utilisateur`) AS Buyer
-					ON Buyer.`BuyerID` = o.`BuyerID`
-				WHERE (Owner.`OwnerID` = ". $user["ID"] ." OR Buyer.`BuyerID` = ". $user["ID"] .")
-				) AS T ORDER BY T.`LastMessageDate` DESC";
-			*/
-			
 			
 			$sql = "
 			SELECT * FROM (
 				SELECT
-					o.`ID` 			AS 'OffreID',
-					o.`ItemID` 		AS 'ItemID',
-					i.`Nom` 		AS 'ItemNom',
-					i.`Lien` 		AS 'ItemImage',
-					i.`EtatVente` 	AS 'ItemEtatVente',
+					o.`ID` 						AS 'OffreID',
+					o.`ItemID` 					AS 'ItemID',
+					o.`IDOffreMessageAccepte` 	AS 'IDOffreMessageAccepte',
+					i.`Nom` 					AS 'ItemNom',
+					i.`Lien` 					AS 'ItemImage',
+					i.`EtatVente` 				AS 'ItemEtatVente',
 					(SELECT `offremessage`.`Message` 	FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessage',
 					(SELECT `offremessage`.`Prix` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastOffer',
 					(SELECT `offremessage`.`Date` 		FROM `offremessage` WHERE `offremessage`.`OffreID` = o.`ID` ORDER BY `Date` DESC LIMIT 1) AS 'LastMessageDate',
@@ -184,9 +122,14 @@
 					$discutions = Array();
 					while ($row = mysqli_fetch_assoc($result))
 					{
+						if($row["OffreID"] == $offerID)
+						{
+							$offre = $row;
+						}
 						array_push($discutions, Array(
 							"OffreID" => $row["OffreID"],
 							"ItemID" => $row["ItemID"],
+							"IDOffreMessageAccepte" => $row["IDOffreMessageAccepte"],
 							"ItemNom" => $row["ItemNom"],
 							"ItemImage" => $row["ItemImage"],
 							"ItemEtatVente" => $row["ItemEtatVente"],
@@ -207,6 +150,8 @@
 				{
 					$discutions = False;
 				}
+				$result -> free_result();
+				$mysqli -> close();
 			}
 			else
 			{
@@ -250,17 +195,17 @@
 								$_activeDiscution .= " active_chat";
 							
 							$endedOffer = "";
-							if($d["ItemEtatVente"] == 1)
+							if($d["IDOffreMessageAccepte"] > -1)
 							{
-								$endedOffer = 'offrevalide';
+								$endedOffer = 'enchereValide';
 							}
-							else if($d["ItemEtatVente"] == 0)
+							else if($d["IDOffreMessageAccepte"] == -2)
 							{
-								$endedOffer = 'offreinvalide';
+								$endedOffer = 'enchereInvalide';
 							}
 							else if($d["ItemEtatVente"] == -1)
 							{
-								$endedOffer = 'offredeleted';
+								$endedOffer = 'enchereInvalide';
 								// $d["ItemImage"] = "./img/notfound.jpg";
 							}
 
@@ -335,20 +280,86 @@
 						} else {
 							$_offreID = "";
 						}
-							echo "
-							<form action='./?page=AjouterOffre' method='post'>
+						
+						// echo json_encode($offre);
+						if($offre["IDOffreMessageAccepte"] == -1)
+						{
+							// <button class='btn btn-primary' name='valider' value='valider' type='submit'>Accepter offre</button>
+							if($offre["LastSenderID"] != $user["ID"])
+							{
+								echo "
 								<div class='row'>
-									<div class='col-md-2'>
-										<input type='number' step='0.01' class='write_msg' placeholder='Prix' name='prix'/>
+									<div class='col-md-1'>
+										<form action='./?page=statusOffre' method='post'>
+											<input type='hidden' name='offerID' value='". $_offreID ."'>
+											<div class='row'>
+												<div class='col-md-6'>
+													
+													<div class='buttonAcceptReject'>
+														<button class='msg_send_btn_accept' name='valider' value='accepter' type='submit'><i class='fa fa-check' aria-hidden='true'></i></button>
+														<span class='buttonAcceptRejectText'>Accepter l'offre</span>
+													</div> 
+													
+												</div>
+												<div class='col-md-6'>
+													<div class='buttonAcceptReject'>
+														<button class='msg_send_btn_reject' name='valider' value='refuser' type='submit'><i class='fa fa-times' aria-hidden='true'></i></button>
+														<span class='buttonAcceptRejectText'>Refuser l'offre</span>
+													</div> 
+													
+												</div>
+											</div>
+										</form>
 									</div>
-									<div class='col-md-10'>
-										<input type='text' class='write_msg' placeholder='Type a message' name='message' />
-										<input type='hidden' name='offerID' value='". $_offreID ."'>
-										
-										<button class='msg_send_btn' name='valider' value='valider' type='submit'><i class='fa fa-paper-plane-o' aria-hidden='true'></i></button>
+									<div class='col-md-11'>
+										<form action='./?page=AjouterOffre' method='post'>
+											<div class='row'>
+												<div class='col-md-2'>
+													<input type='number' step='0.01' class='write_msg' placeholder='Prix' name='prix'/>
+												</div>
+												<div class='col-md-10'>
+													<input type='text' class='write_msg' placeholder='Type a message' name='message' />
+													<input type='hidden' name='offerID' value='". $_offreID ."'>
+													
+													<button class='msg_send_btn' name='valider' value='valider' type='submit'><i class='fa fa-paper-plane-o' aria-hidden='true'></i></button>
+												</div>
+											</div>
+										</form>
 									</div>
-								</div>
-							</form>\n";
+								</div>\n";
+							}
+							else
+							{
+								echo "
+									<form action='./?page=AjouterOffre' method='post'>
+										<div class='row'>
+											<div class='col-md-2'>
+												<input type='number' step='0.01' class='write_msg' placeholder='Prix' name='prix'/>
+											</div>
+											<div class='col-md-10'>
+												<input type='text' class='write_msg' placeholder='Type a message' name='message' />
+												<input type='hidden' name='offerID' value='". $_offreID ."'>
+												
+												<button class='msg_send_btn' name='valider' value='valider' type='submit'><i class='fa fa-paper-plane-o' aria-hidden='true'></i></button>
+											</div>
+										</div>
+									</form>\n";
+							}
+						}
+						else if ($offre["IDOffreMessageAccepte"] > -1)
+						{
+							echo "
+							<div class='enchereValide text-center' style='height : 57px;'>
+								Offre acceptée.
+							</div>";
+						}
+						else if ($offre["IDOffreMessageAccepte"] == -2)
+						{
+							echo "
+							<div class='enchereInvalide text-center' style='height : 57px;'>
+								Offre refusée.
+							</div>";
+						}
 					?>
 					
 					

@@ -99,7 +99,8 @@
 		echo "<div class='col-md'>";
 		
 		
-		
+		if($user["TypeCompte"] >= 2)
+		{
 		?>
 		
 		<form action="./?page=changeStyle" method="post">
@@ -117,7 +118,7 @@
 		</form>
 		
 		<?php
-		
+		}
 		
 		echo "<h2> Vos adresses</h2>";
 		if(!$adresses)

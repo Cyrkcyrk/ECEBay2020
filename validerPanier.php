@@ -110,8 +110,6 @@
 					WHERE `item`.`EtatVente` >= 0
 					AND `panier`.`OwnerID` = ". $user["ID"] .";";
 					
-				// $sql = "SELECT * FROM `item`";
-					
 					
 				list ($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
 				if ($_)
