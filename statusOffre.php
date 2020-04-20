@@ -1,5 +1,6 @@
 <?php
 	$erreur = "";
+	$confirmation = "";
 	$offerID = blindage(isset($_POST["offerID"])? $_POST["offerID"] : "");
 	$valider = blindage(isset($_POST["valider"])? $_POST["valider"] : "");
 	
@@ -75,7 +76,8 @@
 							list($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
 							if($_)
 							{
-								$erreur .= "<br><b>OFFRE VALIDEE</b><hr>";
+								$confirmation .= "<br><b>OFFRE VALIDEE</b><hr>";
+								redirect("./?page=offres&offerID=" . $offre["OffreID"] );
 							}
 							else 
 							{
@@ -119,7 +121,6 @@
 			WHERE (Owner.`OwnerID` = ". $user['ID'] ." OR Buyer.`BuyerID` = ". $user['ID'] .") 
 			AND o.`ID` = ". $offerID .";";
 			
-			echo $sql;
 			
 			$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
 			mysqli_set_charset($mysqli, "utf8");
@@ -152,7 +153,8 @@
 					list($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
 					if($_)
 					{
-						$erreur .= "<br><b>OFFRE REFUSEE</b><hr>;";
+						$confirmation .= "<b>OFFRE REFUSEE</b><hr>;";
+						redirect("./?page=offres&offerID=" . $offre["OffreID"] );
 					}
 					else 
 					{
@@ -166,6 +168,9 @@
 
 <?php 
 	include("./template/_top.php");
+	
+	if($confirmation != "")
+		echo "Erreur: " . $confirmation;
 	
 	if($erreur != "")
 		echo "Erreur: " . $erreur;

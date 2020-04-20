@@ -121,15 +121,15 @@ img{ max-width:100%;}
 
 .msg_send_btn_accept{
   background: #b4ffa4 none repeat scroll 0 0;
-    border: medium none;
+  border: medium none;
   border-radius: 50%;
   color: #fff;
   cursor: pointer;
   font-size: 17px;
   height: 33px;
-  position: absolute;
-  right: 0;
-  top: 11px;
+  /* position: absolute; */
+  /* right: 0; */
+  /* top: 11px; */
   width: 33px;
 }
 
@@ -141,9 +141,9 @@ img{ max-width:100%;}
   cursor: pointer;
   font-size: 17px;
   height: 33px;
-  position: absolute;
-  right: 0;
-  top: 11px;
+  /* position: absolute; */
+  /* right: 0; */
+  /* top: 11px; */
   width: 33px;
 }
 
