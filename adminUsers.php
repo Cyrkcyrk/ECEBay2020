@@ -75,6 +75,8 @@ include("./template/_top.php");
 		echo "		</div>";
 		echo "	</div>\n";
 	}
-	echo "<a href='?page=changerStatusUtilisateur'>Ajouter un utilisateur</a>";
+	echo "<a href='?page=changerStatusUtilisateur'>Ajouter un utilisateur</a>"; ?>
+
+<div class="container">&nbsp;</div>
 	
-include("./template/_bot.php"); ?>
+<?php include("./template/_bot.php"); ?>

@@ -135,6 +135,7 @@
 			echo "<p>Vous êtes acheteur et ne pouvez pas vendre d'items</p>";
 		}
 	?>
+	<div class="container">&nbsp;</div>
 </div>
 <?php include("./template/_bot.php"); ?>
 
