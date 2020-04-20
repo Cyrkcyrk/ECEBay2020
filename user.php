@@ -93,7 +93,8 @@
 
 <?php 
 	include("./template/_top.php");
-
+	echo "<div class='container'>\n";
+	
 	if($selectedUser && $selectedUser["TypeCompte"] > 1)
 	{
 		if($selectedUser["StyleFavoris"] == 0)
@@ -105,9 +106,11 @@
 	{
 		echo "Cet utilisateur n'est pas vendeur.";
 	}
+	
+	echo "<div class='container'>&nbsp;</div>\n</div>";
 
 	
-	
+	include("./template/_bot.php");
 	
 
 ?>

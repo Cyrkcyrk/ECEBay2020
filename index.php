@@ -2,6 +2,7 @@
 	require("functions.php");
 	
 	refreshEncheres($_DATABASE);
+	cleanToken($_DATABASE);
 	
 	$logged = false;
 	$user = null;

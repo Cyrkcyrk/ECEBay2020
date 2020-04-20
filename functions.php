@@ -184,7 +184,7 @@
 	}
 	
 	
-	function refreshEncheres ($_DATABASE) {
+	function refreshEncheres($_DATABASE) {
 		
 		$_fin = time() - 7*24*3600;
 		$sql = "UPDATE `item` SET `EtatVente`=0 WHERE `ModeVente` = 1 AND `EtatVente` = 1 AND `dateMiseEnLigne` < ". $_fin .";";
@@ -193,5 +193,17 @@
 		list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
 		if($erreur != "")
 			echo "Erreur: ". $erreur;
+	}
+	
+	function cleanToken($_DATABASE)
+	{
+		$_fin = time() - 3600;
+		$sql = "DELETE FROM `logintoken` WHERE `CreationDate` < ". $_fin .";";
+		
+		$erreur = "";
+		list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+		if($erreur != "")
+			echo "Erreur: ". $erreur;
+		 
 	}
 ?>
