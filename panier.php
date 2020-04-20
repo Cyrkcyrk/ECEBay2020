@@ -113,7 +113,7 @@
 			AND TMPm.`Ordre` = 0
 		) AS i
 			ON i.`ID` = e.`ItemID`
-		WHERE i.`EtatVente` >= 0
+		WHERE i.`EtatVente` > 0
 		AND e.`BuyerID` = ". $user["ID"] . ";";
 		
 		$itemsEnchere = "";
@@ -224,7 +224,7 @@
 					echo "				<div class='col-md-7'>\n";
 					echo "					<div class='card-block px-3'>\n";
 					echo "						<h4 class='card-title'><a href=?page=item&item=". $i["ID"] .">" . $i["Nom"] ."</a></h4>\n";
-					echo "						<h7 class='card-title'><a href=?page=supprimerDuPanier&ID='". $i['PanierID'] ."'>" . "Supprimer du panier" ."</a></h7>\n";
+					echo "						<h7 class='card-title'><a href=?page=supprimerDuPanier&ID=". $i['PanierID'] .">" . "Supprimer du panier" ."</a></h7>\n";
 					echo "					</div>\n";
 					echo "				</div>\n";
 					echo "				<div class='col-md-3'>\n";

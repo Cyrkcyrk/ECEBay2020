@@ -102,20 +102,59 @@
 			
 			if($TotalAPayer < $seuilPaiement)
 			{
+				
 				$sql = "
-					UPDATE `item` 
-					INNER JOIN `panier`
-						ON `item`.`ID` = `panier`.`ItemID` 
-					SET `item`.`EtatVente` = 0
-					WHERE `item`.`EtatVente` >= 0
-					AND `panier`.`OwnerID` = ". $user["ID"] .";";
-					
-					
-				list ($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
-				if ($_)
-					echo "<b>Merci pour vos achats</b><br>";
-				else 
-					$erreur .= "Une erreur est survenue pendant le paiement<br>";
+				SELECT 
+					i.* 
+				FROM `panier` AS p 
+				JOIN `item` AS i 
+					ON i.`ID` = p.`ItemID` 
+				WHERE i.`EtatVente` > 0
+				AND p.`OwnerID` = ". $user["ID"] .";";
+				
+				
+				$mysqli = new mysqli($_DATABASE["host"],$_DATABASE["user"],$_DATABASE["password"],$_DATABASE["BDD"]);
+				mysqli_set_charset($mysqli, "utf8");
+
+				if ($mysqli -> connect_errno) {
+					$erreur .= "Failed to connect to MySQL: " . $mysqli -> connect_error . "<br>";
+				}
+				if ($result = $mysqli -> query($sql)) {
+					if (mysqli_num_rows($result) > 0) {
+						while($row = mysqli_fetch_assoc($result))
+						{
+							$sql = "UPDATE `offres` SET `IDOffreMessageAccepte` = -2 WHERE `ItemID` = ". $row["ID"] .";";
+							list($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
+							if(!$_)
+								$erreur .= "Une erreur est survenue pendant la mise a jours des offres<br>";
+							
+						}
+						
+						
+						$sql = "
+							UPDATE `item` 
+							INNER JOIN `panier`
+								ON `item`.`ID` = `panier`.`ItemID` 
+							SET `item`.`EtatVente` = 0
+							WHERE `item`.`EtatVente` >= 0
+							AND `panier`.`OwnerID` = ". $user["ID"] .";";
+							
+						list ($_, $erreur) = SQLQuery($_DATABASE, $sql, $erreur);
+						if ($_)
+						{
+							redirect("./?page=confirmation");
+						}
+						else 
+							$erreur .= "Une erreur est survenue pendant l'update des items achetés.<br>";
+						
+					}
+					$result -> free_result();
+					$mysqli -> close();
+				}
+				else
+				{
+					$erreur .= "Une erreur est survenue <br>";
+				}
 			}
 			else
 			{
@@ -128,14 +167,22 @@
 			$erreur .= "Erreur avec la carte bleue selectionnée <br>";
 		}
 	}
-	
-	echo "<hr>Erreur: ". $erreur . "<hr>";
-	
 ?>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 <?php 
-	$erreur = "";
 	$items = "";
 	
 	$adresses = null;
@@ -454,7 +501,10 @@
 	
 	<?php
 		if($erreur != "")
-			echo "Erreur: ". $erreur;
+		{
+			echo "<div>Erreur: ". $erreur . "</div>";
+		}
+			
 	?>
 
 </div>
