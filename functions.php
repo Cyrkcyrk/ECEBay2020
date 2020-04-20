@@ -11,7 +11,7 @@
 	$_DATABASE = Array(
 		"host" => "51.77.145.11",
 		"user" => "ecebay",
-		"password" => "SV8qIjR9TvhNIFve",
+		"password" => "FMYUGjt1JSqm2QcW",
 		"BDD" => "ecebay"
 	);
 	
