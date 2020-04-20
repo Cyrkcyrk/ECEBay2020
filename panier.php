@@ -254,6 +254,9 @@
 						echo "Total (". $NombreImmediat ." articles) : ";
 					}
 					echo $TotalImmediat . "€";
+					
+					echo "<br><a href='./?page=validerPanier'>Valider et acheter</a>";
+					
 				?>
 			</div>
 		</div>

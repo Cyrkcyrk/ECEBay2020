@@ -97,6 +97,28 @@
 		echo "<a href='./?page=logout'>Se deconnecter</a><br>";
 		echo "<div class='row'>";
 		echo "<div class='col-md'>";
+		
+		
+		
+		?>
+		
+		<form action="./?page=changeStyle" method="post">
+			<div id="identification">
+				<div id="formulaire">
+						<input type="radio" name="style" <?php if($user["StyleFavoris"] == 0) echo " checked " ?> value="lignes"> 
+						<label for="lignes">Affichage en ligne</label><br>
+						
+						<input type="radio" name="style" <?php if($user["StyleFavoris"] == 1) echo " checked " ?> value="carte"> 
+						<label for="acheteur">Affichage en cartes</label><br>
+
+						<input type="submit" value="Valider" name="valider"></td>
+				</div>
+			</div>
+		</form>
+		
+		<?php
+		
+		
 		echo "<h2> Vos adresses</h2>";
 		if(!$adresses)
 		{

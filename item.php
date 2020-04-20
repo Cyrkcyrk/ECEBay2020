@@ -193,7 +193,7 @@
 	<div class="col-lg-3 col-md-2 mb-3">
 		<div class="card-body float-right d-none d-sm-block">
 			<?php
-				if($item["OwnerID"] == $user["ID"])
+				if($logged && $item["OwnerID"] == $user["ID"])
 				{
 					echo "			<p>Vous ne pouvez pas acheter un item que vous vendez</p>\n";
 				}
