@@ -217,6 +217,7 @@
 					else if($item["ModeVente"] == 1)
 					{
 						echo "			<p>Encherissez pour " . $item ["PrixEnchereMax"] . "€ </p>\n";
+						echo "			<div>Fin de l'enchere dans ". createCountdown($item["dateMiseEnLigne"]+(7*24*3600)) . "</div>\n";
 						echo "			<form action='./?page=ajouterEnchere' method='post'>\n";
 						echo "				<input type='number' name='Enchere' step='0.01' min='". $item ["PrixEnchereMax"] ."'>\n";
 						echo "				<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";
@@ -258,7 +259,7 @@
 		<div class="card-body d-sm-none">
 			<?php
 				
-				if($item["OwnerID"] == $user["ID"])
+				if($logged && $item["OwnerID"] == $user["ID"])
 				{
 					echo "			<p>Vous ne pouvez pas acheter un item que vous vendez</p>\n";
 				}
@@ -277,6 +278,7 @@
 					else if($item["ModeVente"] == 1)
 					{
 						echo "			<p>Encherissez pour " . $item ["PrixEnchereMax"] . "€ </p>\n";
+						echo "			<div>Fin de l'enchere dans ". createCountdown($item["dateMiseEnLigne"]+(7*24*3600)) . "</div>\n";
 						echo "			<form action='./?page=ajouterEnchere' method='post'>\n";
 						echo "				<input type='number' name='Enchere' step='0.01' min='". $item ["PrixEnchereMax"] ."'>\n";
 						echo "				<input type='hidden' name='ID' value='". $item ["ID"] ."'>\n";

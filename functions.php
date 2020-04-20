@@ -127,16 +127,18 @@
 		exit();
 	}
 	
-	function tokenGenerator () {
-		function RandomString()
-		{
-			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			$randstring = '';
-			for ($i = 0; $i < 10; $i++) {
-				$randstring = $characters[rand(0, strlen($characters)-1)];
-			}
-			return $randstring;
+	function RandomString()
+	{
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$randstring = '';
+		for ($i = 0; $i < 10; $i++) {
+			$randstring = $characters[rand(0, strlen($characters)-1)];
 		}
+		return $randstring;
+	}
+	
+	function tokenGenerator () {
+		
 		return hash_hmac('md5', RandomString() , time() . SECRET);
 	}
 	
@@ -147,5 +149,49 @@
 		$string = nl2br($string);
 		
 		return $string;
+	}
+	
+	
+	function createCountdown($timestamp) {
+		$token = tokenGenerator ();
+		return "
+		<span id='countdown_". $token ."'></span>
+
+		<script>
+		var countDownDate_". $token ." = new Date(". $timestamp ." *1000).getTime();
+
+		var x_". $token ." = setInterval(function() {
+
+		  var now = new Date().getTime();
+
+		  var distance = countDownDate_". $token ." - now;
+		  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+		  document.getElementById('countdown_". $token ."').innerHTML = days + 'j ' + hours + 'h '
+		  + minutes + 'm ' + seconds + 's ';
+
+		  // If the count down is finished, write some text
+		  if (distance < 0) {
+			clearInterval(x_". $token .");
+			document.getElementById('countdown_". $token ."').innerHTML = 'EXPIRED';
+		  }
+		}, 1000);
+		</script>";
+	}
+	
+	
+	function refreshEncheres ($_DATABASE) {
+		
+		$_fin = time() - 7*24*3600;
+		$sql = "UPDATE `item` SET `EtatVente`=0 WHERE `ModeVente` = 1 AND `EtatVente` = 1 AND `dateMiseEnLigne` < ". $_fin .";";
+		
+		$erreur = "";
+		list ($_, $erreur) = SQLquery($_DATABASE, $sql, $erreur);
+		if($erreur != "")
+			echo "Erreur: ". $erreur;
 	}
 ?>

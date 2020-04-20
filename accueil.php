@@ -123,14 +123,16 @@
 						if($i["PrixVenteDirect"]>"0")
 							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
 						echo '					<h5>Début des enchères à&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
+						echo '					<h5>Fin dans '.  createCountdown($i["dateMiseEnLigne"]+(7*24*3600)) . '</h5>'."\n";
 
 					}
+					
+					
 					if($i["ModeVente"]=="2")
 					{
 						if($i["PrixVenteDirect"]>"0")
 							echo '					<h5>Prix d&apos;achat à&nbsp;'. $i["PrixVenteDirect"] .'€</h5>'."\n";
 						echo '					<h5>Prix de départ&nbsp;'. $i["PrixDepart"] .'€</h5>'."\n";
-						echo '<p>Fin de l&apos;enchère le&nbsp'.date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"]))."</p>\n";
 
 					}
 					

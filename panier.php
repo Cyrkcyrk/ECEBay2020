@@ -300,6 +300,7 @@
 				echo "				<div class='col-md-7'>\n";
 				echo "					<div class='card-block px-3'>\n";
 				echo "						<h4 class='card-title'><a href=?page=item&item=". $i["ID"] .">" . $i["Nom"] ."</a></h4>\n";
+				echo '						<h5>Fin dans '.  createCountdown($i["dateMiseEnLigne"]+(7*24*3600)) . '</h5>'."\n";
 				echo "					</div>\n";
 				echo "				</div>\n";
 				echo "				<div class='col-md-3'>\n";

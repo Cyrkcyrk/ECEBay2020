@@ -1,6 +1,8 @@
 <?php
 	require("functions.php");
 	
+	refreshEncheres($_DATABASE);
+	
 	$logged = false;
 	$user = null;
 	

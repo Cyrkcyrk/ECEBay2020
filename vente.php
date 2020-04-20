@@ -99,7 +99,7 @@
 					echo "						<p class='card-text'>". $i["DescriptionQ"] ."</h4>\n";
 					echo "						<p class='card-text'>". $i["DescriptionD"] ."</h4>\n";
 					if($i["ModeVente"] == 1)
-						echo "						<p class='card-text'>Fin de l'enchère le ". date("d-m-Y", strtotime("+7 days", $i["dateMiseEnLigne"])) ."</h4>\n";
+						echo "						<p class='card-text'>Fin dans ".  createCountdown($i["dateMiseEnLigne"]+(7*24*3600)) . "</h4>\n";
 					echo "					</div>\n";
 					echo "				</div>\n";
 					echo "				<div class='col-md-3'>\n";
