@@ -416,6 +416,21 @@
 	
 	<hr>
 	
+	
+	<script>
+		function showOneAdress(ID) {
+			hideAllAdresses();
+			document.getElementById("divAdresse_" + ID).style = "display:1;";
+		}
+		
+		function hideAllAdresses()
+		{
+			var _divAdresses = $('[id^="divAdresse_"]');
+			Object.keys(_divAdresses).forEach(key => {
+				_divAdresses[key].style= "display:none;";
+			})
+		}
+	</script>
 	<form action="./?page=validerPanier" method="post">
 		<h2>Adresse de livraison</h2>
 	<?php
@@ -423,13 +438,13 @@
 		{
 			foreach($adresses as $ad)
 			{
-				echo "		<input type='radio' name='adresse' value='adresse". $ad["ID"] ."'>";
+				echo "		<input type='radio' onChange='showOneAdress(". $ad["ID"] .")' name='adresse' value='adresse". $ad["ID"] ."'>";
 				echo "		<label for='adresse". $ad["ID"] ."'>". $ad["Ligne1"] ."</label><br>";
 			}
 			
 			foreach($adresses as $ad)
 			{
-				echo "		<div id='divAdresse". $ad["ID"] ."' style='display:none;'>";
+				echo "		<div id='divAdresse_". $ad["ID"] ."' style='display:none;'>";
 				echo "			<div id='divAdresse". $ad["ID"] ."' class='adresse card'>";
 				echo "				<div class='card-body' >";
 				echo "					" . $ad["Ligne1"] . "<br>";
@@ -451,17 +466,36 @@
 		
 		echo "		<hr>";
 		echo "		<h2>Moyens de paiements</h2>";
+		?>
+		
+		<script>
+			function showOneCB(ID) {
+				hideAllCB();
+				document.getElementById("divCB_" + ID).style = "display:1;";
+			}
+			
+			function hideAllCB()
+			{
+				var _divAdresses = $('[id^="divCB_"]');
+				Object.keys(_divAdresses).forEach(key => {
+					_divAdresses[key].style= "display:none;";
+				})
+			}
+		</script>
+		
+		
+		<?php
 		if($cartesbancaires)
 		{
 			foreach($cartesbancaires as $cb)
 			{
-				echo "		<input type='radio' name='cb' value='cb". $cb["ID"] ."'>";
+				echo "		<input type='radio' onChange='showOneCB(". $cb["ID"] .")' name='cb' value='cb". $cb["ID"] ."'>";
 				echo "		<label for='cb". $cb["ID"] ."'>".$cb["TypeCarte"] . ": ". $cb["NumeroCarteCensuree"] ."</label><br>";
 			}
 			
 			foreach($cartesbancaires as $cb)
 			{
-				echo "		<div id='divCB". $ad["ID"] ."' style='display:none;'>";
+				echo "		<div id='divCB_". $cb["ID"] ."' style='display:none;'>";
 				echo "			<div class='cb card'>";
 				echo "				<div class='card-body'>";
 				echo "					" . $cb["TypeCarte"] . "<br>";
